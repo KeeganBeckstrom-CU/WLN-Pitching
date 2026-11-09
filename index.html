@@ -607,6 +607,12 @@ body.gated{overflow:hidden}
 .painq .eseg button[data-v="y"][aria-pressed="true"]{background:var(--hi);border-color:var(--hi);color:#fff}
 .painq .pwhere{margin-top:8px}
 .painq .eseg.two{grid-template-columns:repeat(2,1fr)}
+.seg.seg6{grid-template-columns:repeat(7,1fr)}
+@media (max-width:420px){ .seg.seg6{grid-template-columns:repeat(4,1fr);border-radius:16px} .seg.seg6 button{border-radius:12px} }
+.sheet.setup .sheet-x,.sheet.setup .grab{display:none}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.penbanner{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:color-mix(in srgb,var(--mo-bg) 70%,var(--surface));border:1px solid var(--mo);border-radius:14px;padding:12px 16px}
+.penbanner .hint{display:inline}
 </style>
 </head>
 <body>
@@ -654,7 +660,7 @@ body.gated{overflow:hidden}
         <p class="hint" id="penHint"></p></div>
       <div class="field" id="sbRow"><div class="lrow"><span class="lbl">Short box day</span><span class="row" style="gap:6px"><label class="pc">Pitches <input type="number" min="0" max="150" id="pc-sb" inputmode="numeric"></label><button type="button" class="hideBtn" data-k="sbHidden">Hide</button></span></div>
         <div class="days7" data-set="sbDays"></div></div>
-      <div class="field"><span class="lbl">Team off day</span>
+      <div class="field"><span class="lbl">Off day <span style="text-transform:none;letter-spacing:0;font-weight:500">(optional)</span></span>
         <div class="days7" data-set="offDays"></div></div>
       <label class="check" id="ntWrap"><input type="checkbox" id="noThrow"><span>No-throw day right after the bullpen</span></label>
       <div class="lrow"><p class="hint">Tap any date on the calendar for a one-off change.</p><button type="button" class="hideBtn" id="resetWeek">Reset week</button></div>
@@ -662,6 +668,7 @@ body.gated{overflow:hidden}
     </section>
   </aside>
   <div class="content">
+    <div class="penbanner" id="penBanner" hidden></div>
     <section class="panel detail" id="detail" aria-live="polite"></section>
     <section class="panel">
       <div class="toolbar">
@@ -760,6 +767,8 @@ body.gated{overflow:hidden}
     <p class="gate-loading" id="gLoading">Loading your account…</p>
     <form id="gForm" class="stack" novalidate>
       <div class="field" id="gName"><label for="gNameIn">Full name</label><input id="gNameIn" type="text" autocomplete="name" placeholder="First and last name"></div>
+      <div class="field" id="gGradeF"><span class="lbl">Class</span><div class="seg seg4" id="gGrade"><button type="button" data-v="FR">Freshman</button><button type="button" data-v="SO">Sophomore</button><button type="button" data-v="JR">Junior</button><button type="button" data-v="SR">Senior</button></div></div>
+      <div class="field" id="gTeamF"><div class="lrow"><span class="lbl">Team</span><span class="lockpill">🔒 After tryouts</span></div><div class="seg seg3b locked"><button type="button" disabled>Varsity</button><button type="button" disabled>JV-A</button><button type="button" disabled>JV-B</button></div></div>
       <div class="field" id="gEmailF"><label for="gEmail">Email</label><input id="gEmail" type="email" autocomplete="email" inputmode="email" placeholder="you@email.com"></div>
       <div class="field" id="gPassF"><label for="gPass" id="gPassLbl">Password</label><input id="gPass" type="password" autocomplete="current-password" placeholder="At least 6 characters"></div>
       <button class="btn big" type="submit" id="gSubmit">Sign in</button>
@@ -1063,13 +1072,19 @@ function monthInfo(k){
   return {phase:'pre', split:true, note:'Starters and relievers follow their own plans.'};
 }
 const LIVE_START='2027-01-24';   // lives start the week of Jan 24 (no lives in November, December or early January)
-function defaultsFor(k, role, wk){
+function staffDefaultsFor(k, role, wk){
   const m=+k.slice(5,7);
-  const base={liveDays:[],penDays:[],sbDays:[],offDays:[0],pitches:{live:'',pen:'',sb:''},liveHidden:false,sbHidden:true,noThrow:false};
+  const base={liveDays:[],penDays:[],sbDays:[],offDays:[],pitches:{live:'',pen:'',sb:''},liveHidden:false,sbHidden:true,noThrow:false};
   if(m===9||m===10) return {...base,liveDays:[5]};
   if(m===11) return {...base,liveHidden:true,sbHidden:false,sbDays:[5],pitches:{live:'',pen:'',sb:'20'}};
   if(m===12 || (m===1 && wk && wk<LIVE_START)) return {...base,liveHidden:true,sbHidden:false,sbDays:[2],penDays:[5],pitches:{live:'',pen:'20',sb:'20'}};
   return {...base,liveDays:[role==='RP'?1:4],pitches:{live:'30',pen:'',sb:''}};
+}
+// A pitcher who picked a bullpen day starts every week clear except that day; the formula builds the rest around it.
+function defaultsFor(k, role, wk, st){
+  const d=staffDefaultsFor(k, role, wk), pd=st&&st.penDay;
+  if(pd==null||pd==='') return d;
+  return {...d, liveDays:[], penDays:[+pd], sbDays:[], offDays:[], noThrow:false};
 }
 const PHASE_LABEL={fall:'Fall ball',off:'Offseason',pre:'Preseason'};
 
@@ -1095,7 +1110,7 @@ function effectiveCfg(st,wk){
   const mk=weekMonth(wk), suffix=key.slice(10), seg=segOf(wk);
   let best=null;
   for(const k in weeks){ const w=k.slice(0,10); if(k.slice(10)===suffix && w<wk && segOf(w)===seg && (!best||w>best)) best=w; }
-  return best ? weeks[best+suffix] : defaultsFor(mk, st.role||'SP', wk);
+  return best ? weeks[best+suffix] : defaultsFor(mk, st.role||'SP', wk, st);
 }
 function cfgFrom(st,wk){ const s=effectiveCfg(st,wk); const key=wKey(st,wk); return {cfg:s, own:!!(st.weeks&&st.weeks[key]), inherited:!(st.weeks&&st.weeks[key])}; }
 function editCfg(){ const wk=ymd(viewWeek), key=wKey(S,wk); if(!S.weeks[key]) S.weeks[key]=clone(effectiveCfg(S,wk)); return S.weeks[key]; }
@@ -1145,7 +1160,7 @@ function renderSetup(){
   document.getElementById('monthNote').textContent=info.note;
   document.getElementById('phaseBadge').textContent=PHASE_LABEL[info.phase];
   document.getElementById('railWeek').textContent=weekLabel(viewWeek);
-  document.getElementById('railWeekNote').textContent = own ? 'Set for this week. Later weeks this month carry these days until you change them.' : 'Carried over from the last week you set (or the staff plan). Change anything to set this week.';
+  document.getElementById('railWeekNote').textContent = own ? 'Set for this week. Later weeks this month carry these days until you change them.' : (S.penDay!=null&&S.penDay!==''?`Built around your bullpen day (${DOWL[+S.penDay]}). Change anything to set just this week.`:'Carried over from the last week you set (or the staff plan). Change anything to set this week.');
   const coachSet=!!(S.coach&&S.coach.weeks&&S.coach.weeks[wKey(S,wk)]);
   document.querySelector('.rail').classList.toggle('coachset',coachSet);
   if(coachSet) document.getElementById('railWeekNote').textContent='Your coach set this week. Ask him if you need a change.';
@@ -1267,7 +1282,7 @@ function renderLegend(){
     ['high','mod','light'].map(k=>`<tr class="${RX[k].cls}"><td><span class="ichip">${RX[k].label.replace(' intensity','')}</span></td><td>${RX[k].rpe}</td><td>${RX[k].dist}</td><td>${RX[k].vol.replace(' throws','')}<small> throws</small></td></tr>`).join('')+
     `<tr class="no"><td><span class="ichip">No throw</span></td><td colspan="3">No throwing. Mobility${fall?' and conditioning':''} only.</td></tr><tr class="of"><td><span class="ichip">Off</span></td><td colspan="3">Full day off. No training.</td></tr></tbody></table>`;
 }
-function render(){ clearCache(); renderSetup(); renderWeek(); renderMonth(); renderLegend(); renderDetail(); if(window.renderPersonal) window.renderPersonal(); }
+function render(){ clearCache(); renderSetup(); if(window.renderPenBanner) window.renderPenBanner(); renderWeek(); renderMonth(); renderLegend(); renderDetail(); if(window.renderPersonal) window.renderPersonal(); }
 
 // ===== Events =====
 function toast(t){ const el=document.getElementById('toast'); el.textContent=t; el.classList.add('on'); clearTimeout(toast._t); toast._t=setTimeout(()=>el.classList.remove('on'),2000); }
@@ -1882,33 +1897,57 @@ document.addEventListener('keydown',e=>{ if(e.key!=='Escape') return; if(!docume
 
 
 // ===== Account panel (name, class, team) =====
-let acctReturn=null;
+let acctReturn=null, acctSetup=false;
+const hasPen=()=>S.penDay!=null && S.penDay!=='';
+const needsSetup=()=>!S.grade || (!hasPen() && !S.penLater);
+const PEN_DAYS=[0,1,2,3,4,5,6];
 function renderAccount(){
-  const coach=!!(ME&&ME.role==='coach');
+  const coach=!!(ME&&ME.role==='coach'), setup=acctSetup&&!coach;
   document.getElementById('acctBody').innerHTML=`
-    <p class="eyebrow2">Account</p>
-    <h3 id="acctH">${esc(S.name||'Your account')}</h3>
+    <p class="eyebrow2">${setup?'Before you start':'Account'}</p>
+    <h3 id="acctH">${setup?'Set up your plan':esc(S.name||'Your account')}</h3>
+    ${setup?'<p class="hint" style="margin:4px 0 0">Pick your class and your bullpen day. Your whole schedule gets built around your bullpen day.</p>':''}
     <div class="stack" style="gap:18px;margin-top:12px">
       <div class="field"><label for="aName">Full name</label><input id="aName" type="text" value="${esc(S.name||'')}" autocomplete="name" placeholder="First and last name"></div>
       ${coach?'':`<div class="field"><span class="lbl">Class</span><div class="seg seg4" id="aGrade">${GRADES.map(g=>`<button type="button" data-v="${g[0]}" aria-pressed="${S.grade===g[0]}">${g[1]}</button>`).join('')}</div></div>
+      <div class="field"><span class="lbl">Your bullpen day</span><div class="seg seg6" id="aPen">${PEN_DAYS.map(d=>`<button type="button" data-v="${d}" aria-pressed="${S.penDay!=null&&S.penDay!==''&&+S.penDay===d}">${DOW[d]}</button>`).join('')}</div>
+        <p class="hint">Every week starts clear except this day. Beck's Plan fills in the rest around it. You can still change a single week on Beck's Plan.</p>
+        ${setup&&!hasPen()?`<button type="button" class="linkbtn" id="aPenLater" style="align-self:flex-start">${S.penLater?'✓ Adding it later':'Add this later'}</button>`:''}</div>
       <div class="field"><div class="lrow"><span class="lbl">Team</span>${TEAMS_OPEN?'':'<span class="lockpill">🔒 Opens after tryouts</span>'}</div>
         <div class="seg seg3b ${TEAMS_OPEN?'':'locked'}" id="aTeam">${TEAMS.map(([v,t])=>`<button type="button" data-v="${v}" aria-pressed="${S.team===v}" ${TEAMS_OPEN?'':'disabled'}>${t}</button>`).join('')}</div>
         ${TEAMS_OPEN?'':'<p class="hint">Teams are set after tryouts. Your coach will unlock this.</p>'}</div>`}
       <p class="hint">${ME?`Signed in as ${esc(ME.email||ME.full_name||'')} · ${coach?'Coach':'Pitcher'} account. Changes save to your account.`:'Saved on this device.'}</p>
       <span class="hint" id="aSaved" role="status"></span>
+      ${setup?`<button type="button" class="btn big" id="aDone" ${needsSetup()?'disabled':''}>${hasPen()||!S.penLater?'Build my schedule':'Continue to the app'}</button>`:''}
     </div>`;
   const nm=document.getElementById('aName');
   nm.addEventListener('input',()=>{ const rail=document.getElementById('name'); rail.value=nm.value; rail.dispatchEvent(new Event('input')); document.getElementById('acctH').textContent=nm.value||'Your account'; document.getElementById('aSaved').textContent='Saved'; });
   const g=document.getElementById('aGrade'); if(g) g.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; S.grade=b.dataset.v; save(); g.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); document.getElementById('aSaved').textContent=`Class saved: ${GRADE_LONG[S.grade]}`; });
+  const pn=document.getElementById('aPen'); if(pn) pn.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; S.penDay=+b.dataset.v; delete S.penLater; clearCache(); save(); render(); const plb=document.getElementById('aPenLater'); if(plb) plb.remove(); const dnb=document.getElementById('aDone'); if(dnb) dnb.textContent='Build my schedule'; pn.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); document.getElementById('aSaved').textContent=`Bullpen day saved: ${DOWL[S.penDay]}`; const dn=document.getElementById('aDone'); if(dn) dn.disabled=needsSetup(); });
+  if(g) g.addEventListener('click',()=>{ const dn=document.getElementById('aDone'); if(dn) dn.disabled=needsSetup(); });
+  const pl=document.getElementById('aPenLater'); if(pl) pl.addEventListener('click',()=>{ S.penLater=!S.penLater; save(); renderAccount(); if(S.penLater) document.getElementById('aSaved').textContent=S.grade?'No problem. Pick it anytime from Account.':'Pick your class, then you\'re in.'; });
+  const dn=document.getElementById('aDone'); if(dn) dn.addEventListener('click',()=>{ if(needsSetup()) return; acctSetup=false; closeAccount(); goWeek(todayD); selected=TODAY; render(); toast(hasPen()?`Your schedule is built around ${DOWL[+S.penDay]} bullpens`:'Pick your bullpen day anytime from Account'); });
   const t=document.getElementById('aTeam'); if(t && TEAMS_OPEN) t.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; S.team=b.dataset.v; save(); t.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); document.getElementById('aSaved').textContent=`Team saved: ${TEAM_NAME[S.team]}`; });
 }
-function openAccount(){ acctReturn=document.activeElement; renderAccount(); const sh=document.getElementById('acctSheet'); sh.hidden=false; requestAnimationFrame(()=>sh.classList.add('on')); document.getElementById('acctX').focus(); }
-function closeAccount(){ const sh=document.getElementById('acctSheet'); sh.classList.remove('on'); setTimeout(()=>{ sh.hidden=true; if(acctReturn&&acctReturn.focus) acctReturn.focus(); },200); }
+function openAccount(setup){ acctSetup=setup===true; acctReturn=document.activeElement; renderAccount(); const sh=document.getElementById('acctSheet'); sh.classList.toggle('setup',acctSetup); sh.hidden=false; requestAnimationFrame(()=>sh.classList.add('on')); (acctSetup?document.getElementById('aName'):document.getElementById('acctX')).focus(); }
+function closeAccount(){ if(acctSetup && needsSetup()) return; const sh=document.getElementById('acctSheet'); sh.classList.remove('on'); setTimeout(()=>{ sh.hidden=true; if(acctReturn&&acctReturn.focus) acctReturn.focus(); },200); }
 ['acctOpen','acctOpenL'].forEach(id=>document.getElementById(id).addEventListener('click',openAccount));
 document.getElementById('acctX').addEventListener('click',closeAccount);
 document.getElementById('acctBd').addEventListener('click',closeAccount);
 document.addEventListener('keydown',e=>{ if(e.key==='Escape' && !document.getElementById('acctSheet').hidden) closeAccount(); });
 
+// The artifact preview (no sign-in) asks for setup on first visit too, so you can see what pitchers see.
+if(!window.CLOUD_MODE && needsSetup()) setTimeout(()=>openAccount(true),500);
+// Beck's Plan banner while a pitcher hasn't picked a bullpen day yet
+function renderPenBanner(){
+  const el=document.getElementById('penBanner'); if(!el) return;
+  const show=!window.IS_COACH && !hasPen();
+  el.hidden=!show; if(!show) return;
+  el.innerHTML=`<div><b>Pick your bullpen day to build your schedule.</b><span class="hint"> Until then, this is a sample week.</span></div><button type="button" class="btn sm" id="penPick">Pick my bullpen day</button>`;
+  document.getElementById('penPick').onclick=()=>openAccount();
+}
+window.renderPenBanner=renderPenBanner;
+renderPenBanner();
 // ===== Tabs =====
 function showTab(){
   const t=(location.hash||'#becks-plan').slice(1);
@@ -1939,6 +1978,7 @@ function gateMode(mode,msg){
   gate.dataset.mode=mode;
   const up=mode==='up', forgot=mode==='forgot', reset=mode==='reset', loading=mode==='loading';
   document.getElementById('gName').hidden=!up;
+  document.getElementById('gGradeF').hidden=!up; document.getElementById('gTeamF').hidden=!up||TEAMS_OPEN;
   document.getElementById('gEmailF').hidden=reset;
   document.getElementById('gPassF').hidden=forgot;
   document.getElementById('gTabs').hidden=forgot||reset||loading;
@@ -1963,7 +2003,7 @@ function applyAccountUI(){
   acct.hidden=false; document.querySelector('header p.sub').hidden=true; document.getElementById('acctOpenL').hidden=true;
   document.getElementById('heyName').textContent=firstName(ME.full_name)||'there';
   document.getElementById('acctRole').textContent = ME.role==='coach' ? 'Coach' : 'Pitcher';
-  window.HIDE_COACH = ME.role!=='coach';
+  window.HIDE_COACH = ME.role!=='coach'; window.IS_COACH = ME.role==='coach';
   document.querySelector('.tabs a[data-tab="coach-view"]').hidden = window.HIDE_COACH;
   document.getElementById('ppSaveNote').textContent='Log how each day actually went. It saves to your account, so it follows you to any phone.';
 }
@@ -1983,6 +2023,8 @@ async function loadMine(user){
     LOG.entries=row.logs||{};
   }
   S.coach = (row&&row.coach_edits)||{weeks:{},overrides:{}};
+  const metaGrade=user.user_metadata&&user.user_metadata.grade;
+  if(!S.grade && metaGrade){ S.grade=metaGrade; if(remoteHas) setTimeout(pushNow,0); }
   S.name = ME.full_name || S.name;
   try{ localStorage.setItem('wlnSched2',JSON.stringify(S)); localStorage.setItem('wlnLogs1',JSON.stringify(LOG)); }catch(e){}
   if(!remoteHas) pushNow();   // first sign-in: carry over anything already logged on this phone
@@ -2011,7 +2053,7 @@ async function loadTeam(){
   if(window.HAS_COACH_COL===false) toast('Coach edits are off until the Supabase setup step is run.');
   (data||[]).filter(p=>p.role!=='coach').forEach(p=>{
     const pd=Array.isArray(p.player_data)?p.player_data[0]:p.player_data; const st=(pd&&pd.settings)||{};
-    C.athletes['u-'+p.id]={ name:p.full_name||'Unnamed pitcher', role:st.role||'SP', grade:st.grade||null, team:st.team||null, weeks:st.weeks||{}, overrides:st.overrides||{}, coach:(pd&&pd.coach_edits)||{weeks:{},overrides:{}}, logs:(pd&&pd.logs)||{}, sent:pd&&pd.updated_at?pd.updated_at.slice(0,10):null };
+    C.athletes['u-'+p.id]={ name:p.full_name||'Unnamed pitcher', role:st.role||'SP', grade:st.grade||null, penDay:(st.penDay==null?null:st.penDay), team:st.team||null, weeks:st.weeks||{}, overrides:st.overrides||{}, coach:(pd&&pd.coach_edits)||{weeks:{},overrides:{}}, logs:(pd&&pd.logs)||{}, sent:pd&&pd.updated_at?pd.updated_at.slice(0,10):null };
   });
   note.innerHTML=`<div class="lrow"><div><h2 class="h2" style="font-size:20px">Live staff data</h2><p class="hint">${Object.keys(C.athletes).length} pitchers with accounts. Logs show up here as players save them.</p></div><button class="btn ghost sm" type="button" id="cvRefresh">Refresh</button></div>`;
   document.getElementById('cvRefresh').onclick=()=>loadTeam().then(renderCoach);
@@ -2025,6 +2067,7 @@ async function afterLogin(user){
     if(ME.role==='coach') await loadTeam();
     hideGate();
     render(); showTab();
+    if(ME.role!=='coach' && needsSetup()) setTimeout(()=>openAccount(true),400);
     toast(`Hey, ${firstName(ME.full_name)||'there'}!`);
   }catch(err){
     showGate('in','Signed in, but your profile could not load: '+(err.message||err)+'. Ask your coach to check the database setup.');
@@ -2051,6 +2094,8 @@ if(CLOUD){
       if(data&&data.session) afterLogin(data.session.user); else showGate('in');
     });
   }
+  let gGradeSel='';
+  document.getElementById('gGrade').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; gGradeSel=b.dataset.v; document.querySelectorAll('#gGrade button').forEach(x=>x.setAttribute('aria-pressed',x===b)); });
   document.getElementById('gTabs').addEventListener('click',e=>{ const b=e.target.closest('button'); if(b) gateMode(b.dataset.v); });
   document.getElementById('gForgot').addEventListener('click',()=>gateMode('forgot'));
   document.getElementById('gBack').addEventListener('click',()=>gateMode('in'));
@@ -2061,8 +2106,9 @@ if(CLOUD){
     try{
       if(mode==='up'){
         if(!name) throw new Error('Enter your full name so your coaches know who you are.');
+        if(!gGradeSel) throw new Error('Pick your class: freshman, sophomore, junior or senior.');
         if(pass.length<6) throw new Error('Use a password with at least 6 characters.');
-        const {data,error}=await sb.auth.signUp({email,password:pass,options:{data:{full_name:name},emailRedirectTo:location.origin+location.pathname}});
+        const {data,error}=await sb.auth.signUp({email,password:pass,options:{data:{full_name:name,grade:gGradeSel},emailRedirectTo:location.origin+location.pathname}});
         if(error) throw error;
         if(data.session) await afterLogin(data.session.user);
         else { gateMode('in'); setGateMsg('Account created. Check your email for a confirmation link, then sign in here.',true); document.getElementById('gEmail').value=email; }
