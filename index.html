@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <script>/* STEP 3: paste your Supabase Project URL and Publishable key between the quotes on the next 2 lines */
 window.WLN_SUPABASE_URL = 'https://uppnclgtqhfawmoahfrv.supabase.co';
@@ -1936,8 +1936,6 @@ document.getElementById('acctX').addEventListener('click',closeAccount);
 document.getElementById('acctBd').addEventListener('click',closeAccount);
 document.addEventListener('keydown',e=>{ if(e.key==='Escape' && !document.getElementById('acctSheet').hidden) closeAccount(); });
 
-// The artifact preview (no sign-in) asks for setup on first visit too, so you can see what pitchers see.
-if(!window.CLOUD_MODE && needsSetup()) setTimeout(()=>openAccount(true),500);
 // Beck's Plan banner while a pitcher hasn't picked a bullpen day yet
 function renderPenBanner(){
   const el=document.getElementById('penBanner'); if(!el) return;
@@ -2067,7 +2065,6 @@ async function afterLogin(user){
     if(ME.role==='coach') await loadTeam();
     hideGate();
     render(); showTab();
-    if(ME.role!=='coach' && needsSetup()) setTimeout(()=>openAccount(true),400);
     toast(`Hey, ${firstName(ME.full_name)||'there'}!`);
   }catch(err){
     showGate('in','Signed in, but your profile could not load: '+(err.message||err)+'. Ask your coach to check the database setup.');
