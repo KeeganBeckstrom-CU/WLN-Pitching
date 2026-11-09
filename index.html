@@ -396,6 +396,43 @@ body.gated{overflow:hidden}
 .linkbtn{background:none;border:0;color:var(--accent);font-weight:600;cursor:pointer;padding:6px 0}
 .gate-loading{margin:8px 0;color:var(--muted)}
 
+
+/* intensity guide table + labels */
+.eyebrow3{margin:0 0 6px;font:700 12.5px var(--display);letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+.h3{margin:0 0 8px;font:700 18px var(--display);letter-spacing:.04em;text-transform:uppercase}
+.guide{margin-top:16px}
+.itable{width:100%;border-collapse:separate;border-spacing:0 5px;font-size:14px}
+.itable th{background:none;padding:0 8px 2px;font:600 11.5px var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:left}
+.itable td{background:var(--cbg);padding:8px;border:0;font-weight:600;font-variant-numeric:tabular-nums;vertical-align:middle}
+.itable td:first-child{border-radius:10px 0 0 10px;border-left:5px solid var(--c);width:30%}
+.itable td:last-child{border-radius:0 10px 10px 0}
+.itable td[colspan]{font-weight:500}
+.itable small{font-weight:500;color:var(--muted)}
+.ichip{font:700 14px var(--display);letter-spacing:.06em;text-transform:uppercase;color:var(--ct)}
+@media (max-width:420px){ .itable{font-size:13px} .itable td{padding:7px 6px} .itable small{display:none} .ichip{font-size:13px} }
+/* month cells: short labels on phones */
+.mc .t-s{display:none}
+.mkey{display:none;margin:8px 0 0;font-size:12px;color:var(--muted);line-height:1.5}
+.itable td{white-space:nowrap} .itable td[colspan]{white-space:normal}
+@media (max-width:640px){
+  .mc{min-height:60px;padding:5px 3px 4px;align-items:center;text-align:center;border-left-width:3px}
+  .mc .t,.mc .s{display:none}
+  .mc .t-s{display:flex;flex-direction:column;align-items:center;gap:1px;color:var(--ct)}
+  .mc .t-s .ic{width:18px;height:18px}
+  .mc .t-s b{font:700 11px var(--display);letter-spacing:.04em}
+  .mc .n{font-size:12px}
+  .mc.today .n::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-left:3px;vertical-align:2px}
+  .mkey{display:block}
+}
+/* phones: show the throwing-day pickers right under the Today card */
+@media (max-width:900px){
+  .grid2{grid-template-columns:minmax(0,1fr)}
+  .grid2 > .content{display:contents}
+  .grid2 > *, .grid2 > .content > *{min-width:0;max-width:100%}
+  #detail{order:1} .grid2 > .rail{order:2;display:flex!important;position:static} .grid2 > .content > section:nth-of-type(2){order:3} .grid2 > .content > section:nth-of-type(3){order:4}
+  .railDone{display:none!important}
+}
+
 /* ===== Phone fixes ===== */
 .nav{flex-wrap:wrap}
 @media (max-width:640px){
@@ -449,7 +486,8 @@ body.gated{overflow:hidden}
 <!-- ============ BECK'S PLAN ============ -->
 <main id="tab-becks-plan" class="grid2">
   <aside class="rail">
-    <section class="panel stack" aria-label="Your setup">
+    <section class="panel stack" aria-label="Your throwing days">
+      <div><h2 class="h2" style="font-size:22px">Your throwing days</h2><p class="hint" style="margin-top:2px">Pick when you can throw lives, bullpens and short boxes. Your plan builds around them.</p></div>
       <div class="field"><div class="lrow"><label for="month" class="lbl">Month</label><span class="badge" id="phaseBadge"></span></div>
         <select id="month" class="big"></select>
         <p class="hint" id="monthNote"></p></div>
@@ -487,12 +525,15 @@ body.gated{overflow:hidden}
       <div class="weekbar" id="week"></div>
     </section>
     <section class="panel">
+      <p class="eyebrow3">Monthly calendar</p>
       <div class="toolbar">
         <div class="nav"><button type="button" id="mPrev" aria-label="Previous month">‹</button><button type="button" id="mNext" aria-label="Next month">›</button><h2 id="mTitle">Month</h2><span class="badge" id="mSub"></span></div>
       </div>
-      <div class="legend" id="legend"></div>
-      <div style="margin-top:10px"><div class="rpe"><b>What is RPE %?</b> Rate of Perceived Exertion: how hard a throw feels compared with your max effort. <span><i class="hi"></i>100% is everything you have.</span> <span><i class="hi"></i>85–100% is game intent.</span> <span><i class="mo"></i>70–85% is firm but controlled.</span> <span><i class="li"></i>50–70% is easy, loose catch play.</span> Go by feel, not the radar gun.</div></div>
+      <p class="hint" style="margin-top:6px">Every day of the month, colored by intensity. Tap a day to open it in the Today card.</p>
+            <div style="margin-top:10px"><div class="rpe"><b>What is RPE %?</b> Rate of Perceived Exertion: how hard a throw feels compared with your max effort. <span><i class="hi"></i>100% is everything you have.</span> <span><i class="hi"></i>85–100% is game intent.</span> <span><i class="mo"></i>70–85% is firm but controlled.</span> <span><i class="li"></i>50–70% is easy, loose catch play.</span> Go by feel, not the radar gun.</div></div>
       <div class="month" id="monthGrid" style="margin-top:14px"></div>
+      <p class="mkey">LT Light · MOD Moderate · HI High-intensity throw · PEN Bullpen · SB Short box · LIVE Live · NT No throw · OFF Off · ✓ logged</p>
+      <div class="guide"><h3 class="h3">Intensity guide</h3><div id="legend"></div></div>
     </section>
   </div>
 </main>
@@ -870,14 +911,16 @@ function monthInfo(k){
   if(m===9||m===10) return {phase:'fall', split:false, note:'Fall ball: everyone follows the same plan.'};
   if(m===11) return {phase:'off', split:false, note:'November: everyone follows the same plan. No lives; short boxes and bullpens only.'};
   if(m===12) return {phase:'pre', split:false, note:'December: everyone follows the same plan. Mobility C/D and post-throw set 2 start.'};
-  return {phase:'pre', split:true, note:'Starters and relievers split from January on.'};
+  if(m===1) return {phase:'pre', split:true, note:'January: bullpens and short boxes to start. Lives begin the week of Jan 24, and starters and relievers split.'};
+  return {phase:'pre', split:true, note:'Starters and relievers follow their own plans.'};
 }
-function defaultsFor(k, role){
+const LIVE_START='2027-01-24';   // lives start the week of Jan 24 (no lives in November, December or early January)
+function defaultsFor(k, role, wk){
   const m=+k.slice(5,7);
   const base={liveDays:[],penDays:[],sbDays:[],offDays:[0],pitches:{live:'',pen:'',sb:''},liveHidden:false,sbHidden:true,noThrow:false};
   if(m===9||m===10) return {...base,liveDays:[5]};
   if(m===11) return {...base,liveHidden:true,sbHidden:false,sbDays:[5],pitches:{live:'',pen:'',sb:'20'}};
-  if(m===12) return {...base,liveHidden:true,sbHidden:false,sbDays:[2],penDays:[5],pitches:{live:'',pen:'20',sb:'20'}};
+  if(m===12 || (m===1 && wk && wk<LIVE_START)) return {...base,liveHidden:true,sbHidden:false,sbDays:[2],penDays:[5],pitches:{live:'',pen:'20',sb:'20'}};
   return {...base,liveDays:[role==='RP'?1:4],pitches:{live:'30',pen:'',sb:''}};
 }
 const PHASE_LABEL={fall:'Fall ball',off:'Offseason',pre:'Preseason'};
@@ -895,14 +938,15 @@ try{ const saved=JSON.parse(localStorage.getItem('wlnSched2')||'null'); if(saved
 function save(){ try{ localStorage.setItem('wlnSched2',JSON.stringify(S)); }catch(e){} if(window.queueSync) window.queueSync(); }
 
 // Week settings: each week keeps its own days; an unset week carries the last set week of the same month, else the staff default
+const segOf=wk=>weekMonth(wk)+(weekMonth(wk).endsWith('-01')&&wk>=LIVE_START?'b':'a');
 function wKey(st,wk){ return monthInfo(weekMonth(wk)).split ? `${wk}:${st.role||'SP'}` : wk; }
 function effectiveCfg(st,wk){
   const weeks=st.weeks||{}, key=wKey(st,wk);
   if(weeks[key]) return weeks[key];
-  const mk=weekMonth(wk), suffix=key.slice(10);
+  const mk=weekMonth(wk), suffix=key.slice(10), seg=segOf(wk);
   let best=null;
-  for(const k in weeks){ const w=k.slice(0,10); if(k.slice(10)===suffix && w<wk && weekMonth(w)===mk && (!best||w>best)) best=w; }
-  return best ? weeks[best+suffix] : defaultsFor(mk, st.role||'SP');
+  for(const k in weeks){ const w=k.slice(0,10); if(k.slice(10)===suffix && w<wk && segOf(w)===seg && (!best||w>best)) best=w; }
+  return best ? weeks[best+suffix] : defaultsFor(mk, st.role||'SP', wk);
 }
 function cfgFrom(st,wk){ const s=effectiveCfg(st,wk); const key=wKey(st,wk); return {cfg:s, own:!!(st.weeks&&st.weeks[key]), inherited:!(st.weeks&&st.weeks[key])}; }
 function editCfg(){ const wk=ymd(viewWeek), key=wKey(S,wk); if(!S.weeks[key]) S.weeks[key]=clone(effectiveCfg(S,wk)); return S.weeks[key]; }
@@ -1012,7 +1056,8 @@ function renderMonth(){
     const cls=p?RX[p.intensity].cls:'';
     const sub=p&&p.kind!=='off'?[p.preThrow?p.preThrow.replace('Pre-Throw ','PT'):'',p.post||'',p.cond?p.cond.replace('Conditioning ','C'):''].filter(Boolean).join(' · '):'';
     const lg=(typeof window.getLog==='function')&&window.getLog(k);
-    h+=`<button type="button" class="mc ${cls} ${k===selected?'sel':''} ${k===TODAY?'today':''} ${k>=wkStart&&k<=wkEnd?'inweek':''}" data-k="${k}"><span class="n">${day}${lg?' <b class="ok" title="Logged">✓</b>':''}</span><span class="t">${p?label(p):''}</span><span class="s">${esc(sub)}</span></button>`;
+    const ab=p?{live:'LIVE',pen:'PEN',sb:'SB',toss:'HI',off:'OFF',nothrow:'NT',mod:'MOD',light:'LT'}[p.kind]:'';
+    h+=`<button type="button" class="mc ${cls} ${k===selected?'sel':''} ${k===TODAY?'today':''} ${k>=wkStart&&k<=wkEnd?'inweek':''}" data-k="${k}" aria-label="${DOWL[d.getDay()]} ${MON[m]} ${day}: ${p?label(p):'nothing scheduled'}${lg?', logged':''}"><span class="n">${day}${lg?' <b class="ok" title="Logged">✓</b>':''}</span><span class="t">${p?label(p):''}</span><span class="t-s">${p?kindIcon(p.kind):''}<b>${ab}</b></span><span class="s">${esc(sub)}</span></button>`;
   }
   document.getElementById('monthGrid').innerHTML=h;
 }
@@ -1036,7 +1081,7 @@ function renderDetail(){
   const dateTxt=`${isToday?'Today · ':''}${DOWL[d.getDay()]}, ${MON[d.getMonth()].slice(0,3)} ${d.getDate()}`;
   const logged=(typeof window.getLog==='function')&&window.getLog(k);
   const logBtn=`<button class="btn big" type="button" id="logThis">${logged?'Edit my log':'Log this day'}</button>`;
-  const editBtn=`<button class="btn ghost editweek" type="button" id="editWeek">${svg('edit')}Edit my week</button>`;
+  const editBtn=`<button class="btn ghost editweek" type="button" id="editWeek">${svg('edit')}Pick my throwing days</button>`;
   if(!p){ el.className='panel hero of'; el.innerHTML=`<div class="hero-top"><div><p class="hero-date">${dateTxt}</p><h3>Nothing scheduled</h3></div></div><div class="hero-body"><div class="row">${logBtn}${editBtn}</div></div>`; return; }
   const rx=RX[p.intensity], isHigh=['live','pen','sb','toss'].includes(p.kind);
   const names=[p.mobility,p.preThrow,p.plyo,p.post,p.cond].filter(Boolean);
@@ -1063,8 +1108,10 @@ function renderDetail(){
 }
 
 function renderLegend(){
-  document.getElementById('legend').innerHTML=['high','mod','light'].map(k=>`<div class="lg ${RX[k].cls}"><h5>${RX[k].label}</h5><dl><dt>RPE</dt><dd>${RX[k].rpe}</dd><dt>Distance</dt><dd>${RX[k].dist}</dd><dt>Volume</dt><dd>${RX[k].vol}</dd></dl></div>`).join('')
-   + `<div class="lg no"><h5>No throw</h5><p>No throwing. Mobility${monthInfo(curMonth()).phase==='fall'?' and conditioning':''} only.</p></div><div class="lg of"><h5>Off</h5><p>Full day off. No training.</p></div>`;
+  const fall=monthInfo(curMonth()).phase==='fall';
+  document.getElementById('legend').innerHTML=`<table class="itable"><thead><tr><th>Intensity</th><th>RPE</th><th>Distance</th><th>Volume</th></tr></thead><tbody>`+
+    ['high','mod','light'].map(k=>`<tr class="${RX[k].cls}"><td><span class="ichip">${RX[k].label.replace(' intensity','')}</span></td><td>${RX[k].rpe}</td><td>${RX[k].dist}</td><td>${RX[k].vol.replace(' throws','')}<small> throws</small></td></tr>`).join('')+
+    `<tr class="no"><td><span class="ichip">No throw</span></td><td colspan="3">No throwing. Mobility${fall?' and conditioning':''} only.</td></tr><tr class="of"><td><span class="ichip">Off</span></td><td colspan="3">Full day off. No training.</td></tr></tbody></table>`;
 }
 function render(){ clearCache(); renderSetup(); renderWeek(); renderMonth(); renderLegend(); renderDetail(); if(window.renderPersonal) window.renderPersonal(); }
 
@@ -1099,7 +1146,7 @@ document.getElementById('detail').addEventListener('click',e=>{
   if(tick){ e.preventDefault(); e.stopPropagation(); const n=tick.dataset.tick; S.done=S.done||{}; const cur=new Set(S.done[selected]||[]); cur.has(n)?cur.delete(n):cur.add(n); S.done[selected]=[...cur]; if(!S.done[selected].length) delete S.done[selected]; save();
     const open=[...document.querySelectorAll('#detail details[open]')].map(x=>x.dataset.name); renderDetail(); renderWeek(); open.forEach(nm=>{ const dd=document.querySelector(`#detail details[data-name="${CSS.escape(nm)}"]`); if(dd) dd.open=true; }); return; }
   const btn=e.target.closest('button'); const id=btn?btn.id:'';
-  if(id==='editWeek'){ const r=document.querySelector('.rail'); r.classList.add('open'); r.scrollIntoView({behavior:'smooth',block:'start'}); return; }
+  if(id==='editWeek'){ document.querySelector('.rail').scrollIntoView({behavior:'smooth',block:'start'}); return; }
   if(id==='logThis'){ location.hash='personal-plan'; return; }
   if(id==='ovOff') S.overrides[selected]='off';
   else if(id==='ovNT') S.overrides[selected]='nothrow';
@@ -1518,6 +1565,17 @@ if(CLOUD){
     clearTimeout(nameTimer); nameTimer=setTimeout(()=>sb.from('profiles').update({full_name:ME.full_name}).eq('id',ME.id),900);
   });
 }
+
+// ===== Keep "today" current when the app is resumed (home screen apps often aren't reloaded) =====
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='hidden'){ if(sb&&ME&&syncTimer){ clearTimeout(syncTimer); pushNow(); } return; }
+  const now=new Date(); now.setHours(0,0,0,0);
+  if(ymd(now)!==TODAY){
+    try{ localStorage.setItem('wlnSched2',JSON.stringify(S)); localStorage.setItem('wlnLogs1',JSON.stringify(LOG)); }catch(e){}
+    location.reload();
+  }
+});
+setInterval(()=>{ const now=new Date(); now.setHours(0,0,0,0); if(ymd(now)!==TODAY && document.visibilityState==='visible' && !document.querySelector('#ppForm input:focus, #ppForm textarea:focus')) location.reload(); }, 60000);
 
 </script>
 </body>
