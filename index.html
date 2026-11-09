@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <script>/* STEP 3: paste your Supabase Project URL and Publishable key between the quotes on the next 2 lines */
-window.WLN_SUPABASE_URL = 'https://uppnclgtqhfawmoahfrv.supabase.co/rest/v1/';
+window.WLN_SUPABASE_URL = 'https://uppnclgtqhfawmoahfrv.supabase.co';
 window.WLN_SUPABASE_KEY = 'sb_publishable_MHlCXobo0OnoturzVckmyA_0reKYvG-';
 </script>
 <meta charset="utf-8">
@@ -1356,7 +1356,7 @@ showTab();
 
 // ===== Accounts (Supabase) =====
 // The two Supabase values are set at the very top of this file (lines 5 and 6).
-const SUPABASE_URL = String(window.WLN_SUPABASE_URL||'').trim().replace(/\/+$/,'');
+const SUPABASE_URL = String(window.WLN_SUPABASE_URL||'').trim().replace(/\/(rest|auth|storage)\/v1.*$/i,'').replace(/\/+$/,'');
 const SUPABASE_KEY = String(window.WLN_SUPABASE_KEY||'').trim();
 
 const CLOUD = /^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(SUPABASE_URL) && SUPABASE_KEY.length>20;
