@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>/* STEP 3: paste your Supabase Project URL and Publishable key between the quotes on the next 2 lines */
+window.WLN_SUPABASE_URL = 'PASTE_YOUR_PROJECT_URL_HERE';
+window.WLN_SUPABASE_KEY = 'PASTE_YOUR_PUBLISHABLE_KEY_HERE';
+</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>WLN Pitcher Throwing Schedule</title>
@@ -1351,11 +1355,11 @@ let _rz; window.addEventListener('resize',()=>{ clearTimeout(_rz); _rz=setTimeou
 showTab();
 
 // ===== Accounts (Supabase) =====
-// Paste your two values from Supabase > Project Settings > API Keys between the quotes.
-const SUPABASE_URL = 'PASTE_YOUR_PROJECT_URL_HERE';           // looks like https://abcdefghijk.supabase.co
-const SUPABASE_KEY = 'PASTE_YOUR_PUBLISHABLE_KEY_HERE';       // starts with sb_publishable_  (or the legacy anon key)
+// The two Supabase values are set at the very top of this file (lines 5 and 6).
+const SUPABASE_URL = String(window.WLN_SUPABASE_URL||'').trim().replace(/\/+$/,'');
+const SUPABASE_KEY = String(window.WLN_SUPABASE_KEY||'').trim();
 
-const CLOUD = /^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/.test(SUPABASE_URL) && SUPABASE_KEY.length>20;
+const CLOUD = /^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(SUPABASE_URL) && SUPABASE_KEY.length>20;
 window.CLOUD_MODE = CLOUD;
 let sb=null, ME=null, syncTimer=null, nameTimer=null;
 const gate=document.getElementById('gate');
