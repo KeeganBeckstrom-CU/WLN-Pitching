@@ -2,8 +2,8 @@
 <html lang="en" data-theme="dark">
 <head>
 <script>/* STEP 3: paste your Supabase Project URL and Publishable key between the quotes on the next 2 lines */
-window.WLN_SUPABASE_URL = 'https://uppnclgtqhfawmoahfrv.supabase.co';
-window.WLN_SUPABASE_KEY = 'sb_publishable_MHlCXobo0OnoturzVckmyA_0reKYvG-';
+window.WLN_SUPABASE_URL = 'PASTE_YOUR_PROJECT_URL_HERE';
+window.WLN_SUPABASE_KEY = 'PASTE_YOUR_PUBLISHABLE_KEY_HERE';
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -956,6 +956,15 @@ body.viewing .logform .stepper button,body.viewing .logform .qchips{display:none
 .pc-btns{gap:6px;margin-top:2px}
 .nchip .nmsg{border-left:1px solid var(--line);padding:5px 10px}
 .btn.hasnew{border-color:var(--accent);color:var(--accent)}
+
+.abtns{display:flex;gap:6px;margin-left:auto;flex:none;align-self:center}
+.abtns .hbtn{margin-left:0}
+.cardchat{display:inline-flex;align-self:flex-start;margin-top:6px;font:600 12.5px var(--body);color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:4px 10px;cursor:pointer}
+.dnamebtn{background:none;border:0;padding:0;font:inherit;color:inherit;text-transform:inherit;cursor:pointer;text-align:left}
+.dnamebtn span{font-size:.6em;vertical-align:4px}
+.dnamebtn:hover{text-decoration:underline;text-underline-offset:4px}
+.dchat{margin:6px 0 2px;background:var(--maroon);color:#fff}
+#sheet{z-index:45}
 </style>
 </head>
 <body>
@@ -2900,7 +2909,7 @@ function placeMenu(menu,btn){
 const PAIN_NAME={elbow:'Elbow',shoulder:'Shoulder',forearm:'Forearm',other:'Other'};
 const painWhere=pa=>(pa||[]).map(x=>PAIN_NAME[x]||x).join(', ');
 function weekLogged(a,ws){ const days=[...Array(7)].map((_,i)=>ymd(addDays(ws,i))).filter(k=>k<=TODAY); return {n:days.filter(k=>a.logs[k]).length,of:days.length}; }
-const alertRow=(pid,x,done)=>`<div class="arow ${x.sev} ${done?'done':''}"><span class="sevico">${done?'✓':SEV_ICON[x.sev]}</span><div><b>${esc(x.title)}</b><div class="sub2">${esc(x.detail)}</div></div>${done?'':`<button type="button" class="hbtn" data-h="${pid}|${x.type}">Handled</button>`}</div>`;
+const alertRow=(pid,x,done)=>`<div class="arow ${x.sev} ${done?'done':''}"><span class="sevico">${done?'✓':SEV_ICON[x.sev]}</span><div><b>${esc(x.title)}</b><div class="sub2">${esc(x.detail)}</div></div>${done?'':`<span class="abtns"><button type="button" class="hbtn" data-chat="${pid}">💬 Message</button><button type="button" class="hbtn" data-h="${pid}|${x.type}">Handled</button></span>`}</div>`;
 const SEV_ICON={hi:'!',mo:'▲',of:'…'};
 const SEV_RANK={hi:0,mo:1,of:2};
 
@@ -2959,7 +2968,7 @@ function renderToday(){
       <div class="vs"><span class="sub2">Plan</span>${planChip(r.p)}<span class="arrow">→</span>${logChip(r.x)}</div>
       ${!r.x&&rx&&rx.vol?`<div class="sub2">${rx.rpe} · ${rx.dist} · ${rx.vol}</div>`:''}
       ${r.x?`<div class="pstats">${r.x.t?`<span><b>${r.x.t}</b> throws</span>`:''}${r.x.a?`<span>Arm <b>${r.x.a}</b>/10</span>`:''}${r.x.r?`<span>RPE <b>${r.x.r}%</b></span>`:''}</div>`:''}
-      ${r.why.map(w=>`<div class="why ${w[0]==='mo'?'mo':''}">${esc(w[1])}</div>`).join('')}
+      ${r.why.map(w=>`<div class="why ${w[0]==='mo'?'mo':''}">${esc(w[1])}</div>`).join('')}${r.why.length?`<span class="cardchat" role="button" tabindex="0" data-chat="${r.id}">💬 Message ${esc(cvName(r.a.name))}</span>`:''}
       ${r.x&&r.x.pn==='y'&&!r.why.some(w=>/^Pain/.test(w[1]))?`<div class="why">Pain: ${esc(painWhere(r.x.pa)||'yes')}</div>`:''}
       ${r.x&&r.x.n?`<div class="sub2">“${esc(r.x.n)}”</div>`:''}
       ${r.done?`<div class="sub2">✓ ${r.done} handled</div>`:''}</button>`; };
@@ -3122,7 +3131,7 @@ function renderPitcher(){
   const m=cvM(a), rs=ratioState(m.ratio), sp=splitAlerts(dId,a,m), al=sp.open, wl=weekLogged(a,weekStart(todayD)), h=(S.handled&&S.handled[dId])||{open:{},log:[]};
   const next=[...Array(7)].map((_,i)=>ymd(addDays(todayD,i)));
   const keys=Object.keys(a.logs).sort().reverse().slice(0,10);
-  document.getElementById('cvDrawerBody').innerHTML=`<div class="dh"><h3 id="dName">${esc(a.name)}</h3><p>${esc(metaLine(a))} · last log ${cvFmt(m.last)}${a.ex?' · example':''}</p><button class="x" id="dX" type="button" aria-label="Close">×</button></div>
+  document.getElementById('cvDrawerBody').innerHTML=`<div class="dh"><h3 id="dName"><button type="button" class="dnamebtn" data-chat="${dId}" title="Message ${esc(a.name)}">${esc(a.name)} <span>💬</span></button></h3><button type="button" class="btn sm dchat" data-chat="${dId}">💬 Message ${esc(cvName(a.name))}</button><p>${esc(metaLine(a))} · last log ${cvFmt(m.last)}${a.ex?' · example':''}</p><button class="x" id="dX" type="button" aria-label="Close">×</button></div>
   <div class="db">
     <div class="mkpis"><div><div class="k">Throws · 7d</div><div class="v">${m.throws7}</div></div><div><div class="k">Ratio</div><div class="v">${m.ratio==null?'—':m.ratio.toFixed(2)}</div><span class="chip ${rs.cls}">${rs.label}</span></div><div><div class="k">Arm · 7d</div><div class="v">${m.arm7==null?'—':m.arm7.toFixed(1)}</div></div><div><div class="k">Plan match</div><div class="v">${m.match==null?'—':Math.round(m.match*100)+'%'}</div></div><div><div class="k">Logged this wk</div><div class="v">${wl.n}<small style="font-size:14px;color:var(--muted)">/${wl.of}</small></div></div></div>
     ${al.length||sp.done.length?`<section class="panel stack" style="gap:8px"><h2 class="h2" style="font-size:18px">Alerts</h2>${al.map(x=>alertRow(dId,x)).join('')}${sp.done.map(x=>alertRow(dId,x,true)).join('')}</section>`:''}
