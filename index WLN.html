@@ -1047,6 +1047,16 @@ details[open] .psum{display:none}
 .addcell .btn{margin:0;padding:5px 8px}
 button.kpi.tdtile{text-align:left;cursor:pointer;border-top:5px solid var(--c);font:inherit;color:inherit}
 button.kpi.tdtile.on{box-shadow:0 0 0 2px var(--c)}
+.acrow{display:grid;grid-template-columns:minmax(130px,1.1fr) 120px minmax(0,2.4fr) 110px;gap:10px;align-items:center;text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:9px 11px;cursor:pointer;color:inherit;font:inherit;width:100%}
+.acrow b{font-weight:600} .acrow .sub2{font-size:12px;color:var(--muted)}
+.acbar{height:8px;border-radius:99px;background:var(--of-bg);border:1px solid var(--line);overflow:hidden;margin-top:4px} .acbar i{display:block;height:100%;background:var(--lt)}
+.acchips{display:flex;flex-wrap:wrap;gap:4px} .acchips span{font-size:11.5px;padding:2px 7px;border-radius:99px;background:var(--of-bg);color:var(--of-t);border:1px solid var(--line)} .acchips span.y{background:var(--lt-bg);color:var(--lt-t);border-color:color-mix(in srgb,var(--lt) 40%,var(--line));font-weight:600}
+.acwhen{text-align:right;font-size:12.5px;color:var(--muted)} .acwhen b{display:block;color:var(--ink);font-size:13px}
+.acfeed{display:flex;flex-direction:column;gap:0} .acev{display:flex;gap:10px;align-items:baseline;padding:7px 2px;border-bottom:1px solid var(--line);cursor:pointer;background:none;border-left:0;border-right:0;border-top:0;color:inherit;font:inherit;text-align:left;width:100%} .acev:last-child{border-bottom:0}
+.acev .t{flex:0 0 92px;font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums} .acev .d{flex:1} .acev .ok{color:var(--lt-t);font-weight:700}
+.acgrid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(260px,1fr);gap:14px;align-items:start} @media (max-width:900px){ .acgrid{grid-template-columns:1fr} }
+.acday{font:600 12px var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:10px 2px 2px}
+@media (max-width:700px){ .acrow{grid-template-columns:1fr auto} .acrow .acchips{grid-column:1/-1} .acrow .acp{grid-column:1/-1;order:3} }
 .kpis.tdtiles{grid-template-columns:repeat(5,minmax(0,1fr))}
 @media (max-width:900px){ .kpis.tdtiles{grid-template-columns:repeat(2,minmax(0,1fr))} .kpis.tdtiles .tdtile:last-child{grid-column:1/-1} }
 .flagwhy summary{cursor:pointer;font:700 16px var(--display);letter-spacing:.05em;text-transform:uppercase}
@@ -1368,7 +1378,7 @@ body.trk-rtt #editWeek,body.trk-rtt #ovOff,body.trk-rtt #ovNT,body.trk-rtt #ovLi
     <section class="panel">
       <div class="toolbar">
         <div><h2 class="h2">Coach's View</h2><p class="hint" style="margin-top:4px" id="cvSub"></p></div>
-        <div class="row"><div class="seg3 cvnav" id="cvNav" aria-label="Coach views"><button type="button" data-v="today">Today</button><button type="button" data-v="pitchers">Pitchers</button><button type="button" data-v="week">Week</button><button type="button" data-v="plans">Plans</button></div>
+        <div class="row"><div class="seg3 cvnav" id="cvNav" aria-label="Coach views"><button type="button" data-v="today">Today</button><button type="button" data-v="activity">Activity</button><button type="button" data-v="pitchers">Pitchers</button><button type="button" data-v="week">Week</button><button type="button" data-v="plans">Plans</button></div>
           <button class="btn ghost sm" type="button" id="cvClearEx">Remove examples</button></div>
       </div>
     </section>
@@ -4272,7 +4282,55 @@ const teamOpts=[['all','All teams'],...TEAMS];
 const teamFilter=cur=>TEAMS_OPEN?segBtns('fTeam',teamOpts,cur):`<div class="seg3 locked" title="Teams open after tryouts"><button type="button" disabled>🔒 Teams · after tryouts</button></div>`;
 
 // ---------- view state ----------
-let cvTab='today'; try{ const t=localStorage.getItem('wlnCvTab'); if(['today','pitchers','week'].includes(t)) cvTab=t; }catch(e){}
+// ---------- Coach's View > Activity: who checked off their daily work, and when ----------
+let acOff=0, acFilter='all';
+const AC_FIELDS=['mobility','mobility2','preThrow','plyo','post','cond','nerve'];
+const acNames=p=>p&&p.kind!=='off'?AC_FIELDS.map(f=>p[f]).filter(Boolean):[];
+const acTime=iso=>{ const d=new Date(iso); let h=d.getHours(); const m=String(d.getMinutes()).padStart(2,'0'), ap=h>=12?'PM':'AM'; h=h%12||12; return `${h}:${m} ${ap}`; };
+const acAgo=iso=>{ if(!iso) return 'never'; const ms=Date.now()-new Date(iso); if(ms<6e4) return 'just now'; const mi=Math.round(ms/6e4); if(mi<60) return mi+' min ago'; const h=Math.round(mi/60); if(h<24) return h+' hr ago'; const d=Math.round(h/24); return d===1?'yesterday':d+' days ago'; };
+function renderActivity(){
+  const k=ymd(addDays(todayD,-acOff)), isToday=acOff===0;
+  const rows=staff().filter(({a})=>!a.ex).map(({id,a})=>{ const p=planFor(a,k), names=acNames(p), done=((a.done&&a.done[k])||[]).filter(n=>names.includes(n)), at=(a.doneAt&&a.doneAt[k])||{};
+    const last=Object.values(at).sort().pop()||null;
+    const st=!names.length?'off':done.length>=names.length?'all':done.length?'some':'none';
+    return {id,a,p,names,done,at,last,st}; });
+  const work=rows.filter(r=>r.st!=='off');
+  const cnt=c=>work.filter(r=>r.st===c).length;
+  const ord={some:0,all:1,none:2,off:3};
+  const stOf={done:'all',some:'some',none:'none',off:'off'};
+  const shown=rows.filter(r=>acFilter==='all'?r.st!=='off':r.st===stOf[acFilter]).sort((x,y)=>(ord[x.st]-ord[y.st])||((y.last||'').localeCompare(x.last||''))||x.a.name.localeCompare(y.a.name));
+  // feed: every timed check-off in the last 7 days, newest first
+  const ev=[]; staff().filter(({a})=>!a.ex).forEach(({id,a})=>{ const da=a.doneAt||{}, dn=a.done||{}; for(let i=0;i<7;i++){ const dk=ymd(addDays(todayD,-i)); const at=da[dk]||{}; (dn[dk]||[]).forEach(n=>{ if(at[n]) ev.push({id,a,dk,n,t:at[n]}); }); } });
+  ev.sort((x,y)=>y.t.localeCompare(x.t));
+  const feed=ev.slice(0,60); let lastDay='';
+  const feedHtml=feed.map(e=>{ const day=ymd(new Date(e.t)); const hdr=day!==lastDay?`<div class="acday">${day===TODAY?'Today':cvFmt(day)}</div>`:''; lastDay=day;
+    return hdr+`<button type="button" class="acev" data-pid="${e.id}"><span class="t">${acTime(e.t)}</span><span class="d"><b>${esc(e.a.name)}</b> checked off <span class="ok">✓ ${esc(e.n)}</span>${e.dk!==day?` <span class="sub2">(for ${cvFmt(e.dk)})</span>`:''}</span></button>`; }).join('');
+  const tile=(c,t,v,s,cls)=>`<button type="button" class="kpi tdtile ${cls} ${acFilter===c?'on':''}" data-acf="${c}" aria-pressed="${acFilter===c}"><div class="k">${t}</div><div class="v">${v}</div><div class="s">${s}</div></button>`;
+  const row=r=>{ const pct=r.names.length?Math.round(100*r.done.length/r.names.length):0;
+    return `<button type="button" class="acrow" data-pid="${r.id}"><div><b>${esc(r.a.name)}</b><div class="sub2">${r.p?esc(label(r.p)):'Nothing scheduled'}</div></div>
+      <div class="acp">${r.st==='off'?'<span class="lg-no">Off day</span>':`<b>${r.done.length}<span class="sub2">/${r.names.length} done</span></b><div class="acbar"><i style="width:${pct}%"></i></div>`}</div>
+      <div class="acchips">${r.names.map(n=>`<span class="${r.done.includes(n)?'y':''}">${r.done.includes(n)?'✓ ':''}${esc(n)}${!r.done.includes(n)&&(((r.a.dd||{})[k]||{})[n]||[]).length?` · ${((r.a.dd||{})[k]||{})[n].length} drills`:''}</span>`).join('')}</div>
+      <div class="acwhen">${r.last?`<b>${acTime(r.last)}</b>last check-off`:r.done.length?'<b>✓</b>time not saved':`<b>—</b>${r.a.syncAt?'app used '+acAgo(r.a.syncAt):r.a.pre?'no account yet':'no activity'}`}</div></button>`; };
+  document.getElementById('cvBody').innerHTML=`
+    <section class="panel"><div class="toolbar"><div class="datebar"><div class="nav"><button type="button" id="acPrev" aria-label="Previous day" ${acOff>=13?'disabled':''}>‹</button><button type="button" id="acNext" aria-label="Next day" ${acOff===0?'disabled':''}>›</button></div><h2>${isToday?'Today · ':''}${DOWL[parse(k).getDay()]} ${cvFmtS(k)}</h2></div>
+      <button class="btn ghost sm" type="button" id="acRemind" ${cnt('none')?'':'disabled'}>Copy reminder (${cnt('none')})</button></div>
+      <p class="hint" style="margin:6px 0 0">Daily Work check-offs from each pitcher's app. Tap a pitcher to open his plan.</p></section>
+    <div class="kpis tdtiles">${tile('all','Working today',work.length,'have daily work','li')}${tile('done','All done',cnt('all'),'every routine checked','li')}${tile('some','In progress',cnt('some'),'checked some off','mo')}${tile('none','Nothing yet',cnt('none'),isToday?'no check-offs yet':'no check-offs','nl')}${tile('off','Off',rows.filter(r=>r.st==='off').length,'no work scheduled','of')}</div>
+    <div class="acgrid">
+      <section class="panel stack" style="gap:6px"><div class="lrow"><h2 class="h2" style="font-size:19px">${{all:'Working today',done:'All done',some:'In progress',none:'Nothing checked yet',off:'Off'}[acFilter]} · ${shown.length}</h2>${acFilter!=='all'?'<button type="button" class="btn ghost sm" id="acX">Show all</button>':''}</div>
+        ${shown.map(row).join('')||'<p class="hint">Nobody in this group.</p>'}</section>
+      <section class="panel stack" style="gap:2px"><div class="lrow"><h2 class="h2" style="font-size:19px">Latest activity</h2><span class="hint">last 7 days</span></div>
+        ${feedHtml?`<div class="acfeed">${feedHtml}</div>`:'<p class="hint">No timed check-offs yet. Times show here as pitchers tap ✓ on their Daily Work.</p>'}</section>
+    </div>`;
+  const tiles=document.querySelectorAll('#cvBody [data-acf]');
+  document.getElementById('acPrev').onclick=()=>{ acOff=Math.min(13,acOff+1); renderActivity(); };
+  document.getElementById('acNext').onclick=()=>{ acOff=Math.max(0,acOff-1); renderActivity(); };
+  tiles.forEach(b=>b.onclick=()=>{ const f=b.dataset.acf; acFilter=acFilter===f?'all':f; renderActivity(); });
+  const x=document.getElementById('acX'); if(x) x.onclick=()=>{ acFilter='all'; renderActivity(); };
+  document.getElementById('acRemind').onclick=()=>cvCopy(`${work.filter(r=>r.st==='none').map(r=>cvName(r.a.name)).join(', ')}: check off ${isToday?'today':cvFmt(k)}'s Daily Work in the app as you finish each routine.`,'Reminder copied');
+}
+
+let cvTab='today'; try{ const t=localStorage.getItem('wlnCvTab'); if(['today','activity','pitchers','week'].includes(t)) cvTab=t; }catch(e){}
 let tdOff=0;
 let pq='', pRole='all', pGrade='all', pTeam='all', pSort='alerts', pRulesOpen=false, cmp=[];
 let wkView=weekStart(todayD), wRole='all', wGrade='all', wTeam='all', wInt='all', wMode='both';
@@ -4288,7 +4346,7 @@ function renderCoach(){
   const body=document.getElementById('cvBody');
   if(!list.length){ body.innerHTML='<section class="panel"><p class="hint">No pitchers yet. They show up here once they create an account and sign in.</p></section>'; return; }
   syncPlans(); if(typeof syncLift==='function') syncLift();
-  (({today:renderToday,pitchers:renderPitchers,week:renderWeekBoard,plans:renderPlans})[cvTab]||renderToday)();
+  (({today:renderToday,activity:renderActivity,pitchers:renderPitchers,week:renderWeekBoard,plans:renderPlans})[cvTab]||renderToday)();
 }
 window.renderCoachView=renderCoach;
 document.getElementById('cvNav').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; cvTab=b.dataset.v; try{ localStorage.setItem('wlnCvTab',cvTab); }catch(err){} document.getElementById('cvMenu').hidden=true; renderCoach(); });
@@ -4670,7 +4728,7 @@ async function loadTeam(){
   if(window.HAS_COACH_COL===false) toast('Coach edits are off until the Supabase setup step is run.');
   (data||[]).filter(p=>p.role!=='coach').forEach(p=>{
     const pd=Array.isArray(p.player_data)?p.player_data[0]:p.player_data; const st=(pd&&pd.settings)||{};
-    C.athletes['u-'+p.id]={ ...st, pid:st.pid||null, name:p.full_name||'Unnamed pitcher', role:st.role||'SP', grade:st.grade||null, penDay:(st.penDay==null?null:st.penDay), team:st.team||null, ht:st.ht||null, wt:st.wt||null, velo:st.velo||null, throws:st.throws||null, phone:st.phone||null, arsenal:st.arsenal||[], program:st.program||null, weeks:st.weeks||{}, overrides:st.overrides||{}, coach:(pd&&pd.coach_edits)||{weeks:{},overrides:{}}, logs:(pd&&pd.logs)||{}, sent:pd&&pd.updated_at?pd.updated_at.slice(0,10):null };
+    C.athletes['u-'+p.id]={ ...st, pid:st.pid||null, name:p.full_name||'Unnamed pitcher', role:st.role||'SP', grade:st.grade||null, penDay:(st.penDay==null?null:st.penDay), team:st.team||null, ht:st.ht||null, wt:st.wt||null, velo:st.velo||null, throws:st.throws||null, phone:st.phone||null, arsenal:st.arsenal||[], program:st.program||null, weeks:st.weeks||{}, overrides:st.overrides||{}, coach:(pd&&pd.coach_edits)||{weeks:{},overrides:{}}, logs:(pd&&pd.logs)||{}, sent:pd&&pd.updated_at?pd.updated_at.slice(0,10):null, syncAt:(pd&&pd.updated_at)||null };
   });
   seedRoster();
   note.innerHTML=`<div class="lrow"><div><h2 class="h2" style="font-size:20px">Live staff data</h2><p class="hint">${Object.keys(C.athletes).length} pitchers with accounts. Logs show up here as players save them.</p></div><button class="btn ghost sm" type="button" id="cvRefresh">Refresh</button></div>`;
