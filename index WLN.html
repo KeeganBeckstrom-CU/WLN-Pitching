@@ -1308,10 +1308,8 @@ body.trk-rtt #editWeek,body.trk-rtt #ovOff,body.trk-rtt #ovNT,body.trk-rtt #ovLi
   <nav class="tabs" aria-label="Sections">
     <a href="#home" data-tab="home"><span class="tl">Home</span></a>
     <a href="#daily-work" data-tab="daily-work"><span class="tl long">Daily Work</span><span class="ts">Daily</span></a>
-    <a href="#month" data-tab="month"><span class="tl">Month</span></a>
     <a href="#personal-plan" data-tab="personal-plan"><span class="tl">Log</span></a>
     <a href="#schedule" data-tab="schedule"><span class="tl long">Schedule</span><span class="ts">Games</span></a>
-    <a href="#lift" data-tab="lift"><span class="tl">Lift</span></a>
     <a href="#chat" data-tab="chat"><span class="tl">Chat</span><i class="tbadge" id="chatBadge" hidden></i></a>
     <a href="#profile" data-tab="profile"><span class="tl">Profile</span></a>
     <a href="#report" data-tab="report"><span class="tl">Report</span></a>
@@ -2450,7 +2448,8 @@ document.addEventListener('input',e=>{ if(e.target&&e.target.id==='clQ'){ clQ=e.
 // saved on the coach (S.liftShown) and copied to every pitcher (coach.liftOn), so the newest choice wins and pitchers who sign up later get it too.
 const liftFlag=st=>(st&&st.coach&&st.coach.liftOn)||null;
 function liftBest(){ let best=S.liftShown||null; try{ staff().forEach(({a})=>{ const f=liftFlag(a); if(f&&(!best||f.at>best.at)) best=f; }); }catch(e){} return best; }
-function LIFT_ON(){ if(isCoachUser()&&!VIEWING()){ const b=liftBest(); return !!(b&&b.on); } const f=liftFlag(S); return !!(f&&f.on); }
+function LIFT_ON(){ return false;   // Lift removed from this app (lifting lives in its own app)
+  if(isCoachUser()&&!VIEWING()){ const b=liftBest(); return !!(b&&b.on); } const f=liftFlag(S); return !!(f&&f.on); }
 function pushLift(flag){ staff().forEach(({id,a})=>{ const f=liftFlag(a); if(f&&f.at===flag.at) return; a.coach=a.coach||{weeks:{},overrides:{}}; a.coach.liftOn={...flag}; if(!(a.pre&&window.CLOUD_MODE)) coachChanged(id); }); }
 function setLiftShown(on){ if(!isCoachUser()||VIEWING()) return; const flag={on:!!on,at:new Date().toISOString()}; S.liftShown=flag; save(); pushLift(flag); liftKey=null; showTab(); toast(on?'Lift is now showing for the team':'Lift is hidden from the team'); }
 function syncLift(){ if(!isCoachUser()||window.VIEW_AS||typeof C==='undefined') return; const b=liftBest(); if(b) pushLift(b); }
@@ -2461,7 +2460,7 @@ function liftSwitchCard(){ const on=LIFT_ON();
 document.addEventListener('click',e=>{ const b=e.target.closest('[data-liftshow]'); if(b) setLiftShown(b.dataset.liftshow==='1'); });
 
 // ===== Lift on the pitcher's day =====
-function liftOn(k){ for(let w=0;w<P3.WEEKS.length;w++) for(const D of P3.DAYS){ const [m,d,y]=P3.WEEKS[w].dates[D.k].split('/').map(Number); if(ymd(new Date(2000+y,m-1,d))===k) return {w,d:D.k,l:D.l,n:P3.WEEKS[w].n}; } return null; }
+function liftOn(k){ return null; for(let w=0;w<P3.WEEKS.length;w++) for(const D of P3.DAYS){ const [m,d,y]=P3.WEEKS[w].dates[D.k].split('/').map(Number); if(ymd(new Date(2000+y,m-1,d))===k) return {w,d:D.k,l:D.l,n:P3.WEEKS[w].n}; } return null; }
 const liftNames=(d)=>P3.PROGRAM[d].flatMap(b=>b.ex).filter(e=>e.weeks[0].main).map(e=>e.name.replace(/ \(.*\)$/,'')).slice(0,3).join(' · ');
 function liftTodayCard(){ if(!LIFT_ON()) return ''; const t=liftOn(TODAY); if(!t||NT(S)) return '';
   const p=lPct(S,t.w,t.d), pc=Math.round(p*100);
@@ -2472,7 +2471,7 @@ function liftDayRow(k){ if(!LIFT_ON()) return ''; const t=liftOn(k); if(!t||NT(S
   return `<div class="liftrow ${p>=.999?'done':''}"><span class="lico">🏋</span><div><b>Lift · ${t.l} session</b><small>Phase 3 Strength-Hypertrophy · Week ${t.n} · ${p>=.999?'done':p>0?pc+'% done':'not started'}</small></div><button type="button" class="btn ghost sm" data-golift="1">${k===TODAY?(p>=.999?'View':'Open'):'Open sheet'}</button></div>`; }
 document.addEventListener('click',e=>{ if(e.target.closest('[data-golift]')){ location.hash='#lift'; } if(e.target.closest('[data-goreport]')){ location.hash='#report'; } const rp=e.target.closest('[data-rpid]'); if(rp) openPitcher(rp.dataset.rpid); });
 // Coach home: today's lift across the staff
-function coachLiftCard(){ if(!LIFT_ON()) return liftSwitchCard(); const t=liftOn(TODAY); if(!t) return liftSwitchCard();
+function coachLiftCard(){ if(!LIFT_ON()) return ''; const t=liftOn(TODAY); if(!t) return liftSwitchCard();
   const all=staff().filter(x=>!x.a.ex&&!NT(x.a)), ps=all.map(x=>({x,p:lPct(x.a,t.w,t.d)})), done=ps.filter(r=>r.p>=.999), going=ps.filter(r=>r.p>0&&r.p<.999), none=ps.filter(r=>!r.p);
   return `<section class="panel stack" style="gap:8px"><div class="lrow"><span class="lbl">Lift today · ${t.l} · Week ${t.n}</span><button type="button" class="btn ghost sm" data-golift="1">Open lifting</button></div>
     <div class="lift3"><div><b>${done.length}</b><span>done</span></div><div><b>${going.length}</b><span>in progress</span></div><div class="${none.length?'warn':''}"><b>${none.length}</b><span>not started</span></div></div>
@@ -4705,8 +4704,8 @@ renderPenBanner();
 function showTab(){
   const t=(location.hash||'#home').slice(1);
   const coachU=isCoachUser(), viewing=!!window.VIEW_AS;
-  const PT=['home','daily-work','month','personal-plan','schedule','lift','chat','profile'];
-  const allowed=(coachU?(viewing?PT:['home','schedule','lift','chat','report','coach-view']):PT).filter(n=>n!=='lift'||LIFT_ON());
+  const PT=['home','daily-work','personal-plan','schedule','chat','profile'];   // Month and Lift tabs removed
+  const allowed=(coachU?(viewing?PT:['home','schedule','chat','report','coach-view']):PT).filter(n=>n!=='lift'||LIFT_ON());
   document.querySelectorAll('.tabs a[data-tab]').forEach(a=>{ a.hidden=!allowed.includes(a.dataset.tab); });
   renderModeBar();
   const tab=allowed.includes(t)?t:'home';
