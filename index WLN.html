@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
 <script>/* STEP 3: paste your Supabase Project URL and Publishable key between the quotes on the next 2 lines */
-window.APP_BUILD='20261126093209';
+window.APP_BUILD='20261126093715';
 window.PICK_SKIPPED=true;
 window.WLN_SUPABASE_URL = 'https://uppnclgtqhfawmoahfrv.supabase.co';
 window.WLN_SUPABASE_KEY = 'sb_publishable_MHlCXobo0OnoturzVckmyA_0reKYvG-';
@@ -3583,7 +3583,7 @@ const SCHED=[
  {d:'2027-04-26',opp:'Farmington',at:'away',lg:null},
  {d:'2027-04-28',opp:'South Lyon East',at:'away',lg:null},
  {d:'2027-04-29',opp:'South Lyon East',at:'home',lg:null},
- {d:'2027-04-30',opp:'WB',at:'home',lg:null},
+ {d:'2027-04-30',opp:'West Bloomfield',at:'home',lg:null},
  {d:'2027-05-04',opp:'Lakeland',at:'away',lg:null},
  {d:'2027-05-05',opp:'Lakeland',at:'home',lg:null},
  {d:'2027-05-08',opp:'Midland',at:'home',lg:null},
@@ -7129,7 +7129,7 @@ document.addEventListener('click',e=>{
 document.addEventListener('keydown',e=>{ if(document.getElementById('tab-leaders')&&!document.getElementById('tab-leaders').hidden&&(e.key==='ArrowLeft'||e.key==='ArrowRight')&&!e.target.closest('input,textarea,select')){ const b=document.querySelector(`[data-lbstep="${e.key==='ArrowLeft'?-1:1}"]`); if(b) b.click(); } });
 
 // ---------- WLN TV: the 2027 schedule board ----------
-const TEAM_HEX={"Lakeland": ["#0E4C92", "#06264A", "LAK"], "Milford": ["#8B1E2F", "#4A0E18", "MIL"], "South Lyon": ["#1F4FA0", "#E8A317", "SL"], "Walled Lake Central": ["#4B2A7B", "#D9A520", "WLC"], "South Lyon East": ["#2A2A2E", "#111113", "SLE"], "Walled Lake Western": ["#1846B8", "#0B2466", "WLW"], "Farmington": ["#1C2A4A", "#0C1428", "FAR"], "North Farmington": ["#5A2A14", "#C9971F", "NF"], "Livonia Churchill": ["#B3122B", "#1A1A1D", "LC"], "Livonia Franklin": ["#1E2B4A", "#B3122B", "LF"], "Livonia Stevenson": ["#3F7FD0", "#1B3A66", "LS"]};
+const TEAM_HEX={"Lakeland": ["#0E4C92", "#06264A", "LAK"], "Milford": ["#8B1E2F", "#4A0E18", "MIL"], "South Lyon": ["#1F4FA0", "#E8A317", "SL"], "Walled Lake Central": ["#4B2A7B", "#D9A520", "WLC"], "South Lyon East": ["#2A2A2E", "#111113", "SLE"], "Walled Lake Western": ["#1846B8", "#0B2466", "WLW"], "Farmington": ["#1C2A4A", "#0C1428", "FAR"], "North Farmington": ["#5A2A14", "#C9971F", "NF"], "Livonia Churchill": ["#B3122B", "#1A1A1D", "LC"], "Livonia Franklin": ["#1E2B4A", "#B3122B", "LF"], "Livonia Stevenson": ["#3F7FD0", "#1B3A66", "LS"], "Notre Dame Prep": ["#0C5A2E", "#C9A227", "NDP"], "Clarkston": ["#1B2A5C", "#0B1330", "CLK"], "Plymouth": ["#2C2F36", "#111214", "PLY"], "Midland": ["#1C2E7A", "#C9A227", "MID"], "Novi": ["#0E6B35", "#111214", "NOV"], "Canton": ["#B3122B", "#1A1A1D", "CAN"], "Rochester": ["#1E4FB8", "#0B1E55", "ROC"], "Imlay City": ["#1A8CC2", "#C9A227", "IC"], "Brighton": ["#E8731A", "#1A1A1D", "BRI"], "West Bloomfield": ["#0E6B35", "#0A3A1E", "WB"]};
 const LVC_TEAMS=new Set(["Lakeland", "Milford", "South Lyon", "Walled Lake Central", "South Lyon East", "Walled Lake Western", "Farmington", "North Farmington", "Livonia Churchill", "Livonia Franklin", "Livonia Stevenson"]);
 // games per date: LVC series counts come from the 2027 LVC series list; other dates assume a doubleheader a day (Wayne State is a single midweek game)
 const GAMES_OVERRIDE={'Wayne State':1,'LVC Tournament':null};
@@ -7207,7 +7207,7 @@ renderSchedule=function(){
 
 // ---------- coaches add games to the calendar; type a team and its logo and colors come up ----------
 const LOGO_IDX={'Pikeville':0,'Rio Grande':1,'Lindsey Wilson':2,'Cornerstone':3,'Rochester Christian':4,'Northwestern Ohio':5,'Michigan-Dearborn':6,'Madonna':7,'Indiana Tech':8,'Aquinas':9,'Lawrence Tech':10,'Defiance':11,'Midway':12,'Great Lakes Christian':13,'Wayne State':14};
-const XLOGO={"Lakeland": "lvc/lakeland.webp", "Milford": "lvc/milford.webp", "South Lyon": "lvc/south-lyon.webp", "Walled Lake Central": "lvc/wl-central.webp", "South Lyon East": "lvc/south-lyon-east.webp", "Walled Lake Western": "lvc/wl-western.webp", "Farmington": "lvc/farmington.webp", "North Farmington": "lvc/north-farmington.webp", "Livonia Churchill": "lvc/churchill.webp", "Livonia Franklin": "lvc/franklin.webp", "Livonia Stevenson": "lvc/stevenson.webp"};
+const XLOGO={"Lakeland": "lvc/lakeland.webp", "Milford": "lvc/milford.webp", "South Lyon": "lvc/south-lyon.webp", "Walled Lake Central": "lvc/wl-central.webp", "South Lyon East": "lvc/south-lyon-east.webp", "Walled Lake Western": "lvc/wl-western.webp", "Farmington": "lvc/farmington.webp", "North Farmington": "lvc/north-farmington.webp", "Livonia Churchill": "lvc/churchill.webp", "Livonia Franklin": "lvc/franklin.webp", "Livonia Stevenson": "lvc/stevenson.webp", "Notre Dame Prep": "lvc/notre-dame-prep.webp", "Clarkston": "lvc/clarkston.webp", "Plymouth": "lvc/plymouth.webp", "Midland": "lvc/midland.webp", "Novi": "lvc/novi.webp", "Canton": "lvc/canton.webp", "Rochester": "lvc/rochester.webp", "Imlay City": "lvc/imlay-city.webp", "Brighton": "lvc/brighton.webp", "West Bloomfield": "lvc/west-bloomfield.webp"};
 Object.assign(TEAM_HEX,{'Siena Heights':['#004880','#00264A','SH'],'Lourdes':['#C2610F','#5E2F07','LU']});
 const TEAM_ALIAS={'upike':'Pikeville','university of pikeville':'Pikeville','urg':'Rio Grande','rio':'Rio Grande','lwu':'Lindsey Wilson','lindsey':'Lindsey Wilson','cornerstone university':'Cornerstone','rcu':'Rochester Christian','rochester':'Rochester Christian','unoh':'Northwestern Ohio','nw ohio':'Northwestern Ohio','umd':'Michigan-Dearborn','um-dearborn':'Michigan-Dearborn','dearborn':'Michigan-Dearborn','michigan dearborn':'Michigan-Dearborn','madonna university':'Madonna','itw':'Indiana Tech','indiana tech':'Indiana Tech','aq':'Aquinas','aquinas college':'Aquinas','ltu':'Lawrence Tech','lawrence technological':'Lawrence Tech','defiance college':'Defiance','midway university':'Midway','glcc':'Great Lakes Christian','great lakes':'Great Lakes Christian','wsu':'Wayne State','wayne':'Wayne State','siena':'Siena Heights','shu':'Siena Heights','lourdes university':'Lourdes','whac':'LVC Tournament'};
 function findTeam(q){ const s=String(q||'').trim().toLowerCase(); if(!s) return null;
