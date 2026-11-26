@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
 <script>/* STEP 3: paste your Supabase Project URL and Publishable key between the quotes on the next 2 lines */
-window.APP_BUILD='20261126081050';
+window.APP_BUILD='20261126083342';
 window.PICK_SKIPPED=true;
 window.WLN_SUPABASE_URL = 'https://uppnclgtqhfawmoahfrv.supabase.co';
 window.WLN_SUPABASE_KEY = 'sb_publishable_MHlCXobo0OnoturzVckmyA_0reKYvG-';
@@ -2397,6 +2397,56 @@ body.egg-8bit *{font-family:"Courier New",monospace!important;letter-spacing:.06
 body:not([data-tab="clubhouse"]) .ann-pill{display:none}
 @media (min-width:761px){.ann-pill{bottom:84px}}
 .ann-sheet h3{padding-right:96px}
+
+/* ===== v13: Clubhouse TV ===== */
+.ctv{--tvc:#7A1F3D;position:absolute;left:var(--x);top:var(--y);width:var(--w);transform:translate(-50%,-50%);z-index:2;border:0;padding:0;background:none;cursor:pointer;aspect-ratio:var(--tv-ar,16/10);container-type:inline-size}
+@media (max-aspect-ratio:1/1){.ctv{left:var(--px);top:var(--py);width:var(--pw)}}
+.ctv-frame{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;filter:drop-shadow(0 8px 16px rgba(0,0,0,.65))}
+.ctv::before{content:"";position:absolute;left:38%;right:38%;top:-6%;height:8%;background:linear-gradient(#2a2a2e,#111);border-radius:2px 2px 0 0}
+.ctv-scr{position:absolute;left:var(--sl,4%);top:var(--st,5%);right:var(--sr,4%);bottom:var(--sb,12%);overflow:hidden;background:#050608;border-radius:1px}
+.ctv-in{position:absolute;inset:0;display:flex;flex-direction:column;color:#fff;font-family:var(--display,'Barlow Condensed',sans-serif);text-align:left}
+.ctv-in::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.10),transparent 38%),repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px)}
+.ctv-top{display:flex;align-items:center;gap:2.4cqw;padding:2cqw 3cqw;white-space:nowrap;background:linear-gradient(90deg,var(--tvc),color-mix(in srgb,var(--tvc) 30%,#000));font-size:4.6cqw;letter-spacing:.06em}
+.ctv-top img{height:6cqw;width:auto}
+.ctv-top b{font-weight:800}
+.ctv-live{color:#ff6b6b;font-size:3.8cqw;animation:ctvBlink 1.6s steps(2) infinite}
+.ctv-clock{margin-left:auto;font-size:3.9cqw;opacity:.9}
+@keyframes ctvBlink{50%{opacity:.35}}
+.ctv-main{position:relative;flex:1}
+.ctv-sl{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 5cqw;opacity:0;transform:translateY(6%);transition:opacity .6s,transform .6s}
+.ctv-sl.on{opacity:1;transform:none}
+.ctv-sl small{font-size:3.8cqw;letter-spacing:.14em;color:color-mix(in srgb,var(--tvc) 55%,#fff);font-weight:700}
+.ctv-sl b{font-size:6.6cqw;line-height:1.08;font-weight:800;text-transform:uppercase;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ctv-crawl{flex:none;height:11cqw;background:#f2f2f4;color:#111;overflow:hidden;display:flex;align-items:center;border-top:1.2cqw solid var(--tvc)}
+.ctv-track{display:flex;width:max-content;animation:ctvCrawl var(--dur,30s) linear infinite}
+.ctv-track>div{display:flex;align-items:center;white-space:nowrap;font-size:5.4cqw;font-weight:700;text-transform:uppercase;letter-spacing:.02em}
+.ctv-track span{padding:0 2.5cqw}
+.ctv-track b{color:var(--tvc);margin-right:2cqw;font-weight:800}
+.ctv-track i{font-style:normal;color:var(--tvc);font-size:4cqw}
+@keyframes ctvCrawl{to{transform:translateX(-50%)}}
+.ctv:focus-visible{outline:2px solid #fff;outline-offset:4px}
+.tv-src{margin:2px 0 8px}
+.tv-src .ann-chk{margin:0 0 8px}
+@media (prefers-reduced-motion:reduce){.ctv-track{animation:none}}
+.ctv{--tv-ar:684/408;--sl:1.2%;--st:1.6%;--sr:1.4%;--sb:3.8%}
+/* ===== v13: themed clubhouse buttons (coach picks in Cheats) ===== */
+body[class*="hsk-"] .hs{background:none!important;padding:0;gap:.25em;text-shadow:none}
+body[class*="hsk-"] .hs>span:not(.hs-dot){display:flex;align-items:center;height:2.15em;padding:0 var(--pad);border-style:solid;border-width:0 var(--cap);border-image:var(--plate) 0 var(--slice) fill / 0 var(--cap) stretch;filter:drop-shadow(0 4px 6px rgba(0,0,0,.55));transition:transform .15s}
+body[class*="hsk-"] .hs .hs-dot{background:var(--badge) center/contain no-repeat;border:0;box-shadow:none;filter:drop-shadow(0 4px 6px rgba(0,0,0,.55))}
+body[class*="hsk-"] .hs:hover>span:not(.hs-dot),body[class*="hsk-"] .hs:focus-visible>span:not(.hs-dot){transform:translateY(-2px) scale(1.03)}
+body[class*="hsk-"] .hs.primary .hs-dot{animation:none}
+body[class*="hsk-"] .hs.primary .hs-dot::after{border-color:transparent transparent transparent var(--dotc)}
+body[class*="hsk-"] .hs:not(.primary) .hs-dot::after{background:var(--dotc)}
+body.hsk-baseball{--plate:url(btn/baseball-wide.webp);--slice:92;--cap:1.15em;--pad:.35em;--badge:url(btn/baseball-round.webp);--dotc:#8C2244}
+body.hsk-baseball .hs>span:not(.hs-dot){color:#1b2030;letter-spacing:.03em}
+body.hsk-wood{--plate:url(btn/wood-wide.webp);--slice:50;--cap:.7em;--pad:.45em;--badge:url(btn/wood-round.webp);--dotc:#f4e7cf}
+body.hsk-wood .hs>span:not(.hs-dot){color:#f6ead2;text-shadow:0 2px 0 rgba(0,0,0,.75),0 0 6px rgba(0,0,0,.6)}
+body.hsk-steel{--plate:url(btn/steel-wide.webp);--slice:45;--cap:.7em;--pad:.5em;--badge:url(btn/steel-round.webp);--dotc:#2a2c31}
+body.hsk-steel .hs>span:not(.hs-dot){color:#24262b;text-shadow:0 1px 0 rgba(255,255,255,.7);letter-spacing:.06em;text-transform:uppercase;font-size:.86em}
+body.hsk-patch{--plate:url(btn/patch-wide.webp);--slice:100;--cap:1.15em;--pad:.3em;--badge:url(btn/patch-round.webp);--dotc:#f1e3bf}
+body.hsk-patch .hs>span:not(.hs-dot){color:#f4e6c2;text-shadow:0 1px 0 rgba(0,0,0,.6);letter-spacing:.04em}
+body.hsk-scoreboard{--plate:url(btn/scoreboard-wide.webp);--slice:120;--cap:1.4em;--pad:.15em;--badge:url(btn/scoreboard-round.webp);--dotc:#ffb347}
+body.hsk-scoreboard .hs>span:not(.hs-dot){color:#ffbf5e;text-shadow:0 0 6px rgba(255,160,40,.9),0 0 14px rgba(255,120,0,.5);letter-spacing:.08em;text-transform:uppercase;font-size:.84em}
 @media (max-width:760px){ .tabs a[data-tab="leaders"]::before{-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M8%2021h8%22%2F%3E%3Cpath%20d%3D%22M12%2017v4%22%2F%3E%3Cpath%20d%3D%22M7%204h10v5a5%205%200%200%201-10%200z%22%2F%3E%3Cpath%20d%3D%22M17%205h3v2a3%203%200%200%201-3%203%22%2F%3E%3Cpath%20d%3D%22M7%205H4v2a3%203%200%200%200%203%203%22%2F%3E%3C%2Fsvg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M8%2021h8%22%2F%3E%3Cpath%20d%3D%22M12%2017v4%22%2F%3E%3Cpath%20d%3D%22M7%204h10v5a5%205%200%200%201-10%200z%22%2F%3E%3Cpath%20d%3D%22M17%205h3v2a3%203%200%200%201-3%203%22%2F%3E%3Cpath%20d%3D%22M7%205H4v2a3%203%200%200%200%203%203%22%2F%3E%3C%2Fsvg%3E")} }
 @media (max-width:760px){ .tabs a[data-tab="clubhouse"]::before{-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%2021h18%22%2F%3E%3Cpath%20d%3D%22M5%2021V8l7-4%207%204v13%22%2F%3E%3Cpath%20d%3D%22M10%2021v-6h4v6%22%2F%3E%3C%2Fsvg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%2021h18%22%2F%3E%3Cpath%20d%3D%22M5%2021V8l7-4%207%204v13%22%2F%3E%3Cpath%20d%3D%22M10%2021v-6h4v6%22%2F%3E%3C%2Fsvg%3E")} }
 @media (max-width:760px){ .tabs a[data-tab="cheats"]::before{-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%224%2017%2010%2011%204%205%22%2F%3E%3Cline%20x1%3D%2212%22%20y1%3D%2219%22%20x2%3D%2220%22%20y2%3D%2219%22%2F%3E%3C%2Fsvg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%224%2017%2010%2011%204%205%22%2F%3E%3Cline%20x1%3D%2212%22%20y1%3D%2219%22%20x2%3D%2220%22%20y2%3D%2219%22%2F%3E%3C%2Fsvg%3E")} }
@@ -8172,6 +8222,81 @@ document.addEventListener('click',async e=>{
 });
 // re-check when the app comes back to the front
 document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible'&&ANN_STATE!==null) loadAnn(true).then(()=>{ annRefreshBadges(); annRerender(); }); });
+
+
+/* ===== v13: Clubhouse TV with a ticker ===== */
+// where the TV hangs in the room (% of the stage). Each app sets its own; these are the WLN room.
+window.CLUB_TV={x:84,y:23,w:15,px:25,py:19.5,pw:30};
+const TV_DEF={on:true,src:{ann:true,game:true,today:true,team:true,lvc:true,count:true,custom:true},lines:[]};
+const tvCfg=()=>{ const t=TEAM_SET.ticker||{}; return {on:t.on!==false,src:{...TV_DEF.src,...(t.src||{})},lines:Array.isArray(t.lines)?t.lines:[]}; };
+const TV_SRC=[['ann','Coach announcements'],['game','Next game'],['count','Days until first pitch'],['today',"Each player's work for today"],['team','How many have logged today (coaches see it)'],['lvc','LVC standings leaders (WLN)'],['custom','Your own lines']];
+function tvNextGame(){ try{ return typeof nextGame==='function'?nextGame():null; }catch(e){ return null; } }
+function tvDays(d){ return Math.max(0,Math.round((parse(d)-parse(TODAY))/864e5)); }
+function tvItems(){
+  const c=tvCfg(), out=[], coach=typeof isCoachUser==='function'&&isCoachUser()&&!window.VIEW_AS;
+  if(c.src.ann&&typeof ANN!=='undefined') ANN.slice(0,3).forEach(a=>out.push({t:'COACH',v:a.title,hot:typeof annSeenAt==='function'&&a.created_at>annSeenAt()}));
+  const g=tvNextGame();
+  if(c.src.game&&g){ const n=tvDays(g.d); out.push({t:'NEXT GAME',v:`${typeof gameVs==='function'?gameVs(g):g.opp} · ${typeof sFmt==='function'?sFmt(g.d):g.d}${n?` · ${n} day${n===1?'':'s'}`:' · TODAY'}`}); }
+  if(c.src.count&&typeof SCHED!=='undefined'&&SCHED[0]&&TODAY<SCHED[0].d){ const n=tvDays(SCHED[0].d); out.push({t:'COUNTDOWN',v:`${n} days until first pitch`}); }
+  if(c.src.today&&!coach){ try{ const p=dayPlan(TODAY); if(p) out.push({t:'TODAY',v:p.kind==='off'?'Off day. Recover.':`${label(p)}. Log it when you finish.`}); }catch(e){} }
+  if(c.src.team&&coach){ try{ const st=staff().filter(({a})=>!a.pre); const n=st.filter(({a})=>a.logs&&a.logs[TODAY]).length; if(st.length) out.push({t:'TODAY',v:`${n} of ${st.length} pitchers have logged`}); }catch(e){} }
+  if(c.src.lvc&&typeof LVC_DIVS!=='undefined'&&typeof lvcRec==='function'){ LVC_DIVS.forEach(([dn,teams])=>{ const r=teams.map(n=>[n,...lvcRec(n)]).sort((a,b)=>(b[1]-b[2])-(a[1]-a[2])||b[1]-a[1]); const any=r.some(x=>x[1]+x[2]>0); out.push({t:`LVC ${dn.toUpperCase()}`,v:any?r.slice(0,3).map(x=>`${lvcShort(x[0])} ${x[1]}-${x[2]}`).join(' · '):'Conference play starts in April'}); }); }
+  if(c.src.custom) c.lines.filter(Boolean).forEach(l=>out.push({t:'',v:l}));
+  if(!out.length) out.push({t:'',v:'Clubhouse TV'});
+  return out;
+}
+function tvHTML(){
+  const it=tvItems(), crawl=it.map(i=>`<span>${i.t?`<b>${esc(i.t)}</b>`:''}${esc(i.v)}</span>`).join('<i>●</i>');
+  const logo=(document.querySelector('header .logo img')||{}).src||'';
+  return `<div class="ctv-in"><div class="ctv-top">${logo?`<img src="${logo}" alt="">`:''}<b>CLUBHOUSE TV</b><span class="ctv-live">● LIVE</span><span class="ctv-clock" id="ctvClock"></span></div>
+    <div class="ctv-main" id="ctvMain">${it.map((i,n)=>`<div class="ctv-sl ${n?'':'on'}"><small>${esc(i.t||'CLUBHOUSE')}</small><b>${esc(i.v)}</b></div>`).join('')}</div>
+    <div class="ctv-crawl"><div class="ctv-track" style="--dur:${Math.max(18,crawl.replace(/<[^>]+>/g,'').length*0.22)}s"><div>${crawl}<i>●</i></div><div aria-hidden="true">${crawl}<i>●</i></div></div></div></div>`;
+}
+let _ctvT=null;
+function tvMount(){
+  const st=document.querySelector('#clubBody .club-stage'); if(!st) return;
+  st.querySelector('.ctv')?.remove(); if(!tvCfg().on) return;
+  const T=window.CLUB_TV;
+  st.insertAdjacentHTML('beforeend',`<button type="button" class="ctv" data-annall aria-label="Clubhouse TV, open announcements" style="--x:${T.x}%;--y:${T.y}%;--w:${T.w}%;--px:${T.px}%;--py:${T.py}%;--pw:${T.pw}%">
+    <span class="ctv-scr">${tvHTML()}</span><img class="ctv-frame" src="tex/tv.webp" alt=""></button>`);
+  clearInterval(_ctvT); let k=0;
+  const tick=()=>{ const m=document.getElementById('ctvMain'); if(!m){ clearInterval(_ctvT); return; } const s=m.children; if(s.length>1){ s[k%s.length].classList.remove('on'); k++; s[k%s.length].classList.add('on'); }
+    const c=document.getElementById('ctvClock'); if(c) c.textContent=new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}); };
+  tick(); _ctvT=setInterval(tick,5000);
+}
+const _rc13=renderClubhouse; renderClubhouse=function(allowed){
+  _rc13(allowed); tvMount();
+  if(typeof ANN_STATE!=='undefined'&&ANN_STATE===null&&typeof loadAnn==='function') loadAnn().then(()=>{ const c=document.getElementById('tab-clubhouse'); if(c&&!c.hidden) tvMount(); });
+  if(TEAM_SET_STATE===null&&typeof loadTeamSet==='function') loadTeamSet().then(()=>{ const c=document.getElementById('tab-clubhouse'); if(c&&!c.hidden) tvMount(); });
+};
+// ---------- Coach's Cheats: ticker controls ----------
+const _cc13=typeof cheatsCodes==='function'?cheatsCodes:null;
+cheatsCodes=function(line){ if(_cc13) _cc13(line); const c=tvCfg();
+  line(`<span class="ct-k">const</span> <span class="ct-v">CLUBHOUSE_TV</span> = ${ctBool('tv_on',c.on)};  <span class="ct-c">// TV with the ticker in the clubhouse</span>`);
+  line(`<button type="button" class="ct-run ct-run2" id="ctTv">▶ editTicker</button><span class="ct-f">()</span>;  <span class="ct-c">// pick what scrolls and add your own lines (${c.lines.filter(Boolean).length} custom)</span>`); };
+const _cb13=typeof cheatsBind==='function'?cheatsBind:null;
+cheatsBind=function(body){ if(_cb13) _cb13(body);
+  const t=body.querySelector('[data-ct="tv_on"]'); if(t) t.addEventListener('click',()=>{ const c=tvCfg(); TEAM_SET.ticker={...c,on:!c.on}; });
+  const b=document.getElementById('ctTv'); if(b) b.onclick=tvEditor; };
+function tvEditor(){ const c=tvCfg();
+  showSheet(`<div class="ann-sheet"><p class="ws-eye">Coach's Cheats</p><h3>Clubhouse TV ticker</h3>
+    <div class="tv-src">${TV_SRC.map(([k,n])=>`<label class="ann-chk"><input type="checkbox" data-tvs="${k}" ${c.src[k]?'checked':''}> <span>${n}</span></label>`).join('')}</div>
+    <label class="ann-f">Your own lines (one per line)<textarea id="tvLines" rows="5" maxlength="900" placeholder="Lift at 6:30 Tuesday&#10;Turf shoes only on the field this week">${esc(c.lines.join('\n'))}</textarea></label>
+    <div class="push-act"><button type="button" class="btn" id="tvGo">Save ticker</button><button type="button" class="btn ghost" id="tvX">Cancel</button></div></div>`);
+  document.getElementById('tvX').onclick=()=>closeSheet();
+  document.getElementById('tvGo').onclick=async e=>{ const src={}; document.querySelectorAll('[data-tvs]').forEach(x=>src[x.dataset.tvs]=x.checked);
+    const lines=document.getElementById('tvLines').value.split('\n').map(s=>s.trim()).filter(Boolean).slice(0,12).map(s=>s.slice(0,120));
+    TEAM_SET.ticker={on:c.on,src,lines}; e.target.disabled=true; e.target.textContent='Saving…';
+    const r=await saveTeamSet(); closeSheet(); toast(r.ok?'Ticker saved':'Could not save'+(r.err?': '+r.err:'')); if(r.ok) CH_DIRTY=false; renderCheats(); };
+}
+// ---------- themed buttons ----------
+const HSK=['classic','baseball','wood','steel','patch','scoreboard'];
+function hskApply(){ const v=HSK.includes(TEAM_SET.btn)?TEAM_SET.btn:'classic'; HSK.forEach(k=>document.body.classList.toggle('hsk-'+k,k===v&&k!=='classic')); }
+const _rc13b=renderClubhouse; renderClubhouse=function(allowed){ hskApply(); _rc13b(allowed); if(TEAM_SET_STATE===null&&typeof loadTeamSet==='function') loadTeamSet().then(hskApply); };
+const _cc13b=cheatsCodes; cheatsCodes=function(line){ _cc13b(line);
+  line(`<span class="ct-k">const</span> <span class="ct-v">BUTTON_STYLE</span> = <button type="button" class="ct-tok ct-str" id="ctBtn">'${HSK.includes(TEAM_SET.btn)?TEAM_SET.btn:'classic'}'</button>;  <span class="ct-c">// clubhouse buttons · ${HSK.map(k=>`'${k}'`).join(' · ')}</span>`); };
+const _cb13b=cheatsBind; cheatsBind=function(body){ _cb13b(body);
+  const b=document.getElementById('ctBtn'); if(b) b.onclick=()=>{ const i=HSK.indexOf(HSK.includes(TEAM_SET.btn)?TEAM_SET.btn:'classic'); TEAM_SET.btn=HSK[(i+1)%HSK.length]; hskApply(); CH_DIRTY=true; CH_OUT=''; renderCheats(); }; };
 
 // ===== Tabs =====
 function showTab(){
