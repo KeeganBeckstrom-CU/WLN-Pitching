@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
 <script>/* STEP 3: paste your Supabase Project URL and Publishable key between the quotes on the next 2 lines */
-window.APP_BUILD='20261126083342';
+window.APP_BUILD='20261126084436';
 window.PICK_SKIPPED=true;
 window.WLN_SUPABASE_URL = 'https://uppnclgtqhfawmoahfrv.supabase.co';
 window.WLN_SUPABASE_KEY = 'sb_publishable_MHlCXobo0OnoturzVckmyA_0reKYvG-';
@@ -2399,13 +2399,18 @@ body:not([data-tab="clubhouse"]) .ann-pill{display:none}
 .ann-sheet h3{padding-right:96px}
 
 /* ===== v13: Clubhouse TV ===== */
-.ctv{--tvc:#7A1F3D;position:absolute;left:var(--x);top:var(--y);width:var(--w);transform:translate(-50%,-50%);z-index:2;border:0;padding:0;background:none;cursor:pointer;aspect-ratio:var(--tv-ar,16/10);container-type:inline-size}
-@media (max-aspect-ratio:1/1){.ctv{left:var(--px);top:var(--py);width:var(--pw)}}
+.ctv{--tvc:#7A1F3D;position:absolute;z-index:2;border:0;padding:0;background:none;cursor:pointer;container-type:inline-size;-webkit-tap-highlight-color:transparent}
+/* desktop: content mapped onto the lounge video wall (JS sets the transform) */
+.ctv.wall{left:0;top:0;width:780px;height:300px;transform-origin:0 0}
+.ctv.wall .ctv-scr{position:absolute;inset:0;overflow:hidden;background:#050608;box-shadow:0 0 40px rgba(255,255,255,.08)}
+.ctv.wall:hover .ctv-scr{box-shadow:0 0 0 4px rgba(255,255,255,.35),0 0 50px rgba(255,255,255,.15)}
+/* phones: a TV hung from the ceiling */
+.ctv.hung{--tv-ar:684/408;left:var(--px);top:var(--py);width:var(--pw);aspect-ratio:var(--tv-ar);transform:translate(-50%,-50%)}
+.ctv.hung::before{content:"";position:absolute;left:46%;right:46%;bottom:100%;height:40%;background:linear-gradient(90deg,#1a1a1d,#3a3a40,#1a1a1d)}
+.ctv.hung .ctv-scr{position:absolute;left:1.2%;top:1.6%;right:1.4%;bottom:3.8%;overflow:hidden;background:#050608}
 .ctv-frame{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;filter:drop-shadow(0 8px 16px rgba(0,0,0,.65))}
-.ctv::before{content:"";position:absolute;left:38%;right:38%;top:-6%;height:8%;background:linear-gradient(#2a2a2e,#111);border-radius:2px 2px 0 0}
-.ctv-scr{position:absolute;left:var(--sl,4%);top:var(--st,5%);right:var(--sr,4%);bottom:var(--sb,12%);overflow:hidden;background:#050608;border-radius:1px}
 .ctv-in{position:absolute;inset:0;display:flex;flex-direction:column;color:#fff;font-family:var(--display,'Barlow Condensed',sans-serif);text-align:left}
-.ctv-in::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.10),transparent 38%),repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px)}
+.ctv-in::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.08),transparent 38%),repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px)}
 .ctv-top{display:flex;align-items:center;gap:2.4cqw;padding:2cqw 3cqw;white-space:nowrap;background:linear-gradient(90deg,var(--tvc),color-mix(in srgb,var(--tvc) 30%,#000));font-size:4.6cqw;letter-spacing:.06em}
 .ctv-top img{height:6cqw;width:auto}
 .ctv-top b{font-weight:800}
@@ -2415,7 +2420,7 @@ body:not([data-tab="clubhouse"]) .ann-pill{display:none}
 .ctv-main{position:relative;flex:1}
 .ctv-sl{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 5cqw;opacity:0;transform:translateY(6%);transition:opacity .6s,transform .6s}
 .ctv-sl.on{opacity:1;transform:none}
-.ctv-sl small{font-size:3.8cqw;letter-spacing:.14em;color:color-mix(in srgb,var(--tvc) 55%,#fff);font-weight:700}
+.ctv-sl small{font-size:3.8cqw;letter-spacing:.14em;color:color-mix(in srgb,var(--tvc) 45%,#fff);font-weight:700}
 .ctv-sl b{font-size:6.6cqw;line-height:1.08;font-weight:800;text-transform:uppercase;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .ctv-crawl{flex:none;height:11cqw;background:#f2f2f4;color:#111;overflow:hidden;display:flex;align-items:center;border-top:1.2cqw solid var(--tvc)}
 .ctv-track{display:flex;width:max-content;animation:ctvCrawl var(--dur,30s) linear infinite}
@@ -2424,29 +2429,53 @@ body:not([data-tab="clubhouse"]) .ann-pill{display:none}
 .ctv-track b{color:var(--tvc);margin-right:2cqw;font-weight:800}
 .ctv-track i{font-style:normal;color:var(--tvc);font-size:4cqw}
 @keyframes ctvCrawl{to{transform:translateX(-50%)}}
-.ctv:focus-visible{outline:2px solid #fff;outline-offset:4px}
-.tv-src{margin:2px 0 8px}
-.tv-src .ann-chk{margin:0 0 8px}
+/* wide video wall: sizes for a 780×300 screen */
+.ctv.wall .ctv-top{font-size:24px;padding:10px 22px;gap:14px}.ctv.wall .ctv-top img{height:30px}
+.ctv.wall .ctv-live{font-size:19px}.ctv.wall .ctv-clock{font-size:20px}
+.ctv.wall .ctv-sl{padding:0 28px}.ctv.wall .ctv-sl small{font-size:19px}.ctv.wall .ctv-sl b{font-size:44px;-webkit-line-clamp:2}
+.ctv.wall .ctv-crawl{height:56px;border-top-width:6px}.ctv.wall .ctv-track>div{font-size:30px}.ctv.wall .ctv-track span{padding:0 18px}.ctv.wall .ctv-track b{margin-right:12px}.ctv.wall .ctv-track i{font-size:18px}
+.ctv:focus-visible{outline:3px solid #fff;outline-offset:4px}
 @media (prefers-reduced-motion:reduce){.ctv-track{animation:none}}
-.ctv{--tv-ar:684/408;--sl:1.2%;--st:1.6%;--sr:1.4%;--sb:3.8%}
-/* ===== v13: themed clubhouse buttons (coach picks in Cheats) ===== */
-body[class*="hsk-"] .hs{background:none!important;padding:0;gap:.25em;text-shadow:none}
-body[class*="hsk-"] .hs>span:not(.hs-dot){display:flex;align-items:center;height:2.15em;padding:0 var(--pad);border-style:solid;border-width:0 var(--cap);border-image:var(--plate) 0 var(--slice) fill / 0 var(--cap) stretch;filter:drop-shadow(0 4px 6px rgba(0,0,0,.55));transition:transform .15s}
-body[class*="hsk-"] .hs .hs-dot{background:var(--badge) center/contain no-repeat;border:0;box-shadow:none;filter:drop-shadow(0 4px 6px rgba(0,0,0,.55))}
-body[class*="hsk-"] .hs:hover>span:not(.hs-dot),body[class*="hsk-"] .hs:focus-visible>span:not(.hs-dot){transform:translateY(-2px) scale(1.03)}
-body[class*="hsk-"] .hs.primary .hs-dot{animation:none}
-body[class*="hsk-"] .hs.primary .hs-dot::after{border-color:transparent transparent transparent var(--dotc)}
-body[class*="hsk-"] .hs:not(.primary) .hs-dot::after{background:var(--dotc)}
-body.hsk-baseball{--plate:url(btn/baseball-wide.webp);--slice:92;--cap:1.15em;--pad:.35em;--badge:url(btn/baseball-round.webp);--dotc:#8C2244}
-body.hsk-baseball .hs>span:not(.hs-dot){color:#1b2030;letter-spacing:.03em}
-body.hsk-wood{--plate:url(btn/wood-wide.webp);--slice:50;--cap:.7em;--pad:.45em;--badge:url(btn/wood-round.webp);--dotc:#f4e7cf}
-body.hsk-wood .hs>span:not(.hs-dot){color:#f6ead2;text-shadow:0 2px 0 rgba(0,0,0,.75),0 0 6px rgba(0,0,0,.6)}
-body.hsk-steel{--plate:url(btn/steel-wide.webp);--slice:45;--cap:.7em;--pad:.5em;--badge:url(btn/steel-round.webp);--dotc:#2a2c31}
-body.hsk-steel .hs>span:not(.hs-dot){color:#24262b;text-shadow:0 1px 0 rgba(255,255,255,.7);letter-spacing:.06em;text-transform:uppercase;font-size:.86em}
-body.hsk-patch{--plate:url(btn/patch-wide.webp);--slice:100;--cap:1.15em;--pad:.3em;--badge:url(btn/patch-round.webp);--dotc:#f1e3bf}
-body.hsk-patch .hs>span:not(.hs-dot){color:#f4e6c2;text-shadow:0 1px 0 rgba(0,0,0,.6);letter-spacing:.04em}
-body.hsk-scoreboard{--plate:url(btn/scoreboard-wide.webp);--slice:120;--cap:1.4em;--pad:.15em;--badge:url(btn/scoreboard-round.webp);--dotc:#ffb347}
-body.hsk-scoreboard .hs>span:not(.hs-dot){color:#ffbf5e;text-shadow:0 0 6px rgba(255,160,40,.9),0 0 14px rgba(255,120,0,.5);letter-spacing:.08em;text-transform:uppercase;font-size:.84em}
+/* ===== coach channel guide ===== */
+.tvg{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.72);display:grid;place-items:center;padding:16px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.tvg-box{width:min(620px,100%);max-height:calc(100dvh - 32px);display:flex;flex-direction:column;background:#07090f;border:3px solid #1d2230;border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.7),inset 0 0 80px rgba(40,60,120,.12);overflow:hidden;font-family:var(--display,'Barlow Condensed',sans-serif);color:#e9ecf4}
+.tvg-hd{display:flex;align-items:center;gap:12px;padding:12px 14px 12px 18px;background:linear-gradient(90deg,#7A1F3D,#141820 70%);border-bottom:2px solid #000}
+.tvg-hd b{font-size:22px;letter-spacing:.06em}
+.tvg-hd span{font-size:14px;letter-spacing:.18em;opacity:.85}
+.tvg-hd em{margin-left:auto;font-style:normal;font-size:13px;letter-spacing:.08em;background:rgba(0,0,0,.35);padding:4px 10px;border-radius:99px;text-transform:uppercase}
+.tvg-x{width:40px;height:40px;border:0;border-radius:10px;background:rgba(255,255,255,.1);color:#fff;font-size:18px;cursor:pointer}
+.tvg-list{overflow:auto;padding:6px 0}
+.tvg-row{display:flex;align-items:center;gap:14px;padding:10px 14px 10px 16px;border-bottom:1px solid #141925;cursor:pointer;outline:0}
+.tvg-row.sel{background:linear-gradient(90deg,rgba(255,214,0,.16),rgba(255,214,0,.03));box-shadow:inset 4px 0 0 #ffd600}
+.tvg-row:focus-visible{box-shadow:inset 0 0 0 2px #ffd600}
+.tvg-ch{flex:none;width:44px;height:36px;display:grid;place-items:center;border-radius:6px;background:#141925;color:#8f9ab3;font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}
+.tvg-row.on .tvg-ch{background:#ffd600;color:#111}
+.tvg-nm{flex:1;min-width:0;display:flex;flex-direction:column}
+.tvg-nm b{font-size:19px;letter-spacing:.03em;text-transform:uppercase}
+.tvg-nm small{font:500 13px/1.35 var(--body,system-ui);color:#8f9ab3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tvg-row.on .tvg-nm small{color:#c9d0e0}
+.tvg-sw{flex:none;min-width:58px;height:34px;border:0;border-radius:99px;background:#1f2533;color:#8f9ab3;font:800 15px var(--display,inherit);letter-spacing:.08em;cursor:pointer}
+.tvg-row.on .tvg-sw{background:#1db954;color:#fff}
+.tvg-ed{padding:12px 16px;border-top:2px solid #141925;background:#0b0e16}
+.tvg-ed p{margin:0;font:500 14px/1.4 var(--body,system-ui);color:#aab3c8}
+.tvg-ed p b{color:#fff}
+.tvg-ed label{display:block;font:600 13px var(--body,system-ui);color:#aab3c8;margin-bottom:8px}
+.tvg-ed input,.tvg-ed textarea{display:block;width:100%;box-sizing:border-box;margin-top:5px;padding:10px 12px;border-radius:8px;border:1px solid #2a3142;background:#121724;color:#fff;font:500 16px var(--body,system-ui)}
+.tvg-ft{display:flex;gap:10px;justify-content:space-between;padding:12px 16px;border-top:1px solid #141925}
+.tvg-pw,.tvg-save{min-height:44px;border:0;border-radius:10px;padding:0 18px;font:800 16px var(--display,inherit);letter-spacing:.06em;cursor:pointer}
+.tvg-pw{background:#1f2533;color:#c9d0e0}
+.tvg-save{background:#ffd600;color:#111}
+@media (max-width:480px){.tvg{padding:10px}.tvg-hd{padding:10px 10px 10px 14px}.tvg-hd span,.tvg-hd em{display:none}.tvg-nm b{font-size:16px}.tvg-row{gap:10px;padding:9px 10px}.tvg-ch{width:38px;height:32px;font-size:17px}.tvg-pw,.tvg-save{white-space:nowrap;padding:0 14px;font-size:15px}.tvg-ed{padding:10px 12px}}
+/* ===== players lounge: holiday art + logo egg placement ===== */
+.hol-amer{top:38.5%}
+.egg-logo{left:46.5%;top:23.5%;width:7%;height:13%}
+@media (max-aspect-ratio:1/1){
+  .hol-tban,.hol-xban{top:34%;width:54%}
+  .hol-amer{top:48.5%}
+  .egg-logo{left:41%;top:3%;width:18%;height:12%}
+}
+
+@media (min-width:761px){.ann-pill{bottom:18px}}
 @media (max-width:760px){ .tabs a[data-tab="leaders"]::before{-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M8%2021h8%22%2F%3E%3Cpath%20d%3D%22M12%2017v4%22%2F%3E%3Cpath%20d%3D%22M7%204h10v5a5%205%200%200%201-10%200z%22%2F%3E%3Cpath%20d%3D%22M17%205h3v2a3%203%200%200%201-3%203%22%2F%3E%3Cpath%20d%3D%22M7%205H4v2a3%203%200%200%200%203%203%22%2F%3E%3C%2Fsvg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M8%2021h8%22%2F%3E%3Cpath%20d%3D%22M12%2017v4%22%2F%3E%3Cpath%20d%3D%22M7%204h10v5a5%205%200%200%201-10%200z%22%2F%3E%3Cpath%20d%3D%22M17%205h3v2a3%203%200%200%201-3%203%22%2F%3E%3Cpath%20d%3D%22M7%205H4v2a3%203%200%200%200%203%203%22%2F%3E%3C%2Fsvg%3E")} }
 @media (max-width:760px){ .tabs a[data-tab="clubhouse"]::before{-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%2021h18%22%2F%3E%3Cpath%20d%3D%22M5%2021V8l7-4%207%204v13%22%2F%3E%3Cpath%20d%3D%22M10%2021v-6h4v6%22%2F%3E%3C%2Fsvg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%2021h18%22%2F%3E%3Cpath%20d%3D%22M5%2021V8l7-4%207%204v13%22%2F%3E%3Cpath%20d%3D%22M10%2021v-6h4v6%22%2F%3E%3C%2Fsvg%3E")} }
 @media (max-width:760px){ .tabs a[data-tab="cheats"]::before{-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%224%2017%2010%2011%204%205%22%2F%3E%3Cline%20x1%3D%2212%22%20y1%3D%2219%22%20x2%3D%2220%22%20y2%3D%2219%22%2F%3E%3C%2Fsvg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%224%2017%2010%2011%204%205%22%2F%3E%3Cline%20x1%3D%2212%22%20y1%3D%2219%22%20x2%3D%2220%22%20y2%3D%2219%22%2F%3E%3C%2Fsvg%3E")} }
@@ -6767,15 +6796,15 @@ function weeklyMode(){ return WEEKLY_PREVIEW||TODAY>=WEEKLY_FROM; }
 function SCHED_LABEL(){ return weeklyMode()?'Weekly Schedule':'Set My Schedule'; }
 // x/y: spot on the wide picture (clubhouse.jpg). px/py: spot on the phone picture (clubhouse-phone.jpg). flip/pflip: label sits to the left of the dot.
 const CLUB_STOPS=[
-  {k:'field', x:50, y:52, px:52, py:59, pflip:false, primary:true, p:['Today\'s Work','daily-work'], c:['Coach\'s View','coach-view']},
-  {k:'tv',    x:26, y:31, px:27, py:35.5, pflip:false, p:['Schedule','schedule'], c:['Schedule','schedule']},
-  {k:'board', x:30.4, y:50, px:44, py:48.5, pflip:false, p:[SCHED_LABEL(),'home'], c:null},
-  {k:'locker',x:90, y:46, flip:true, px:84, py:75, pflip:true, p:['My Locker','profile'], c:['Clubhouse Home','home']},
-  {k:'phone', x:72, y:66, px:44, py:69.5, pflip:true, p:['Chat','chat'], c:['Chat','chat']},
-  {k:'laptop',x:51.5, y:74, px:47, py:64, pflip:true, p:['Log','personal-plan'], c:['Coach\'s Cheats','cheats']},
-  {k:'door',  x:13, y:52, px:13, py:55, pflip:false, p:['Settings','@account'], c:['Settings','@account']},
-  {k:'cork',  x:16, y:41, px:21, py:44, pflip:false, p:['Help','@help'], c:['Help','@help']},
-  {k:'lead',  x:14.5, y:23, px:84, py:30, pflip:true, p:['Leaderboards','leaders'], c:['Leaderboards','leaders']},
+  {k:'field', x:52, y:47, px:50, py:54, primary:true, p:['Today\'s Work','daily-work'], c:['Coach\'s View','coach-view']},
+  {k:'tv',    x:67, y:55.5, px:81, py:60, flip:true, pflip:true, p:['Schedule','schedule'], c:['Schedule','schedule']},
+  {k:'board', x:4.6, y:62, px:14, py:62, p:[SCHED_LABEL(),'home'], c:null},
+  {k:'locker',x:72.5, y:63, px:80, py:80, pflip:true, p:['My Locker','profile'], c:['Clubhouse Home','home']},
+  {k:'phone', x:37, y:84, px:27, py:67, p:['Chat','chat'], c:['Chat','chat']},
+  {k:'laptop',x:63, y:85, px:72, py:73, pflip:true, p:['Log','personal-plan'], c:['Coach\'s Cheats','cheats']},
+  {k:'door',  x:16, y:32, px:13, py:43, p:['Settings','@account'], c:['Settings','@account']},
+  {k:'cork',  x:72, y:20, px:13, py:22, flip:true, p:['Help','@help'], c:['Help','@help']},
+  {k:'lead',  x:85, y:48, px:86, py:40, flip:true, pflip:true, p:['Leaderboards','leaders'], c:['Leaderboards','leaders']},
 ];
 function clubGo(dest){
   if(dest==='@account'){ const b=document.getElementById('acctOpenL')||document.getElementById('acctOpen'); if(b) b.click(); return; }
@@ -6811,7 +6840,7 @@ function renderClubhouse(allowed){
     `;
   const logo=document.querySelector('header .logo img'); const li=el.querySelector('.club-logo'); if(logo&&li) li.setAttribute('href',logo.getAttribute('src'));
   const room=document.getElementById('clubRoom');   // start looking at the tunnel to the field
-  requestAnimationFrame(()=>{ if(!matchMedia('(max-aspect-ratio: 1/1)').matches && room.scrollWidth>room.clientWidth) room.scrollLeft=room.scrollWidth*0.559-room.clientWidth/2; });
+  requestAnimationFrame(()=>{ if(!matchMedia('(max-aspect-ratio: 1/1)').matches && room.scrollWidth>room.clientWidth) room.scrollLeft=room.scrollWidth*0.52-room.clientWidth/2; });
 }
 document.addEventListener('click',e=>{ const b=e.target.closest('[data-clubgo]'); if(b) clubGo(b.dataset.clubgo); });
 
@@ -8224,44 +8253,75 @@ document.addEventListener('click',async e=>{
 document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible'&&ANN_STATE!==null) loadAnn(true).then(()=>{ annRefreshBadges(); annRerender(); }); });
 
 
-/* ===== v13: Clubhouse TV with a ticker ===== */
-// where the TV hangs in the room (% of the stage). Each app sets its own; these are the WLN room.
-window.CLUB_TV={x:84,y:23,w:15,px:25,py:19.5,pw:30};
-const TV_DEF={on:true,src:{ann:true,game:true,today:true,team:true,lvc:true,count:true,custom:true},lines:[]};
-const tvCfg=()=>{ const t=TEAM_SET.ticker||{}; return {on:t.on!==false,src:{...TV_DEF.src,...(t.src||{})},lines:Array.isArray(t.lines)?t.lines:[]}; };
-const TV_SRC=[['ann','Coach announcements'],['game','Next game'],['count','Days until first pitch'],['today',"Each player's work for today"],['team','How many have logged today (coaches see it)'],['lvc','LVC standings leaders (WLN)'],['custom','Your own lines']];
+/* ===== v13: Clubhouse TV (video wall on desktop, hung TV on phones) + coach channel guide ===== */
+// phone spot for the hung TV (% of the phone stage)
+window.CLUB_TV=window.CLUB_TV||{px:50,py:26.5,pw:40};
+// desktop: the lounge's curved video wall (% of the stage): top-left, top-right, bottom-left, bottom-right
+window.CLUB_WALL=window.CLUB_WALL||[[10.4,53.7],[34.4,54.4],[10.4,77.6],[34.4,62.6]];
+const TV_CH=[
+ ['ann','Coach announcements','The last 3 things you posted'],
+ ['game','Next game','Opponent, date and days to go'],
+ ['count','First pitch countdown','Days until opening day'],
+ ['today',"Today's work","Each player sees his own plan for today"],
+ ['team','Logged today','How many have logged (only coaches see it)'],
+ ['lvc','LVC standings','Division leaders'],
+ ['potw','Pitcher of the week','You pick him'],
+ ['tip','Arm care tip','A new tip each day'],
+ ['custom','Coach\'s lines','Anything you type']];
+const TV_TIPS=['Arm care before you throw. Every time.','Long toss is for building the arm, not for showing off.','Log your throws the same day while you still remember them.','Sleep is the cheapest recovery there is.','If something hurts, tell a coach today, not next week.','Hydrate before practice, not during it.','Your front side leads the way. Stay closed.','Bullpens are for one thing at a time. Pick a focus.','Ice is optional. Moving the arm the next day is not.','Strike one is the best pitch in baseball.','Fill the zone early, expand late.','Recovery days still count. Do the band work.'];
+const tvOK=k=>k!=='lvc'||typeof LVC_DIVS!=='undefined';
+const tvCfg=()=>{ const t=TEAM_SET.ticker||{}; const src={}; TV_CH.forEach(([k])=>src[k]=t.src&&k in t.src?!!t.src[k]:k!=='potw'); return {on:t.on!==false,src,lines:Array.isArray(t.lines)?t.lines:[],potw:t.potw||{}}; };
 function tvNextGame(){ try{ return typeof nextGame==='function'?nextGame():null; }catch(e){ return null; } }
 function tvDays(d){ return Math.max(0,Math.round((parse(d)-parse(TODAY))/864e5)); }
-function tvItems(){
-  const c=tvCfg(), out=[], coach=typeof isCoachUser==='function'&&isCoachUser()&&!window.VIEW_AS;
-  if(c.src.ann&&typeof ANN!=='undefined') ANN.slice(0,3).forEach(a=>out.push({t:'COACH',v:a.title,hot:typeof annSeenAt==='function'&&a.created_at>annSeenAt()}));
-  const g=tvNextGame();
-  if(c.src.game&&g){ const n=tvDays(g.d); out.push({t:'NEXT GAME',v:`${typeof gameVs==='function'?gameVs(g):g.opp} · ${typeof sFmt==='function'?sFmt(g.d):g.d}${n?` · ${n} day${n===1?'':'s'}`:' · TODAY'}`}); }
-  if(c.src.count&&typeof SCHED!=='undefined'&&SCHED[0]&&TODAY<SCHED[0].d){ const n=tvDays(SCHED[0].d); out.push({t:'COUNTDOWN',v:`${n} days until first pitch`}); }
-  if(c.src.today&&!coach){ try{ const p=dayPlan(TODAY); if(p) out.push({t:'TODAY',v:p.kind==='off'?'Off day. Recover.':`${label(p)}. Log it when you finish.`}); }catch(e){} }
-  if(c.src.team&&coach){ try{ const st=staff().filter(({a})=>!a.pre); const n=st.filter(({a})=>a.logs&&a.logs[TODAY]).length; if(st.length) out.push({t:'TODAY',v:`${n} of ${st.length} pitchers have logged`}); }catch(e){} }
-  if(c.src.lvc&&typeof LVC_DIVS!=='undefined'&&typeof lvcRec==='function'){ LVC_DIVS.forEach(([dn,teams])=>{ const r=teams.map(n=>[n,...lvcRec(n)]).sort((a,b)=>(b[1]-b[2])-(a[1]-a[2])||b[1]-a[1]); const any=r.some(x=>x[1]+x[2]>0); out.push({t:`LVC ${dn.toUpperCase()}`,v:any?r.slice(0,3).map(x=>`${lvcShort(x[0])} ${x[1]}-${x[2]}`).join(' · '):'Conference play starts in April'}); }); }
-  if(c.src.custom) c.lines.filter(Boolean).forEach(l=>out.push({t:'',v:l}));
-  if(!out.length) out.push({t:'',v:'Clubhouse TV'});
-  return out;
-}
+function tvChannel(k,c,coach){ const out=[];
+  if(k==='ann'&&typeof ANN!=='undefined') ANN.slice(0,3).forEach(a=>out.push({t:'COACH',v:a.title}));
+  if(k==='game'){ const g=tvNextGame(); if(g){ const n=tvDays(g.d); out.push({t:'NEXT GAME',v:`${typeof gameVs==='function'?gameVs(g):g.opp} · ${typeof sFmt==='function'?sFmt(g.d):g.d}${n?` · ${n} day${n===1?'':'s'}`:' · TODAY'}`}); } }
+  if(k==='count'&&typeof SCHED!=='undefined'&&SCHED[0]&&TODAY<SCHED[0].d) out.push({t:'COUNTDOWN',v:`${tvDays(SCHED[0].d)} days until first pitch`});
+  if(k==='today'&&!coach){ try{ const p=dayPlan(TODAY); if(p) out.push({t:'TODAY',v:p.kind==='off'?'Off day. Recover.':`${label(p)}. Log it when you finish.`}); }catch(e){} }
+  if(k==='today'&&coach) out.push({t:'TODAY',v:"Players see their own work here"});
+  if(k==='team'&&coach){ try{ const st=staff().filter(({a})=>!a.pre); const n=st.filter(({a})=>a.logs&&a.logs[TODAY]).length; if(st.length) out.push({t:'LOGGED TODAY',v:`${n} of ${st.length} pitchers`}); }catch(e){} }
+  if(k==='lvc'&&typeof LVC_DIVS!=='undefined'&&typeof lvcRec==='function') LVC_DIVS.forEach(([dn,teams])=>{ const r=teams.map(n=>[n,...lvcRec(n)]).sort((a,b)=>(b[1]-b[2])-(a[1]-a[2])||b[1]-a[1]); const any=r.some(x=>x[1]+x[2]>0); out.push({t:`LVC ${dn.toUpperCase()}`,v:any?r.slice(0,3).map(x=>`${lvcShort(x[0])} ${x[1]}-${x[2]}`).join(' · '):'League play starts in April'}); });
+  if(k==='potw'&&c.potw.name) out.push({t:'PITCHER OF THE WEEK',v:c.potw.name+(c.potw.why?` · ${c.potw.why}`:'')});
+  if(k==='tip'){ const d=Math.floor(Date.now()/864e5); out.push({t:'ARM CARE',v:TV_TIPS[d%TV_TIPS.length]}); }
+  if(k==='custom') c.lines.filter(Boolean).forEach(l=>out.push({t:'',v:l}));
+  return out; }
+function tvItems(){ const c=tvCfg(), coach=typeof isCoachUser==='function'&&isCoachUser()&&!window.VIEW_AS; const out=[];
+  TV_CH.forEach(([k])=>{ if(c.src[k]&&tvOK(k)) out.push(...tvChannel(k,c,coach)); });
+  if(!out.length) out.push({t:'',v:'Clubhouse TV'}); return out; }
 function tvHTML(){
   const it=tvItems(), crawl=it.map(i=>`<span>${i.t?`<b>${esc(i.t)}</b>`:''}${esc(i.v)}</span>`).join('<i>●</i>');
   const logo=(document.querySelector('header .logo img')||{}).src||'';
-  return `<div class="ctv-in"><div class="ctv-top">${logo?`<img src="${logo}" alt="">`:''}<b>CLUBHOUSE TV</b><span class="ctv-live">● LIVE</span><span class="ctv-clock" id="ctvClock"></span></div>
-    <div class="ctv-main" id="ctvMain">${it.map((i,n)=>`<div class="ctv-sl ${n?'':'on'}"><small>${esc(i.t||'CLUBHOUSE')}</small><b>${esc(i.v)}</b></div>`).join('')}</div>
+  return `<div class="ctv-in"><div class="ctv-top">${logo?`<img src="${logo}" alt="">`:''}<b>CLUBHOUSE TV</b><span class="ctv-live">● LIVE</span><span class="ctv-clock" data-ctvclock></span></div>
+    <div class="ctv-main" data-ctvmain>${it.map((i,n)=>`<div class="ctv-sl ${n?'':'on'}"><small>${esc(i.t||'CLUBHOUSE')}</small><b>${esc(i.v)}</b></div>`).join('')}</div>
     <div class="ctv-crawl"><div class="ctv-track" style="--dur:${Math.max(18,crawl.replace(/<[^>]+>/g,'').length*0.22)}s"><div>${crawl}<i>●</i></div><div aria-hidden="true">${crawl}<i>●</i></div></div></div></div>`;
 }
-let _ctvT=null;
+// map a w×h box onto 4 points (projective transform)
+function tvHomog(w,h,q){
+  const adj=m=>[m[4]*m[8]-m[5]*m[7],m[2]*m[7]-m[1]*m[8],m[1]*m[5]-m[2]*m[4],m[5]*m[6]-m[3]*m[8],m[0]*m[8]-m[2]*m[6],m[2]*m[3]-m[0]*m[5],m[3]*m[7]-m[4]*m[6],m[1]*m[6]-m[0]*m[7],m[0]*m[4]-m[1]*m[3]];
+  const mm=(a,b)=>{ const c=[]; for(let i=0;i<3;i++) for(let j=0;j<3;j++){ let s=0; for(let k=0;k<3;k++) s+=a[3*i+k]*b[3*k+j]; c[3*i+j]=s; } return c; };
+  const mv=(m,v)=>[m[0]*v[0]+m[1]*v[1]+m[2]*v[2],m[3]*v[0]+m[4]*v[1]+m[5]*v[2],m[6]*v[0]+m[7]*v[1]+m[8]*v[2]];
+  const basis=p=>{ const m=[p[0],p[2],p[4],p[1],p[3],p[5],1,1,1]; const v=mv(adj(m),[p[6],p[7],1]); return mm(m,[v[0],0,0,0,v[1],0,0,0,v[2]]); };
+  const t=mm(basis(q),adj(basis([0,0,w,0,0,h,w,h]))); for(let i=0;i<9;i++) t[i]/=t[8];
+  return `matrix3d(${t[0]},${t[3]},0,${t[6]},${t[1]},${t[4]},0,${t[7]},0,0,1,0,${t[2]},${t[5]},0,${t[8]})`;
+}
+const tvPhone=()=>matchMedia('(max-aspect-ratio: 1/1)').matches;
+let _ctvT=null, _ctvRO=null;
+function tvPlace(){ const st=document.querySelector('#clubBody .club-stage'), el=st&&st.querySelector('.ctv'); if(!el) return;
+  if(tvPhone()){ el.style.transform=''; return; }
+  const W=st.clientWidth, H=st.clientHeight, q=window.CLUB_WALL.flatMap(([x,y])=>[x/100*W,y/100*H]);
+  el.style.transform=tvHomog(780,300,q); }
 function tvMount(){
   const st=document.querySelector('#clubBody .club-stage'); if(!st) return;
   st.querySelector('.ctv')?.remove(); if(!tvCfg().on) return;
-  const T=window.CLUB_TV;
-  st.insertAdjacentHTML('beforeend',`<button type="button" class="ctv" data-annall aria-label="Clubhouse TV, open announcements" style="--x:${T.x}%;--y:${T.y}%;--w:${T.w}%;--px:${T.px}%;--py:${T.py}%;--pw:${T.pw}%">
-    <span class="ctv-scr">${tvHTML()}</span><img class="ctv-frame" src="tex/tv.webp" alt=""></button>`);
+  const T=window.CLUB_TV, phone=tvPhone();
+  st.insertAdjacentHTML('beforeend',`<button type="button" class="ctv ${phone?'hung':'wall'}" data-tvtap aria-label="Clubhouse TV" style="--px:${T.px}%;--py:${T.py}%;--pw:${T.pw}%">
+    <span class="ctv-scr">${tvHTML()}</span>${phone?'<img class="ctv-frame" src="tex/tv.webp" alt="">':''}</button>`);
+  tvPlace();
+  if(!_ctvRO&&window.ResizeObserver){ _ctvRO=new ResizeObserver(()=>{ const el=document.querySelector('#clubBody .ctv'); if(el&&el.classList.contains(tvPhone()?'wall':'hung')) tvMount(); else tvPlace(); }); }
+  if(_ctvRO){ _ctvRO.disconnect(); _ctvRO.observe(st); }
   clearInterval(_ctvT); let k=0;
-  const tick=()=>{ const m=document.getElementById('ctvMain'); if(!m){ clearInterval(_ctvT); return; } const s=m.children; if(s.length>1){ s[k%s.length].classList.remove('on'); k++; s[k%s.length].classList.add('on'); }
-    const c=document.getElementById('ctvClock'); if(c) c.textContent=new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}); };
+  const tick=()=>{ const m=st.querySelector('[data-ctvmain]'); if(!m||!m.isConnected){ clearInterval(_ctvT); return; } const s=m.children; if(s.length>1){ s[k%s.length].classList.remove('on'); k++; s[k%s.length].classList.add('on'); }
+    const c=st.querySelector('[data-ctvclock]'); if(c) c.textContent=new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}); };
   tick(); _ctvT=setInterval(tick,5000);
 }
 const _rc13=renderClubhouse; renderClubhouse=function(allowed){
@@ -8269,34 +8329,53 @@ const _rc13=renderClubhouse; renderClubhouse=function(allowed){
   if(typeof ANN_STATE!=='undefined'&&ANN_STATE===null&&typeof loadAnn==='function') loadAnn().then(()=>{ const c=document.getElementById('tab-clubhouse'); if(c&&!c.hidden) tvMount(); });
   if(TEAM_SET_STATE===null&&typeof loadTeamSet==='function') loadTeamSet().then(()=>{ const c=document.getElementById('tab-clubhouse'); if(c&&!c.hidden) tvMount(); });
 };
-// ---------- Coach's Cheats: ticker controls ----------
+document.addEventListener('click',async e=>{ if(!e.target.closest('[data-tvtap]')) return; e.preventDefault();
+  if(typeof isCoachUser==='function'&&isCoachUser()&&!window.VIEW_AS) tvGuide();
+  else { if(typeof ANN_STATE!=='undefined'&&ANN_STATE===null) await loadAnn(); if(typeof annSheetAll==='function') annSheetAll(); } });
+// ---------- coach channel guide ----------
+let TVG=null;
+function tvGuide(){ const c=tvCfg(); TVG={src:{...c.src},lines:[...c.lines],potw:{...c.potw},on:c.on,sel:0}; tvGuideRender(); }
+function tvGuideRender(){
+  document.getElementById('tvGuide')?.remove();
+  const chans=TV_CH.filter(([k])=>tvOK(k)), live=chans.filter(([k])=>TVG.src[k]).length;
+  const prev=k=>{ const it=tvChannel(k,{...TVG},true); return it.length?it.map(i=>(i.t?i.t+': ':'')+i.v).join('  ·  '):(k==='potw'?'Pick a pitcher below':k==='custom'?'Type your lines below':'Nothing to show right now'); };
+  const sel=chans[TVG.sel]||chans[0];
+  document.body.insertAdjacentHTML('beforeend',`<div class="tvg" id="tvGuide" role="dialog" aria-modal="true" aria-label="Clubhouse TV channel guide">
+   <div class="tvg-box">
+    <div class="tvg-hd"><b>CLUBHOUSE TV</b><span>CHANNEL GUIDE</span><em>${live} on the ticker</em><button type="button" class="tvg-x" data-tvgx aria-label="Close">✕</button></div>
+    <div class="tvg-list">${chans.map(([k,n,d],i)=>`<div class="tvg-row ${TVG.src[k]?'on':''} ${i===TVG.sel?'sel':''}" data-tvgi="${i}" role="button" tabindex="0">
+      <span class="tvg-ch">${String(i+2).padStart(2,'0')}</span><span class="tvg-nm"><b>${esc(n)}</b><small>${esc(prev(k))}</small></span>
+      <button type="button" class="tvg-sw" data-tvgk="${k}" role="switch" aria-checked="${!!TVG.src[k]}" aria-label="${esc(n)}">${TVG.src[k]?'ON':'OFF'}</button></div>`).join('')}</div>
+    <div class="tvg-ed">${sel[0]==='potw'?`<label>Pitcher of the week<input id="tvgPn" maxlength="40" value="${esc(TVG.potw.name||'')}" placeholder="Name"></label><label>Why (optional)<input id="tvgPw" maxlength="70" value="${esc(TVG.potw.why||'')}" placeholder="7 K's in 4 IP vs Lakeland"></label>`
+      :sel[0]==='custom'?`<label>Your lines, one per row<textarea id="tvgL" rows="4" maxlength="900" placeholder="Lift at 6:30 Tuesday&#10;Turf shoes only on the field this week">${esc(TVG.lines.join('\n'))}</textarea></label>`
+      :`<p><b>${esc(sel[1])}</b> · ${esc(sel[2])}</p>`}</div>
+    <div class="tvg-ft"><button type="button" class="tvg-pw" data-tvgpw>${TVG.on?'⏻ Turn TV off':'⏻ Turn TV on'}</button><button type="button" class="tvg-save" data-tvgsave>▶ Save &amp; watch</button></div>
+   </div></div>`);
+  const sr=document.querySelector('#tvGuide .tvg-row.sel'); if(sr) sr.scrollIntoView({block:'nearest'});
+  const pn=document.getElementById('tvgPn'), pw=document.getElementById('tvgPw'), tl=document.getElementById('tvgL');
+  if(pn) pn.oninput=()=>{ TVG.potw.name=pn.value.trim(); if(TVG.potw.name) TVG.src.potw=true; }; if(pw) pw.oninput=()=>{ TVG.potw.why=pw.value.trim(); };
+  if(tl) tl.oninput=()=>{ TVG.lines=tl.value.split('\n').map(s=>s.trim()).filter(Boolean).slice(0,12).map(s=>s.slice(0,120)); };
+}
+document.addEventListener('click',async e=>{ const g=document.getElementById('tvGuide'); if(!g||!g.contains(e.target)) return;
+  if(e.target.closest('[data-tvgx]')||e.target===g){ g.remove(); TVG=null; return; }
+  const sw=e.target.closest('[data-tvgk]'), row=e.target.closest('[data-tvgi]');
+  if(sw){ const k=sw.dataset.tvgk; TVG.src[k]=!TVG.src[k]; TVG.sel=+row.dataset.tvgi; tvGuideRender(); return; }
+  if(row){ TVG.sel=+row.dataset.tvgi; tvGuideRender(); return; }
+  if(e.target.closest('[data-tvgpw]')){ TVG.on=!TVG.on; tvGuideRender(); return; }
+  const sv=e.target.closest('[data-tvgsave]'); if(sv){ sv.disabled=true; sv.textContent='Saving…';
+    TEAM_SET.ticker={on:TVG.on,src:TVG.src,lines:TVG.lines,potw:TVG.potw}; const r=await saveTeamSet();
+    g.remove(); TVG=null; toast(r.ok?'Clubhouse TV updated':'Could not save'+(r.err?': '+r.err:'')); tvMount(); }
+});
+document.addEventListener('keydown',e=>{ const g=document.getElementById('tvGuide'); if(!g) return;
+  if(e.key==='Escape'){ g.remove(); TVG=null; }
+  if(e.key==='Enter'&&e.target.matches&&e.target.matches('.tvg-row')) e.target.click(); });
+// ---------- Coach's Cheats: TV on/off ----------
 const _cc13=typeof cheatsCodes==='function'?cheatsCodes:null;
 cheatsCodes=function(line){ if(_cc13) _cc13(line); const c=tvCfg();
-  line(`<span class="ct-k">const</span> <span class="ct-v">CLUBHOUSE_TV</span> = ${ctBool('tv_on',c.on)};  <span class="ct-c">// TV with the ticker in the clubhouse</span>`);
-  line(`<button type="button" class="ct-run ct-run2" id="ctTv">▶ editTicker</button><span class="ct-f">()</span>;  <span class="ct-c">// pick what scrolls and add your own lines (${c.lines.filter(Boolean).length} custom)</span>`); };
+  line(`<span class="ct-k">const</span> <span class="ct-v">CLUBHOUSE_TV</span> = ${ctBool('tv_on',c.on)};  <span class="ct-c">// tap the TV in the clubhouse to change channels</span>`); };
 const _cb13=typeof cheatsBind==='function'?cheatsBind:null;
 cheatsBind=function(body){ if(_cb13) _cb13(body);
-  const t=body.querySelector('[data-ct="tv_on"]'); if(t) t.addEventListener('click',()=>{ const c=tvCfg(); TEAM_SET.ticker={...c,on:!c.on}; });
-  const b=document.getElementById('ctTv'); if(b) b.onclick=tvEditor; };
-function tvEditor(){ const c=tvCfg();
-  showSheet(`<div class="ann-sheet"><p class="ws-eye">Coach's Cheats</p><h3>Clubhouse TV ticker</h3>
-    <div class="tv-src">${TV_SRC.map(([k,n])=>`<label class="ann-chk"><input type="checkbox" data-tvs="${k}" ${c.src[k]?'checked':''}> <span>${n}</span></label>`).join('')}</div>
-    <label class="ann-f">Your own lines (one per line)<textarea id="tvLines" rows="5" maxlength="900" placeholder="Lift at 6:30 Tuesday&#10;Turf shoes only on the field this week">${esc(c.lines.join('\n'))}</textarea></label>
-    <div class="push-act"><button type="button" class="btn" id="tvGo">Save ticker</button><button type="button" class="btn ghost" id="tvX">Cancel</button></div></div>`);
-  document.getElementById('tvX').onclick=()=>closeSheet();
-  document.getElementById('tvGo').onclick=async e=>{ const src={}; document.querySelectorAll('[data-tvs]').forEach(x=>src[x.dataset.tvs]=x.checked);
-    const lines=document.getElementById('tvLines').value.split('\n').map(s=>s.trim()).filter(Boolean).slice(0,12).map(s=>s.slice(0,120));
-    TEAM_SET.ticker={on:c.on,src,lines}; e.target.disabled=true; e.target.textContent='Saving…';
-    const r=await saveTeamSet(); closeSheet(); toast(r.ok?'Ticker saved':'Could not save'+(r.err?': '+r.err:'')); if(r.ok) CH_DIRTY=false; renderCheats(); };
-}
-// ---------- themed buttons ----------
-const HSK=['classic','baseball','wood','steel','patch','scoreboard'];
-function hskApply(){ const v=HSK.includes(TEAM_SET.btn)?TEAM_SET.btn:'classic'; HSK.forEach(k=>document.body.classList.toggle('hsk-'+k,k===v&&k!=='classic')); }
-const _rc13b=renderClubhouse; renderClubhouse=function(allowed){ hskApply(); _rc13b(allowed); if(TEAM_SET_STATE===null&&typeof loadTeamSet==='function') loadTeamSet().then(hskApply); };
-const _cc13b=cheatsCodes; cheatsCodes=function(line){ _cc13b(line);
-  line(`<span class="ct-k">const</span> <span class="ct-v">BUTTON_STYLE</span> = <button type="button" class="ct-tok ct-str" id="ctBtn">'${HSK.includes(TEAM_SET.btn)?TEAM_SET.btn:'classic'}'</button>;  <span class="ct-c">// clubhouse buttons · ${HSK.map(k=>`'${k}'`).join(' · ')}</span>`); };
-const _cb13b=cheatsBind; cheatsBind=function(body){ _cb13b(body);
-  const b=document.getElementById('ctBtn'); if(b) b.onclick=()=>{ const i=HSK.indexOf(HSK.includes(TEAM_SET.btn)?TEAM_SET.btn:'classic'); TEAM_SET.btn=HSK[(i+1)%HSK.length]; hskApply(); CH_DIRTY=true; CH_OUT=''; renderCheats(); }; };
+  const t=body.querySelector('[data-ct="tv_on"]'); if(t) t.addEventListener('click',()=>{ const c=tvCfg(); TEAM_SET.ticker={...(TEAM_SET.ticker||{}),on:!c.on}; }); };
 
 // ===== Tabs =====
 function showTab(){
