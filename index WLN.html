@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
 <script>/* STEP 3: paste your Supabase Project URL and Publishable key between the quotes on the next 2 lines */
-window.APP_BUILD='20261126093715';
+window.APP_BUILD='20261126094448';
 window.PICK_SKIPPED=true;
 window.WLN_SUPABASE_URL = 'https://uppnclgtqhfawmoahfrv.supabase.co';
 window.WLN_SUPABASE_KEY = 'sb_publishable_MHlCXobo0OnoturzVckmyA_0reKYvG-';
@@ -2520,6 +2520,12 @@ body:not([data-tab="clubhouse"]) .ann-pill{display:none}
 .lvc .hint{padding:0 14px 10px;margin:0}
 @media(max-width:380px){.lvc-r{grid-template-columns:14px 1fr 48px 28px 54px;font-size:12.5px}.lvc-n img{width:24px;height:24px}}
 </style>
+<style>.prog-card .progseg2{display:flex;gap:6px;margin:8px 0 10px;background:rgba(0,0,0,.25);border-radius:12px;padding:4px}
+.prog-card .progseg2 button{flex:1;min-height:44px;border:0;border-radius:9px;background:none;color:inherit;font:700 16px var(--display);letter-spacing:.03em;cursor:pointer;opacity:.75}
+.prog-card .progseg2 button[aria-pressed="true"]{background:#7A1F3D;color:#fff;opacity:1}
+.prog-card .pc-f{display:block;margin:0 0 10px;font-size:13px;font-weight:600;opacity:.9}
+.prog-card .pc-f input,.prog-card .pc-f textarea{display:block;width:100%;box-sizing:border-box;margin-top:5px;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.25);color:inherit;font:inherit;font-size:16px}
+</style>
 </head>
 <body>
 <header>
@@ -4913,6 +4919,26 @@ function setProgram(v){
 }
 document.addEventListener('click',e=>{ const b=e.target.closest('[data-prog]'); if(b) setProgram(b.dataset.prog); });
 
+// ---------- WLN: "own throwing program" spot in My Locker ----------
+const _rpOwn=renderProfile; renderProfile=function(){
+  _rpOwn.apply(this,arguments);
+  const el=document.getElementById('profBody'); if(!el) return;
+  const own=isPersonal();
+  const html=`<section class="panel prog-card">
+    <div class="lrow"><span class="lbl">Throwing program</span>${own?'<span class="chip of">Own program</span>':''}</div>
+    <div class="seg progseg2" role="group" aria-label="Throwing program"><button type="button" data-prog="team" aria-pressed="${!own}">WLN's Program</button><button type="button" data-prog="personal" aria-pressed="${own}">My own program</button></div>
+    ${own?`<label class="pc-f">Who runs it<input id="pcBy" maxlength="60" value="${esc(S.progBy||'')}" placeholder="Velocity House, Driveline, my pitching coach…"></label>
+      <label class="pc-f">What it looks like<textarea id="pcNote" rows="3" maxlength="400" placeholder="Throw Mon/Wed/Fri, pen on Saturday, long toss Sunday">${esc(S.progNote||'')}</textarea></label>
+      <p class="hint">WLN's daily workouts are hidden while you're on your own program. Keep logging every day so ${VIEWING()?'the staff':'Coach Beck'} can see your workload.</p>`
+      :`<p class="hint">Following a throwing program from your own pitching coach? Switch to <b>My own program</b> and tell us who runs it.</p>`}
+  </section>`;
+  const head=el.querySelector('.hsec'); (head||el).insertAdjacentHTML(head?'afterend':'afterbegin',html);
+  const by=document.getElementById('pcBy'), nt=document.getElementById('pcNote');
+  let t=null; const sv=()=>{ clearTimeout(t); t=setTimeout(()=>{ S.progBy=by?by.value.trim():S.progBy; S.progNote=nt?nt.value.trim():S.progNote; if(!S.progBy) delete S.progBy; if(!S.progNote) delete S.progNote; save(); },600); };
+  if(by) by.oninput=sv; if(nt) nt.oninput=sv;
+};
+const _spOwn=setProgram; setProgram=function(v){ _spOwn(v); const t=document.getElementById('tab-profile'); if(t&&!t.hidden) renderProfile(); };
+
 // ---------- Daily Work: steps (before / throw / after / finish) ----------
 function personalWorkCard(){
   return `<div class="pwork"><p class="eyebrow2">Personal program</p><h3>You're on your own program</h3>
@@ -5219,7 +5245,7 @@ function renderModeBar(){
   const list=staff().sort((x,y)=>x.a.name.localeCompare(y.a.name));
   const cur=window.VIEW_AS||'';
   bar.innerHTML=`<div class="seg cbseg"><button type="button" data-cmode="coach" aria-pressed="${!cur}">Coach's View</button><button type="button" data-cmode="player" aria-pressed="${!!cur}">Pitcher's View</button></div>
-    <select id="cbPlayer" aria-label="Pick a pitcher"><option value="">Pick a pitcher to see his app…</option>${list.map(({id,a})=>`<option value="${id}" ${id===cur?'selected':''}>${esc(a.name)}${a.program==='personal'?' (own program)':''}</option>`).join('')}</select>
+    <select id="cbPlayer" aria-label="Pick a pitcher"><option value="">Pick a pitcher to see his app…</option>${list.map(({id,a})=>`<option value="${id}" ${id===cur?'selected':''}>${esc(a.name)}${a.program==='personal'?' (own program'+(a.progBy?': '+esc(a.progBy):'')+')':''}</option>`).join('')}</select>
     ${cur?`<span class="cbnote">👁 You're seeing exactly what <b>${esc(cvName((C.athletes[cur]||{}).name||''))}</b> sees. Anything you change saves to his app.${(C.athletes[cur]||{}).pre?' He hasn\'t signed up yet.':''}</span>`:''}`;
   document.getElementById('cbPlayer').onchange=e=>{ if(e.target.value) viewAs(e.target.value); else exitView(); };
 }
