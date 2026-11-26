@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
 <script>/* STEP 3: paste your Supabase Project URL and Publishable key between the quotes on the next 2 lines */
-window.APP_BUILD='20261126073447';
+window.APP_BUILD='20261126073625';
 window.PICK_SKIPPED=true;
 window.WLN_SUPABASE_URL = 'https://uppnclgtqhfawmoahfrv.supabase.co';
 window.WLN_SUPABASE_KEY = 'sb_publishable_MHlCXobo0OnoturzVckmyA_0reKYvG-';
@@ -7118,7 +7118,7 @@ renderHome=function(){
   const keep=el.querySelector('.hweekp');
   [...el.children].forEach(ch=>{ if(ch!==keep&&!ch.contains(keep)) ch.remove(); });
   const h=keep&&keep.querySelector('h2'); if(h) h.textContent=VIEWING()?'His week':'Your week';
-  if(keep&&!el.querySelector('.ss-head')) el.insertAdjacentHTML('afterbegin',`<div class="ss-head"><p class="ws-eye">WLN pitching</p><h2>${VIEWING()?esc(cvName(S.name))+"'s Schedule":'Set My Schedule'}</h2><p class="ws-sub">${VIEWING()?`Set his week here. From ${fmtWk(WEEKLY_FROM)} his page turns into a Weekly Schedule built from what you and Coach Beck put in. <a href="?weekly=1#home">Preview it</a>`:'Tap a day to mark your off days, bullpens, Short boxes and lives. Your daily work is built from this.'}</p></div>`);
+  if(keep&&!el.querySelector('.ss-head')) el.insertAdjacentHTML('afterbegin',`<div class="ss-head"><p class="ws-eye">WLN pitching</p><h2>${VIEWING()?esc(cvName(S.name))+"'s Schedule":'Set My Schedule'}</h2><p class="ws-sub">${VIEWING()?`Set his week here. From ${fmtWk(WEEKLY_FROM)} his page turns into a Weekly Schedule built from what Coach Beck puts in. <a href="?weekly=1#home">Preview it</a>`:'Tap a day to mark your off days, bullpens, Short boxes and lives. Your daily work is built from this.'}</p></div>`);
 };
 document.addEventListener('click',e=>{ const b=e.target.closest('[data-wsgo]'); if(!b) return; selected=b.dataset.wsgo; goWeek(parse(selected)); location.hash='daily-work'; });
 
