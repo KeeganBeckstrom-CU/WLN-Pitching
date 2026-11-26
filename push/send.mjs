@@ -1,6 +1,7 @@
 // Sends the 9:00 AM (Michigan time) reminder to every pitcher who turned it on.
 import webpush from 'web-push';
-const { SUPABASE_SERVICE_KEY, VAPID_PRIVATE, SCHEDULE = '', FORCE = '' } = process.env;
+const SUPABASE_SERVICE_KEY = (process.env.SUPABASE_SERVICE_KEY || '').trim();
+const { VAPID_PRIVATE, SCHEDULE = '', FORCE = '' } = process.env;
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://uppnclgtqhfawmoahfrv.supabase.co';
 const VAPID_PUBLIC = process.env.VAPID_PUBLIC || 'BEuAvnEHuSsSpq3n1m63YwofWfNv_S--aQ57pMRvNRH__56iUYRPzqLIic5uJUt9gsA-_CN_FjLnz1lR2PAf51c';
 if (!SUPABASE_SERVICE_KEY || !VAPID_PRIVATE) { console.log('Secrets not set yet, nothing sent.'); process.exit(0); }
@@ -28,7 +29,8 @@ if (dow === 'Monday') body = 'New week. Check your plan in the Clubhouse and get
 if (md === '11-27') body = 'Hope you ate well yesterday 🦃 Time to get back to work. Open the Clubhouse and get your throwing in.';
 
 webpush.setVapidDetails('mailto:coach@cleary.edu', VAPID_PUBLIC, VAPID_PRIVATE);
-const H = { apikey: SUPABASE_SERVICE_KEY, Authorization: `Bearer ${SUPABASE_SERVICE_KEY}` };
+// works with the new sb_secret_ key or the legacy service_role key
+const H = { apikey: SUPABASE_SERVICE_KEY, ...(SUPABASE_SERVICE_KEY.startsWith('eyJ') ? { Authorization: `Bearer ${SUPABASE_SERVICE_KEY}` } : {}) };
 const ts = await fetch(`${SUPABASE_URL}/rest/v1/team_settings?id=eq.main&select=data`, { headers: H }).then(r => r.ok ? r.json() : []).catch(() => []);
 if (ts[0] && ts[0].data && ts[0].data.push_on === false) { console.log("Coach's Cheats: MORNING_REMINDER_9AM is off. Nothing sent."); process.exit(0); }
 const res = await fetch(`${SUPABASE_URL}/rest/v1/push_subs?select=endpoint,name,sub`, { headers: H });

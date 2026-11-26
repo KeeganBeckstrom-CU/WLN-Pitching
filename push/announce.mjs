@@ -1,12 +1,14 @@
 // Sends a phone notification for each new announcement a coach posted with "send a notification" checked.
 import webpush from 'web-push';
-const { SUPABASE_SERVICE_KEY, VAPID_PRIVATE } = process.env;
+const SUPABASE_SERVICE_KEY = (process.env.SUPABASE_SERVICE_KEY || '').trim();
+const { VAPID_PRIVATE } = process.env;
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://uppnclgtqhfawmoahfrv.supabase.co';
 const PAGE = 'index%20WLN.html';
 const VAPID_PUBLIC = 'BEuAvnEHuSsSpq3n1m63YwofWfNv_S--aQ57pMRvNRH__56iUYRPzqLIic5uJUt9gsA-_CN_FjLnz1lR2PAf51c';
 if (!SUPABASE_SERVICE_KEY || !VAPID_PRIVATE) { console.log('Secrets not set yet, nothing sent.'); process.exit(0); }
 webpush.setVapidDetails('mailto:coach@cleary.edu', VAPID_PUBLIC, VAPID_PRIVATE);
-const H = { apikey: SUPABASE_SERVICE_KEY, Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`, 'Content-Type': 'application/json' };
+// works with the new sb_secret_ key or the legacy service_role key
+const H = { apikey: SUPABASE_SERVICE_KEY, ...(SUPABASE_SERVICE_KEY.startsWith('eyJ') ? { Authorization: `Bearer ${SUPABASE_SERVICE_KEY}` } : {}), 'Content-Type': 'application/json' };
 const since = new Date(Date.now() - 24 * 3600e3).toISOString();
 const q = `${SUPABASE_URL}/rest/v1/announcements?select=id,title,body,author&push=eq.true&pushed_at=is.null&created_at=gte.${encodeURIComponent(since)}&order=created_at.asc`;
 const r = await fetch(q, { headers: H });
