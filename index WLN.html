@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
 <script>/* STEP 3: paste your Supabase Project URL and Publishable key between the quotes on the next 2 lines */
-window.APP_BUILD='20261126072903';
+window.APP_BUILD='20261126073447';
 window.PICK_SKIPPED=true;
 window.WLN_SUPABASE_URL = 'https://uppnclgtqhfawmoahfrv.supabase.co';
 window.WLN_SUPABASE_KEY = 'sb_publishable_MHlCXobo0OnoturzVckmyA_0reKYvG-';
@@ -2706,7 +2706,7 @@ function renderPicker(){
   qi.oninput=()=>{ pickQ=qi.value; const pos=qi.selectionStart; renderPicker(); const n=document.getElementById('pkQ'); n.focus(); try{ n.setSelectionRange(pos,pos); }catch(e){} };
   document.querySelectorAll('[data-pk]').forEach(b=>b.onclick=()=>{ pickSel=b.dataset.pk; renderPicker(); const go=document.getElementById('pkGo'); if(go) go.scrollIntoView({block:'nearest'}); });
   const go=document.getElementById('pkGo'); if(go) go.onclick=()=>claimProfile(pickSel);
-  const sk=document.getElementById('pkSkip'); if(sk) sk.onclick=()=>{ window.PICK_SKIPPED=true; try{ localStorage.setItem('clyPickSkip','1'); }catch(e){} acctSetup=false; closeAccount(); };
+  const sk=document.getElementById('pkSkip'); if(sk) sk.onclick=()=>{ window.PICK_SKIPPED=true; try{ localStorage.setItem('wlnPickSkip','1'); }catch(e){} acctSetup=false; closeAccount(); };
 }
 function claimProfile(pid){
   const r=ROSTER_BY_ID[pid]; if(!r) return;
@@ -2720,7 +2720,7 @@ function claimProfile(pid){
   renderAccount(); render(); toast(`Welcome, ${firstName(r.n)}. Your profile is set.`);
 }
 function maybePick(){
-  try{ if(!window.CLOUD_MODE && localStorage.getItem('clyPickSkip')) window.PICK_SKIPPED=true; }catch(e){}
+  try{ if(!window.CLOUD_MODE && localStorage.getItem('wlnPickSkip')) window.PICK_SKIPPED=true; }catch(e){}
   if(window.PICK_SKIPPED) return;
   if(ME && ME.role==='coach') return;
   if(S.pid && ROSTER_BY_ID[S.pid] && !(S.arsenal||[]).some(a=>a.gv!=null||a.pv!=null)){ const ar=rosterArsenal(ROSTER_BY_ID[S.pid]); if(ar.length){ const mine=Object.fromEntries((S.arsenal||[]).map(a=>[a.t,a])); S.arsenal=ar.map(a=>({...a,v:a.v||(mine[a.t]&&mine[a.t].v)||''})); save(); render(); } }
@@ -3388,8 +3388,8 @@ function dayGlance(p){
   let i=0;
   return `<div class="glance">${row(++i,'Before you throw',esc(before))}${row(++i,'Throw',thr)}${p.post?row(++i,'After you throw',esc(p.post)):''}${p.cond?row(++i,'Finish',esc(p.cond)):''}</div>`;
 }
-let profOpen=false; try{ profOpen=localStorage.getItem('clyProfOpen')==='1'; }catch(e){}
-document.addEventListener('toggle',e=>{ const d=e.target; if(d&&d.id==='hprofD'){ profOpen=d.open; try{ localStorage.setItem('clyProfOpen',profOpen?'1':'0'); }catch(err){} } },true);
+let profOpen=false; try{ profOpen=localStorage.getItem('wlnProfOpen')==='1'; }catch(e){}
+document.addEventListener('toggle',e=>{ const d=e.target; if(d&&d.id==='hprofD'){ profOpen=d.open; try{ localStorage.setItem('wlnProfOpen',profOpen?'1':'0'); }catch(err){} } },true);
 
 function welcomeLine(coach){
   const d=todayD; let me=''; try{ me=(ME&&ME.full_name)||''; }catch(e){}
@@ -3563,7 +3563,7 @@ function gripKey(g){ if(!g) return ''; if(g.d==='none') return ''; if(g.d&&GRIP_
   return hit?hit[1]:(GA_BYT[g.t]||''); }
 const gripExact=g=>!!(g&&((g.d&&GRIP_ART[g.d])||(g.id&&g.id.indexOf('a-')===0)||(GA_BYID[g.id]&&g.id!=='g-cb-mccullers'&&g.id!=='g-ff-pic')));
 function gripSpinInit(k,h){ if(gaSpinState.key!==k){ gaSpinState={key:k,yaw:0,pitch:0}; } return gaSpin(k,h,gaSpinState.yaw,gaSpinState.pitch); }
-function gripHand(){ try{ return localStorage.getItem('clyGripHand')==='L'?'L':'R'; }catch(e){ return 'R'; } }
+function gripHand(){ try{ return localStorage.getItem('wlnGripHand')==='L'?'L':'R'; }catch(e){ return 'R'; } }
 const gripThumb=g=>{ const k=gripKey(g), st=gripStills(g); if(st.length) return `<button type="button" class="gath gathp" data-gview="${esc(g.id)}" aria-label="See the ${esc(g.n)} grip"><img src="${st[st.length-1]}" alt="" loading="lazy"></button>`; return k?`<button type="button" class="gath" data-gview="${esc(g.id)}" aria-label="See the ${esc(g.n)} grip">${gripArt(k,{thumb:1,hand:gripHand()})}</button>`:`<span class="tlogo none">${esc(g.t==='ALL'?'ALL':(PITCH_CODE[g.t]||g.t))}</span>`; };
 const gripWatch=(g,cls)=>g.url?(ytEmbed(g.url)?`<a class="btn sm ${cls||''} vid" href="${esc(g.url)}" target="_blank" rel="noopener noreferrer" data-drill="${esc(g.n)}" data-reps="${esc(g.cue||'')}" data-routine="Pitch grip">Watch</a>`:`<a class="btn sm ${cls||''}" href="${esc(g.url)}" target="_blank" rel="noopener noreferrer">Video</a>`):'';
 let gripOpenId=null;
@@ -3592,7 +3592,7 @@ function openGrip(id){ const g=gripFind(id); if(!g) return; const k=gripKey(g); 
     </table></div>`, g.n+' grip'); }
 document.addEventListener('click',e=>{ let b;
   if((b=e.target.closest('[data-gview]'))){ e.preventDefault(); e.stopPropagation(); return openGrip(b.dataset.gview); }
-  if((b=e.target.closest('[data-ghand]'))){ try{ localStorage.setItem('clyGripHand',b.dataset.ghand); }catch(err){} if(gripOpenId){ const id=gripOpenId; const body=document.getElementById('sheetBody'), y=body?body.scrollTop:0; openGrip(id); } try{ if(typeof cvTab!=='undefined'&&cvTab==='grips'&&document.getElementById('grF')) renderGrips(); else render(); }catch(err){} }
+  if((b=e.target.closest('[data-ghand]'))){ try{ localStorage.setItem('wlnGripHand',b.dataset.ghand); }catch(err){} if(gripOpenId){ const id=gripOpenId; const body=document.getElementById('sheetBody'), y=body?body.scrollTop:0; openGrip(id); } try{ if(typeof cvTab!=='undefined'&&cvTab==='grips'&&document.getElementById('grF')) renderGrips(); else render(); }catch(err){} }
 },true);
 
 // ===== Spin the ball: the same grip drawn on a ball you can drag around =====
@@ -3973,7 +3973,7 @@ document.addEventListener('change',e=>{ if(e.target&&e.target.id==='grWho'){ grW
 
 function renderProfile(){ const el=document.getElementById('profBody'); if(!el) return;
   el.innerHTML=`${VIEWING()?`<div class="hsec"><h2 class="h2">${esc(S.name||'Pitcher')}'s profile</h2><p class="hint">Anything you change here saves to his app.</p></div>`:''}${injCard()}${pickLockCard()}${ownLockCard()}${profileCard()}${gripsCard()}${drillsCard()}${!window.CLOUD_MODE&&S.pid&&!VIEWING()?'<p class="hint" style="text-align:center"><button type="button" class="linkbtn" id="demoLeave">Draft testing only: leave this profile and go back to the coach side</button></p>':''}`; }
-document.addEventListener('click',e=>{ if(!e.target.closest('#demoLeave')) return; delete S.pid; delete S.track; delete S.rttStart; save(); try{ localStorage.setItem('clyPickSkip','1'); }catch(err){} location.hash='#home'; location.reload(); });
+document.addEventListener('click',e=>{ if(!e.target.closest('#demoLeave')) return; delete S.pid; delete S.track; delete S.rttStart; save(); try{ localStorage.setItem('wlnPickSkip','1'); }catch(err){} location.hash='#home'; location.reload(); });
 
 // ===== Coaches can edit a pitcher's whole page =====
 // A coach cannot write a pitcher's own saved data, so each change rides along in the coach's note to that pitcher (coach.patch)
@@ -4514,7 +4514,7 @@ const topVelo=st=>{ if(st.velo) return st.velo; const v=(st.arsenal||[]).map(x=>
 const fmtMD=k=>{ const d=parse(k); return `${d.getMonth()+1}/${d.getDate()}`; };
 const smsHref=ph=>'sms:'+String(ph||'').replace(/[^\d+]/g,'');
 let hGrade='all', hSort='attention', hNoteEdit=false, hView='coach', hWeekOff=0;
-try{ const v=localStorage.getItem('clyHomeView'); if(v==='pitcher') hView=v; }catch(e){}
+try{ const v=localStorage.getItem('wlnHomeView'); if(v==='pitcher') hView=v; }catch(e){}
 
 function teamNote(){ return (S.coach&&S.coach.note) || ((window.IS_COACH||isLocalDemo())?S.teamNote:null) || null; }
 function noteCard(n){
@@ -4718,7 +4718,7 @@ function renderHome(){
   const coach=showCoachHome();
   el.innerHTML=(coach&&!VIEWING())?welcomeLine(true)+coachInboxCard()+coachLiftCard()+`<section class="panel"><div class="lrow"><span class="lbl">Weekly report</span><button type="button" class="btn ghost sm" data-goreport="1">Open report</button></div><p class="hint" style="margin-top:6px">Logs, arm feel, pain flags and pitches for the week, on one page.</p></section>`+coachHome():pitcherHome(false);
   if(!newsSeen()){ const wl=el.querySelector('.welcome'); (wl||el).insertAdjacentHTML(wl?'afterend':'afterbegin',`<div class="newsbanner"><div><b>New version of the app.</b><span class="hint"> See what changed.</span></div><span class="row"><button type="button" class="btn sm" data-help="news">What's new</button><button type="button" class="btn ghost sm" id="hNewsOk">Got it</button></span></div>`); document.getElementById('hNewsOk').onclick=()=>{ markNewsSeen(); renderHome(); }; }
-  const hv=document.getElementById('hView'); if(hv) hv.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; hView=b.dataset.v; try{ localStorage.setItem('clyHomeView',hView); }catch(err){} renderHome(); window.scrollTo(0,0); };
+  const hv=document.getElementById('hView'); if(hv) hv.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; hView=b.dataset.v; try{ localStorage.setItem('wlnHomeView',hView); }catch(err){} renderHome(); window.scrollTo(0,0); };
   const so=document.getElementById('hSort'); if(so){ so.value=hSort; so.onchange=()=>{ hSort=so.value; renderHome(); }; }
   const g=document.getElementById('hGrade'); if(g) g.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; hGrade=b.dataset.v; renderHome(); };
   const post=document.getElementById('hNotePost'); if(post) post.onclick=()=>{ const t=document.getElementById('hNoteIn').value.trim(); if(!t) return toast('Write a note first'); postNote(t); hNoteEdit=false; renderHome(); toast('Note posted to every pitcher'); };
@@ -5280,8 +5280,8 @@ function closeRail(){
 
 // ===== What's new banner + Help =====
 // The banner shows on every visit until NEWS.until; "Got it" hides it for the rest of that day.
-function newsSeen(){ const t=ymd(new Date()); if(t>NEWS.until) return true; try{ return localStorage.getItem('clyNewsSeen')===NEWS.v+'|'+t; }catch(e){ return true; } }
-function markNewsSeen(){ try{ localStorage.setItem('clyNewsSeen',NEWS.v+'|'+ymd(new Date())); }catch(e){} renderNews(); if(window.renderHome) renderHome(); }
+function newsSeen(){ const t=ymd(new Date()); if(t>NEWS.until) return true; try{ return localStorage.getItem('wlnNewsSeen')===NEWS.v+'|'+t; }catch(e){ return true; } }
+function markNewsSeen(){ try{ localStorage.setItem('wlnNewsSeen',NEWS.v+'|'+ymd(new Date())); }catch(e){} renderNews(); if(window.renderHome) renderHome(); }
 function renderNews(){
   const el=document.getElementById('newsBanner'); if(!el) return;
   el.hidden=newsSeen(); if(el.hidden) return;
@@ -5689,8 +5689,8 @@ const weekKeyOf=d=>ymd(weekStart(d));
 const weekMonth=wk=>monthKey(addDays(parse(wk),4));   // a week belongs to the month holding its Thursday
 const clone=o=>JSON.parse(JSON.stringify(o));
 let S={ name:'', role:'SP', weeks:{}, overrides:{} };
-try{ const saved=JSON.parse(localStorage.getItem('clySched2')||'null'); if(saved && saved.weeks) S={...S,...saved}; }catch(e){}
-function save(){ if(window.VIEW_AS){ coachPatchSave(); return; } try{ localStorage.setItem('clySched2',JSON.stringify(S)); }catch(e){} if(window.queueSync) window.queueSync(); }
+try{ const saved=JSON.parse(localStorage.getItem('wlnSched2')||'null'); if(saved && saved.weeks) S={...S,...saved}; }catch(e){}
+function save(){ if(window.VIEW_AS){ coachPatchSave(); return; } try{ localStorage.setItem('wlnSched2',JSON.stringify(S)); }catch(e){} if(window.queueSync) window.queueSync(); }
 
 // Week settings: each week keeps its own days; an unset week carries the last set week of the same month, else the staff default
 const segOf=wk=>weekMonth(wk)+(weekMonth(wk).endsWith('-01')&&wk>=LIVE_START?'b':'a');
@@ -6015,8 +6015,8 @@ const LOG_HEAD=withNotes=>`<thead><tr><th>Date</th><th>Intensity</th><th>Mound</
 
 // ===== Personal Plan =====
 let LOG={entries:{}};
-try{ const s=JSON.parse(localStorage.getItem('clyLogs1')||'null'); if(s&&s.entries) LOG=s; }catch(e){}
-function saveLog(){ if(window.VIEW_AS){ coachPatchSave(); return; } try{ localStorage.setItem('clyLogs1',JSON.stringify(LOG)); }catch(e){} if(window.queueSync) window.queueSync(); }
+try{ const s=JSON.parse(localStorage.getItem('wlnLogs1')||'null'); if(s&&s.entries) LOG=s; }catch(e){}
+function saveLog(){ if(window.VIEW_AS){ coachPatchSave(); return; } try{ localStorage.setItem('wlnLogs1',JSON.stringify(LOG)); }catch(e){} if(window.queueSync) window.queueSync(); }
 window.getLog=k=>LOG.entries[k]||null;
 function entryFromPlan(k){
   const p=dayPlan(k); if(!p) return null;
@@ -6143,8 +6143,8 @@ async function cvCopy(t,msg){ try{ await navigator.clipboard.writeText(t); toast
 
 // ---------- staff data ----------
 let C={athletes:{},examplesRemoved:false,edits:{}};
-try{ const s=JSON.parse(localStorage.getItem('clyCoach3')||'null'); if(s) C={...C,examplesRemoved:!!s.examplesRemoved,edits:s.edits||{}}; }catch(e){}
-function saveC(){ if(window.CLOUD_MODE) return; try{ localStorage.setItem('clyCoach3',JSON.stringify({examplesRemoved:C.examplesRemoved,edits:C.edits})); }catch(e){} }
+try{ const s=JSON.parse(localStorage.getItem('wlnCoach3')||'null'); if(s) C={...C,examplesRemoved:!!s.examplesRemoved,edits:s.edits||{}}; }catch(e){}
+function saveC(){ if(window.CLOUD_MODE) return; try{ localStorage.setItem('wlnCoach3',JSON.stringify({examplesRemoved:C.examplesRemoved,edits:C.edits})); }catch(e){} }
 function rng(seed){ return ()=>{ seed|=0; seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
 // Example staff (only when no one is signed in as a coach): made-up pitchers so every view has something to show.
 const EX_ROSTER=[
@@ -6356,7 +6356,7 @@ function renderAnalytics(){
 function anWire(){ document.querySelectorAll('#anRange button').forEach(b=>b.onclick=()=>{ anDays=+b.dataset.v; renderAnalytics(); });
   document.querySelectorAll('[data-ans]').forEach(b=>b.onclick=()=>{ anSort=b.dataset.ans; const y=window.scrollY; renderAnalytics(); window.scrollTo(0,y); }); }
 
-let cvTab='today'; try{ const t=localStorage.getItem('clyCvTab'); if(['today','activity','analytics','pitchers','week'].includes(t)) cvTab=t; }catch(e){}
+let cvTab='today'; try{ const t=localStorage.getItem('wlnCvTab'); if(['today','activity','analytics','pitchers','week'].includes(t)) cvTab=t; }catch(e){}
 let tdOff=0;
 let pq='', pRole='all', pGrade='all', pTeam='all', pSort='alerts', pRulesOpen=false, cmp=[];
 let wkView=weekStart(todayD), wRole='all', wGrade='all', wTeam='all', wInt='all', wMode='both';
@@ -6376,7 +6376,7 @@ function renderCoach(){
   (({today:renderToday,activity:renderActivity,analytics:renderAnalytics,pitchers:renderPitchers,week:renderWeekBoard,plans:renderPlans,grips:renderGrips})[cvTab]||renderToday)(); try{ vidCoachPanel(); }catch(e){}
 }
 window.renderCoachView=renderCoach;
-document.getElementById('cvNav').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; cvTab=b.dataset.v; try{ localStorage.setItem('clyCvTab',cvTab); }catch(err){} document.getElementById('cvMenu').hidden=true; renderCoach(); });
+document.getElementById('cvNav').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; cvTab=b.dataset.v; try{ localStorage.setItem('wlnCvTab',cvTab); }catch(err){} document.getElementById('cvMenu').hidden=true; renderCoach(); });
 document.getElementById('cvClearEx').addEventListener('click',()=>{ for(const id in C.athletes) if(C.athletes[id].ex) delete C.athletes[id]; C.examplesRemoved=true; saveC(); renderCoach(); });
 
 // ======== Today ========
@@ -6623,7 +6623,7 @@ function renderAccount(){
   if(g) g.addEventListener('click',()=>{ const dn=document.getElementById('aDone'); if(dn) dn.disabled=needsSetup(); });
   const pl=document.getElementById('aPenLater'); if(pl) pl.addEventListener('click',()=>{ S.penLater=!S.penLater; save(); renderAccount(); if(S.penLater) document.getElementById('aSaved').textContent=S.grade?'No problem. Pick it anytime from Account.':'Pick your class, then you\'re in.'; });
   const dn=document.getElementById('aDone'); if(dn) dn.addEventListener('click',()=>{ if(needsSetup()) return; acctSetup=false; closeAccount(); goWeek(todayD); selected=TODAY; render(); hWeekOff=0; location.hash='home'; toast('Now set your bullpen and off days under Set My Schedule'); });
-  const sw=document.getElementById('aSwitch'); if(sw) sw.onclick=()=>{ delete S.pid; save(); window.PICK_SKIPPED=false; try{ localStorage.removeItem('clyPickSkip'); }catch(e){} render(); openAccount(true); };
+  const sw=document.getElementById('aSwitch'); if(sw) sw.onclick=()=>{ delete S.pid; save(); window.PICK_SKIPPED=false; try{ localStorage.removeItem('wlnPickSkip'); }catch(e){} render(); openAccount(true); };
   wireProfileFields();
   [['aTown','town','Hometown'],['aHs','hs','High school'],['aPrev','prev','Previous college'],['aGrad','grad','Grad year']].forEach(([id,k,l])=>{ const el=document.getElementById(id); if(!el) return; el.addEventListener('input',()=>{ const v=el.value.trim(); if(k==='grad'){ S.grad=/^\d{4}$/.test(v)?+v:null; if(S.grad&&CLASS_BY_GRAD[S.grad]) S.grade=CLASS_BY_GRAD[S.grad]; } else S[k]=v; save(); document.getElementById('aSaved').textContent=l+' saved'; }); });
   const t=document.getElementById('aTeam'); if(t && TEAMS_OPEN) t.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; S.team=b.dataset.v; save(); t.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); document.getElementById('aSaved').textContent=`Team saved: ${TEAM_NAME[S.team]}`; });
@@ -7338,7 +7338,7 @@ function pushState(){
   if(pushIOS()&&!pushStandalone()) return 'homescreen';
   if(!pushSupported()) return 'unsupported';
   if(Notification.permission==='denied') return 'denied';
-  if(Notification.permission==='granted'&&localStorage.getItem('cu_push_on')==='1') return 'on';
+  if(Notification.permission==='granted'&&localStorage.getItem('wln_push_on')==='1') return 'on';
   return 'off';
 }
 let SW_REG=null;
@@ -7361,13 +7361,13 @@ async function pushTurnOn(){
   if(!sub) sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u(VAPID_PUBLIC)});
   const ok=await pushSave(sub,true);
   if(!ok){ toast('Could not save the reminder. Try again in a minute.'); return; }
-  localStorage.setItem('cu_push_on','1');
+  localStorage.setItem('wln_push_on','1');
   reg.showNotification('Morning reminder is on ✅',{body:"You'll get a nudge at 9:00 AM to get your work in and log it.",icon:'icon-192.png',tag:'cleary-setup'});
   closeSheet(); toast('Reminder on: every morning at 9:00'); pushChip();
 }
 async function pushTurnOff(){
   try{ const reg=SW_REG||await navigator.serviceWorker.ready; const sub=await reg.pushManager.getSubscription(); if(sub){ await pushSave(sub,false); await sub.unsubscribe(); } }catch(e){}
-  localStorage.removeItem('cu_push_on'); closeSheet(); toast('Morning reminder off'); pushChip();
+  localStorage.removeItem('wln_push_on'); closeSheet(); toast('Morning reminder off'); pushChip();
 }
 function pushSheet(){
   const st=pushState();
@@ -7419,8 +7419,8 @@ let _tgRs; addEventListener('resize',()=>{ clearTimeout(_tgRs); _tgRs=setTimeout
     try{
       if(SW_REG) SW_REG.update().catch(()=>{});
       const j=await fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.json());
-      if(j&&j.build&&j.build!==cur&&!sessionStorage.getItem('cu_upd_'+j.build)){
-        sessionStorage.setItem('cu_upd_'+j.build,'1');   // never loop
+      if(j&&j.build&&j.build!==cur&&!sessionStorage.getItem('wln_upd_'+j.build)){
+        sessionStorage.setItem('wln_upd_'+j.build,'1');   // never loop
         location.reload();
       }
     }catch(e){}
@@ -7437,7 +7437,7 @@ async function pushSubscribeQuiet(){
     const reg=SW_REG||await navigator.serviceWorker.ready;
     let sub=await reg.pushManager.getSubscription();
     if(!sub) sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u(VAPID_PUBLIC)});
-    if(await pushSave(sub,true)) localStorage.setItem('cu_push_on','1');
+    if(await pushSave(sub,true)) localStorage.setItem('wln_push_on','1');
   }catch(e){}
 }
 let PUSH_ARMED=false;
@@ -7489,7 +7489,7 @@ function tgSplash(tries){
   const mid=document.elementFromPoint(innerWidth/2,innerHeight/2);
   const ready=tab&&!tab.hidden&&tab.offsetParent!==null&&mid&&tab.contains(mid)&&typeof S!=='undefined'&&S&&S.name;
   if(!ready){ if(tries<20) setTimeout(()=>tgSplash(tries+1),1500); return; }
-  const md=new Date(); const key='cu_tg_splash_'+md.getFullYear()+(md.getMonth()===10&&md.getDate()===26?'_day':'');
+  const md=new Date(); const key='wln_tg_splash_'+md.getFullYear()+(md.getMonth()===10&&md.getDate()===26?'_day':'');
   if(localStorage.getItem(key)||document.querySelector('.tg-splash')) return;
   localStorage.setItem(key,'1');
   const first=String((typeof S!=='undefined'&&S&&S.name)||'').trim().split(/\s+/)[0];
@@ -7520,7 +7520,7 @@ let _tsP=null;
 function loadTeamSet(force){
   if(_tsP&&!force) return _tsP;
   _tsP=(async()=>{
-    if(!cloudOn()){ try{ Object.assign(TEAM_SET,JSON.parse(localStorage.getItem('cu_team_set')||'{}')); }catch(e){} TEAM_SET_STATE=true; return TEAM_SET; }
+    if(!cloudOn()){ try{ Object.assign(TEAM_SET,JSON.parse(localStorage.getItem('wln_team_set')||'{}')); }catch(e){} TEAM_SET_STATE=true; return TEAM_SET; }
     try{
       const r=await sb.from('team_settings').select('data').eq('id','main').maybeSingle();
       if(r.error){ TEAM_SET_STATE=false; } else { TEAM_SET_STATE=true; if(r.data&&r.data.data) Object.assign(TEAM_SET,r.data.data); }
@@ -7530,7 +7530,7 @@ function loadTeamSet(force){
   return _tsP;
 }
 async function saveTeamSet(){
-  if(!cloudOn()){ try{ localStorage.setItem('cu_team_set',JSON.stringify(TEAM_SET)); }catch(e){} return {ok:true}; }
+  if(!cloudOn()){ try{ localStorage.setItem('wln_team_set',JSON.stringify(TEAM_SET)); }catch(e){} return {ok:true}; }
   const r=await sb.from('team_settings').upsert({id:'main',data:TEAM_SET,updated_at:new Date().toISOString()},{onConflict:'id'}).select('id');
   return {ok:!r.error&&r.data&&r.data.length>0,err:r.error&&r.error.message};
 }
@@ -7854,6 +7854,7 @@ function cardBadges(st){
 function badgeCheck(){
   try{
     if(typeof S==='undefined'||!S||!S.name||window.VIEW_AS||(isCoachUser()&&!VIEWING())) return;
+    if(window.CLOUD_MODE&&(typeof ME==='undefined'||!ME||ME.role==='coach')) return;
     const L=badgesFor(S).filter(b=>b.got), seen=S.bseen||[], fresh=L.filter(b=>!seen.includes(b.id));
     if(!fresh.length||document.querySelector('.bd-pop,.tg-splash')) return;
     S.bseen=[...new Set([...seen,...fresh.map(b=>b.id)])]; save();
@@ -7914,8 +7915,8 @@ const _pushAuto10=pushAuto; pushAuto=async function(){
   await _pushAuto10();
   try{
     if(isCoachUser()||window.VIEW_AS||TEAM_SET.push_on===false) return;
-    const v=TEAM_SET.push_ask_v||0, seen=Number(localStorage.getItem('cu_push_ask_seen')||0);
-    if(v<=seen) return; const st=pushStatusNow(); localStorage.setItem('cu_push_ask_seen',String(v));
+    const v=TEAM_SET.push_ask_v||0, seen=Number(localStorage.getItem('wln_push_ask_seen')||0);
+    if(v<=seen) return; const st=pushStatusNow(); localStorage.setItem('wln_push_ask_seen',String(v));
     if(st==='allow'||st==='unsupported') return;
     setTimeout(()=>{ if(!document.querySelector('.tg-splash,.bd-pop')) pushAskSheet(st); else setTimeout(()=>pushAskSheet(st),6000); },1800);
   }catch(e){}
@@ -8058,7 +8059,7 @@ async function loadMine(user){
   const metaGrade=user.user_metadata&&user.user_metadata.grade;
   if(!S.grade && metaGrade){ S.grade=metaGrade; if(remoteHas) setTimeout(pushNow,0); }
   S.name = ME.full_name || S.name;
-  try{ localStorage.setItem('clySched2',JSON.stringify(S)); localStorage.setItem('clyLogs1',JSON.stringify(LOG)); }catch(e){}
+  try{ localStorage.setItem('wlnSched2',JSON.stringify(S)); localStorage.setItem('wlnLogs1',JSON.stringify(LOG)); }catch(e){}
   if(!remoteHas) pushNow();   // first sign-in: carry over anything already logged on this phone
 }
 async function pushNow(){
@@ -8085,11 +8086,10 @@ async function loadTeam(){
   if(window.HAS_COACH_COL===false) toast('Coach edits are off until the Supabase setup step is run.');
   (data||[]).filter(p=>p.role!=='coach').forEach(p=>{
     const pd=Array.isArray(p.player_data)?p.player_data[0]:p.player_data; const st=(pd&&pd.settings)||{};
-    if(!st.pid) return;   // signed up but has not picked a profile yet
     C.athletes['u-'+p.id]={ ...st, pid:st.pid||null, name:p.full_name||'Unnamed pitcher', role:st.role||'SP', grade:st.grade||null, penDay:(st.penDay==null?null:st.penDay), team:st.team||null, ht:st.ht||null, wt:st.wt||null, velo:st.velo||null, throws:st.throws||null, phone:st.phone||null, arsenal:st.arsenal||[], program:st.program||null, weeks:st.weeks||{}, overrides:st.overrides||{}, coach:(pd&&pd.coach_edits)||{weeks:{},overrides:{}}, logs:(pd&&pd.logs)||{}, sent:pd&&pd.updated_at?pd.updated_at.slice(0,10):null, syncAt:(pd&&pd.updated_at)||null };
   });
   const nAcct=Object.keys(C.athletes).length; seedRoster(true);
-  note.innerHTML=`<div class="lrow"><div><h2 class="h2" style="font-size:20px">Live staff data</h2><p class="hint">${nAcct} of ${CLEARY_ROSTER.length} pitchers have accounts. The rest show their preloaded profile. Logs show up here as players save them.</p></div><button class="btn ghost sm" type="button" id="cvRefresh">Refresh</button></div>`;
+  note.innerHTML=`<div class="lrow"><div><h2 class="h2" style="font-size:20px">Live staff data</h2><p class="hint">${nAcct} pitchers have accounts. Logs show up here as players save them.</p></div><button class="btn ghost sm" type="button" id="cvRefresh">Refresh</button></div>`;
   document.getElementById('cvRefresh').onclick=()=>loadTeam().then(renderCoach);
 }
 
@@ -8109,7 +8109,7 @@ async function afterLogin(user){
 }
 function clearLocal(){
   S={ name:'', role:'SP', weeks:{}, overrides:{} }; LOG.entries={}; C={athletes:{},examplesRemoved:true,edits:{}};
-  try{ localStorage.removeItem('clySched2'); localStorage.removeItem('clyLogs1'); localStorage.removeItem('clyCoach2'); localStorage.removeItem('clyCoach3'); }catch(e){}
+  try{ localStorage.removeItem('wlnSched2'); localStorage.removeItem('wlnLogs1'); localStorage.removeItem('wlnCoach2'); localStorage.removeItem('wlnCoach3'); }catch(e){}
 }
 
 if(CLOUD){
@@ -8192,7 +8192,7 @@ document.addEventListener('visibilitychange',()=>{
   if(document.visibilityState==='hidden'){ if(sb&&ME&&syncTimer){ clearTimeout(syncTimer); pushNow(); } return; }
   const now=new Date(); now.setHours(0,0,0,0);
   if(ymd(now)!==TODAY){
-    if(!window.VIEW_AS) try{ localStorage.setItem('clySched2',JSON.stringify(S)); localStorage.setItem('clyLogs1',JSON.stringify(LOG)); }catch(e){}
+    if(!window.VIEW_AS) try{ localStorage.setItem('wlnSched2',JSON.stringify(S)); localStorage.setItem('wlnLogs1',JSON.stringify(LOG)); }catch(e){}
     location.reload();
   } else if(window.refreshCoach) window.refreshCoach();
 });
