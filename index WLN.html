@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
 <script>/* STEP 3: paste your Supabase Project URL and Publishable key between the quotes on the next 2 lines */
-window.APP_BUILD='20261126075239';
+window.APP_BUILD='20261126081050';
 window.PICK_SKIPPED=true;
 window.WLN_SUPABASE_URL = 'https://uppnclgtqhfawmoahfrv.supabase.co';
 window.WLN_SUPABASE_KEY = 'sb_publishable_MHlCXobo0OnoturzVckmyA_0reKYvG-';
@@ -2360,6 +2360,43 @@ body.egg-8bit *{font-family:"Courier New",monospace!important;letter-spacing:.06
   #tab-coach-view .cvnav{display:grid!important;grid-template-columns:1fr 1fr;gap:4px;width:100%}
   #tab-coach-view .cvnav button{white-space:nowrap;font-size:13px;padding:8px 6px}
 }
+
+/* ===== v12: announcements ===== */
+.ann-card{border-left:4px solid var(--accent,#7A1F3D)}
+.ann-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.ann-h span{font:700 13px/1 var(--display,inherit);letter-spacing:.12em;text-transform:uppercase;opacity:.85}
+.ann-it{padding:10px 0;border-top:1px solid rgba(255,255,255,.08)}
+.ann-it:first-of-type{border-top:0}
+.ann-it.new .ann-top b::after{content:'NEW';margin-left:8px;padding:1px 6px;border-radius:4px;background:var(--accent,#7A1F3D);color:#fff;font-size:10px;letter-spacing:.08em;vertical-align:2px}
+.ann-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.ann-top b{font-size:16px;line-height:1.3}
+.ann-it p{margin:4px 0 4px;line-height:1.45;opacity:.92}
+.ann-it small{opacity:.6;font-size:12px}
+.ann-del{flex:none;border:0;background:rgba(255,255,255,.08);color:inherit;border-radius:6px;padding:3px 8px;font-size:12px;cursor:pointer}
+.ann-del.arm{background:#B3261E;color:#fff}
+.ann-all{margin-top:6px}
+.ann-sheet h3{margin:2px 0 12px}
+.ann-sheet>.btn{margin-bottom:10px}
+.ann-list{max-height:60vh;overflow:auto}
+.ann-f{display:block;margin:0 0 10px;font-size:13px;font-weight:600;opacity:.9}
+.ann-f input,.ann-f textarea{display:block;width:100%;box-sizing:border-box;margin-top:5px;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.25);color:inherit;font:inherit;font-size:16px}
+.ann-chk{display:flex;gap:10px;align-items:flex-start;margin:4px 0 14px;font-size:14px;line-height:1.35}
+.ann-chk input{width:20px;height:20px;margin:1px 0 0;flex:none;accent-color:var(--accent,#7A1F3D)}
+.ann-chk small{display:block;opacity:.65;font-size:12px;margin-top:2px}
+/* clubhouse pill: pinned under the top bar */
+.ann-pill{position:fixed;z-index:6;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 74px);display:flex;align-items:center;gap:10px;max-width:min(92vw,460px);
+  padding:9px 14px 9px 10px;border-radius:14px;border:1px solid rgba(255,255,255,.16);background:rgba(14,14,18,.78);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  color:#fff;text-align:left;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+.ann-pill.hot{border-color:rgba(255,255,255,.35);animation:annPulse 2.4s ease-in-out 3}
+@keyframes annPulse{50%{box-shadow:0 0 0 6px rgba(255,255,255,.12),0 10px 30px rgba(0,0,0,.45)}}
+.ann-pin{font-size:20px}
+.ann-txt{min-width:0;display:flex;flex-direction:column}
+.ann-txt small{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
+.ann-txt b{font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ann-pill i{font-style:normal;flex:none;min-width:20px;height:20px;border-radius:10px;background:var(--accent,#7A1F3D);font:700 12px/20px system-ui;text-align:center}
+body:not([data-tab="clubhouse"]) .ann-pill{display:none}
+@media (min-width:761px){.ann-pill{bottom:84px}}
+.ann-sheet h3{padding-right:96px}
 @media (max-width:760px){ .tabs a[data-tab="leaders"]::before{-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M8%2021h8%22%2F%3E%3Cpath%20d%3D%22M12%2017v4%22%2F%3E%3Cpath%20d%3D%22M7%204h10v5a5%205%200%200%201-10%200z%22%2F%3E%3Cpath%20d%3D%22M17%205h3v2a3%203%200%200%201-3%203%22%2F%3E%3Cpath%20d%3D%22M7%205H4v2a3%203%200%200%200%203%203%22%2F%3E%3C%2Fsvg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M8%2021h8%22%2F%3E%3Cpath%20d%3D%22M12%2017v4%22%2F%3E%3Cpath%20d%3D%22M7%204h10v5a5%205%200%200%201-10%200z%22%2F%3E%3Cpath%20d%3D%22M17%205h3v2a3%203%200%200%201-3%203%22%2F%3E%3Cpath%20d%3D%22M7%205H4v2a3%203%200%200%200%203%203%22%2F%3E%3C%2Fsvg%3E")} }
 @media (max-width:760px){ .tabs a[data-tab="clubhouse"]::before{-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%2021h18%22%2F%3E%3Cpath%20d%3D%22M5%2021V8l7-4%207%204v13%22%2F%3E%3Cpath%20d%3D%22M10%2021v-6h4v6%22%2F%3E%3C%2Fsvg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%2021h18%22%2F%3E%3Cpath%20d%3D%22M5%2021V8l7-4%207%204v13%22%2F%3E%3Cpath%20d%3D%22M10%2021v-6h4v6%22%2F%3E%3C%2Fsvg%3E")} }
 @media (max-width:760px){ .tabs a[data-tab="cheats"]::before{-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%224%2017%2010%2011%204%205%22%2F%3E%3Cline%20x1%3D%2212%22%20y1%3D%2219%22%20x2%3D%2220%22%20y2%3D%2219%22%2F%3E%3C%2Fsvg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%224%2017%2010%2011%204%205%22%2F%3E%3Cline%20x1%3D%2212%22%20y1%3D%2219%22%20x2%3D%2220%22%20y2%3D%2219%22%2F%3E%3C%2Fsvg%3E")} }
@@ -2370,7 +2407,8 @@ body.egg-8bit *{font-family:"Courier New",monospace!important;letter-spacing:.06
 .lvc-h small{display:block;font-size:10px;letter-spacing:.14em;color:#d9c2ca}.lvc-h b{font:800 19px/1.1 Oswald,Impact,sans-serif;letter-spacing:.04em;color:#fff}
 .lvc-tag{margin-left:auto;font-size:11px;padding:3px 8px;border-radius:99px;background:rgba(255,255,255,.1);color:#e7e7ea}
 .lvc-ed{font:700 12px system-ui;padding:6px 12px;border-radius:6px;border:1px solid #b98a99;background:#7A1F3D;color:#fff}
-.lvc-t{padding:4px 8px 8px}
+.lvc-t{padding:4px 8px 8px}.lvc-t+.lvc-t{border-top:2px solid #7A1F3D;margin-top:4px}
+.lvc-r.hd>span:nth-child(2){color:#fff;font-size:12px;letter-spacing:.08em}
 .lvc-r{display:grid;grid-template-columns:16px 1fr 54px 32px 60px;align-items:center;gap:6px;padding:7px 6px;border-bottom:1px solid rgba(255,255,255,.06);color:#e7e7ea;font:600 14px system-ui;font-variant-numeric:tabular-nums}
 .lvc-r>span:nth-child(n+3){text-align:center}.lvc-r>span:first-child{color:#97989C;font-size:12px}
 .lvc-r.hd{font:700 10.5px system-ui;letter-spacing:.1em;color:#97989C;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.14)}
@@ -6679,15 +6717,15 @@ function weeklyMode(){ return WEEKLY_PREVIEW||TODAY>=WEEKLY_FROM; }
 function SCHED_LABEL(){ return weeklyMode()?'Weekly Schedule':'Set My Schedule'; }
 // x/y: spot on the wide picture (clubhouse.jpg). px/py: spot on the phone picture (clubhouse-phone.jpg). flip/pflip: label sits to the left of the dot.
 const CLUB_STOPS=[
-  {k:'field', x:50, y:52, px:51.4, py:47.5, pflip:false, primary:true, p:['Today\'s Work','daily-work'], c:['Coach\'s View','coach-view']},
-  {k:'tv',    x:26, y:31, px:28, py:35.5, p:['Schedule','schedule'], c:['Schedule','schedule']},
-  {k:'board', x:30.4, y:50, px:41, py:52, pflip:true, p:[SCHED_LABEL(),'home'], c:null},
-  {k:'locker',x:90, y:46, flip:true, px:72, py:58, pflip:true, p:['My Locker','profile'], c:['Clubhouse Home','home']},
-  {k:'phone', x:72, y:66, px:20, py:74, p:['Chat','chat'], c:['Chat','chat']},
-  {k:'laptop',x:51.5, y:74, px:49, py:66, pflip:true, p:['Log','personal-plan'], c:['Coach\'s Cheats','cheats']},
-  {k:'door',  x:13, y:52, px:14, py:50.5, pflip:false, p:['Settings','@account'], c:['Settings','@account']},
-  {k:'cork',  x:16, y:41, px:27, py:44.5, p:['Help','@help'], c:['Help','@help']},
-  {k:'lead',  x:14.5, y:23, px:50, py:40.5, pflip:false, p:['Leaderboards','leaders'], c:['Leaderboards','leaders']},
+  {k:'field', x:50, y:52, px:52, py:59, pflip:false, primary:true, p:['Today\'s Work','daily-work'], c:['Coach\'s View','coach-view']},
+  {k:'tv',    x:26, y:31, px:27, py:35.5, pflip:false, p:['Schedule','schedule'], c:['Schedule','schedule']},
+  {k:'board', x:30.4, y:50, px:44, py:48.5, pflip:false, p:[SCHED_LABEL(),'home'], c:null},
+  {k:'locker',x:90, y:46, flip:true, px:84, py:75, pflip:true, p:['My Locker','profile'], c:['Clubhouse Home','home']},
+  {k:'phone', x:72, y:66, px:44, py:69.5, pflip:true, p:['Chat','chat'], c:['Chat','chat']},
+  {k:'laptop',x:51.5, y:74, px:47, py:64, pflip:true, p:['Log','personal-plan'], c:['Coach\'s Cheats','cheats']},
+  {k:'door',  x:13, y:52, px:13, py:55, pflip:false, p:['Settings','@account'], c:['Settings','@account']},
+  {k:'cork',  x:16, y:41, px:21, py:44, pflip:false, p:['Help','@help'], c:['Help','@help']},
+  {k:'lead',  x:14.5, y:23, px:84, py:30, pflip:true, p:['Leaderboards','leaders'], c:['Leaderboards','leaders']},
 ];
 function clubGo(dest){
   if(dest==='@account'){ const b=document.getElementById('acctOpenL')||document.getElementById('acctOpen'); if(b) b.click(); return; }
@@ -6993,8 +7031,8 @@ document.addEventListener('click',e=>{
 document.addEventListener('keydown',e=>{ if(document.getElementById('tab-leaders')&&!document.getElementById('tab-leaders').hidden&&(e.key==='ArrowLeft'||e.key==='ArrowRight')&&!e.target.closest('input,textarea,select')){ const b=document.querySelector(`[data-lbstep="${e.key==='ArrowLeft'?-1:1}"]`); if(b) b.click(); } });
 
 // ---------- WLN TV: the 2027 schedule board ----------
-const TEAM_HEX={"Lakeland": ["#0E4C92", "#06264A", "LAK"], "Milford": ["#8B1E2F", "#4A0E18", "MIL"], "South Lyon": ["#1F4FA0", "#E8A317", "SL"], "Walled Lake Central": ["#4B2A7B", "#D9A520", "WLC"], "South Lyon East": ["#2A2A2E", "#111113", "SLE"], "Walled Lake Western": ["#1846B8", "#0B2466", "WLW"]};
-const LVC_TEAMS=new Set(["Lakeland", "Milford", "South Lyon", "Walled Lake Central", "South Lyon East", "Walled Lake Western"]);
+const TEAM_HEX={"Lakeland": ["#0E4C92", "#06264A", "LAK"], "Milford": ["#8B1E2F", "#4A0E18", "MIL"], "South Lyon": ["#1F4FA0", "#E8A317", "SL"], "Walled Lake Central": ["#4B2A7B", "#D9A520", "WLC"], "South Lyon East": ["#2A2A2E", "#111113", "SLE"], "Walled Lake Western": ["#1846B8", "#0B2466", "WLW"], "Farmington": ["#1C2A4A", "#0C1428", "FAR"], "North Farmington": ["#5A2A14", "#C9971F", "NF"], "Livonia Churchill": ["#B3122B", "#1A1A1D", "LC"], "Livonia Franklin": ["#1E2B4A", "#B3122B", "LF"], "Livonia Stevenson": ["#3F7FD0", "#1B3A66", "LS"]};
+const LVC_TEAMS=new Set(["Lakeland", "Milford", "South Lyon", "Walled Lake Central", "South Lyon East", "Walled Lake Western", "Farmington", "North Farmington", "Livonia Churchill", "Livonia Franklin", "Livonia Stevenson"]);
 // games per date: LVC series counts come from the 2027 LVC series list; other dates assume a doubleheader a day (Wayne State is a single midweek game)
 const GAMES_OVERRIDE={'Wayne State':1,'LVC Tournament':null};
 function gamesIn(g){ if(g.opp in GAMES_OVERRIDE) return GAMES_OVERRIDE[g.opp]; const days=g.e?Math.round((parse(g.e)-parse(g.d))/864e5)+1:1; return days; }
@@ -7007,31 +7045,37 @@ function cdCells(d){ let ms=Math.max(0,d-new Date()); const D=Math.floor(ms/864e
   const p=n=>String(n).padStart(2,'0'); return `<div><b>${D}</b><span>days</span></div><div><b>${p(H)}</b><span>hrs</span></div><div><b>${p(M)}</b><span>min</span></div><div><b>${p(Sx)}</b><span>sec</span></div>`; }
 setInterval(()=>{ const el=document.getElementById('cdClock'); if(!el||document.getElementById('tab-schedule').hidden) return; const c=cdTarget(); if(c) el.innerHTML=cdCells(c.d); },1000);
 const LVC_LOGO=n=>n==='Walled Lake Northern'?'lvc/wl-northern.webp':XLOGO[n];
-const LVC_2026=[['Lakeland',15,7,23,13],['Milford',14,7,19,12],['South Lyon',11,8,16,15],['Walled Lake Central',10,11,12,26],['Walled Lake Northern',9,12,16,20],['South Lyon East',8,12,11,18],['Walled Lake Western',5,17,12,22]];
+const LVC_DIVS=[['Lakes',['Farmington','North Farmington','Livonia Churchill','Livonia Franklin','Livonia Stevenson','Walled Lake Central']],
+  ['Valley',['Lakeland','Milford','South Lyon','South Lyon East','Walled Lake Northern','Walled Lake Western']]];
 let LVC_EDIT=false;
-function lvcRows(){ const d=TEAM_SET.lvc&&TEAM_SET.lvc.rows; return (d&&d.length?d:LVC_2026).map(r=>r.slice()); }
+const lvcShort=n=>n.replace('Walled Lake','WL').replace('South Lyon East','SL East').replace('Livonia ','').replace('North Farmington','N. Farmington');
+function lvcRec(n){ const r=TEAM_SET.lvc2&&TEAM_SET.lvc2.rec&&TEAM_SET.lvc2.rec[n]; return r&&r.length===4?r.slice():[0,0,0,0]; }
+function lvcDiv(name,teams,coach){
+  const rows=teams.map(n=>[n,...lvcRec(n)]).sort((a,b)=>(b[1]-b[2])-(a[1]-a[2])||b[1]-a[1]||(b[3]-b[4])-(a[3]-a[4]));
+  const top=rows[0], gb=r=>{ const v=((top[1]-r[1])+(r[2]-top[2]))/2; return v<=0?'—':String(v); };
+  const num=(r,j)=>LVC_EDIT?`<input type="number" min="0" max="60" inputmode="numeric" data-lv="${esc(r[0])}|${j}" value="${r[j]}">`:r[j];
+  let k=0,prev=null; return `<div class="lvc-t"><div class="lvc-r hd"><span></span><span>${name} Division</span><span>LVC</span><span>GB</span><span>Overall</span></div>
+    ${rows.map((r,i)=>{ const key=(r[1]-r[2])+'/'+r[1]; if(key!==prev){k=i+1;prev=key;} return `<div class="lvc-r ${r[0]==='Walled Lake Northern'?'me':''}">
+      <span>${k}</span><span class="lvc-n"><img src="${LVC_LOGO(r[0])}" alt="">${esc(lvcShort(r[0]))}</span>
+      <span>${num(r,1)}-${num(r,2)}</span><span>${LVC_EDIT?'':gb(r)}</span><span>${num(r,3)}-${num(r,4)}</span></div>`; }).join('')}</div>`;
+}
 function lvcStandings(){
   if(TEAM_SET_STATE===null&&typeof loadTeamSet==='function') loadTeamSet().then(()=>{ const t=document.getElementById('tab-schedule'); if(t&&!t.hidden) renderSchedule(); });
-  const rows=lvcRows().sort((a,b)=>(b[1]-b[2])-(a[1]-a[2])||b[1]-a[1]);
-  const top=rows[0], gb=r=>{ const v=((top[1]-r[1])+(r[2]-top[2]))/2; return v<=0?'—':String(v); };
-  const label=TEAM_SET.lvc&&TEAM_SET.lvc.label||'2026 final';
   const coach=typeof isCoachUser==='function'&&isCoachUser();
-  const num=(r,i,j)=>LVC_EDIT?`<input type="number" min="0" max="60" inputmode="numeric" data-lv="${i},${j}" value="${r[j]}">`:r[j];
+  const label=TEAM_SET.lvc2&&TEAM_SET.lvc2.label||'2027 season';
   return `<section class="lvc">
     <div class="lvc-h"><div><small>LAKES VALLEY CONFERENCE</small><b>LVC STANDINGS</b></div><span class="lvc-tag">${esc(label)}</span>
       ${coach?`<button type="button" class="lvc-ed" data-lvced>${LVC_EDIT?'Save':'Edit'}</button>`:''}</div>
-    <div class="lvc-t"><div class="lvc-r hd"><span>#</span><span>Team</span><span>LVC</span><span>GB</span><span>Overall</span></div>
-    ${rows.map((r,k)=>{ const i=lvcRows().findIndex(x=>x[0]===r[0]); return `<div class="lvc-r ${r[0]==='Walled Lake Northern'?'me':''}">
-      <span>${k+1}</span><span class="lvc-n"><img src="${LVC_LOGO(r[0])}" alt="">${esc(r[0].replace('Walled Lake','WL').replace('South Lyon East','SL East'))}</span>
-      <span>${num(r,i,1)}-${num(r,i,2)}</span><span>${LVC_EDIT?'':gb(r)}</span><span>${num(r,i,3)}-${num(r,i,4)}</span></div>`; }).join('')}</div>
+    ${LVC_DIVS.map(d=>lvcDiv(d[0],d[1],coach)).join('')}
     ${LVC_EDIT?`<label class="lvc-lab">Label <input type="text" id="lvcLab" maxlength="30" value="${esc(label)}"></label><p class="hint">Change any record, then Save. Players see it next time they open Schedule.</p>`:''}
   </section>`;
 }
 document.addEventListener('click',async e=>{ const b=e.target.closest('[data-lvced]'); if(!b) return;
   if(!LVC_EDIT){ LVC_EDIT=true; renderSchedule(); return; }
-  const rows=lvcRows(); document.querySelectorAll('[data-lv]').forEach(x=>{ const [i,j]=x.dataset.lv.split(',').map(Number); rows[i][j]=Math.max(0,parseInt(x.value,10)||0); });
-  const lab=(document.getElementById('lvcLab')||{}).value||'2027 season';
-  TEAM_SET.lvc={rows,label:lab.trim()}; b.disabled=true; b.textContent='Saving…';
+  const rec={}; LVC_DIVS.forEach(d=>d[1].forEach(n=>rec[n]=lvcRec(n)));
+  document.querySelectorAll('[data-lv]').forEach(x=>{ const [n,j]=x.dataset.lv.split('|'); rec[n][+j-1]=Math.max(0,parseInt(x.value,10)||0); });
+  const lab=((document.getElementById('lvcLab')||{}).value||'2027 season').trim();
+  TEAM_SET.lvc2={rec,label:lab}; b.disabled=true; b.textContent='Saving…';
   const r=await saveTeamSet(); LVC_EDIT=false; renderSchedule(); if(r&&!r.ok&&typeof toast==='function') toast('Could not save standings');
 });
 renderSchedule=function(){
@@ -7065,7 +7109,7 @@ renderSchedule=function(){
 
 // ---------- coaches add games to the calendar; type a team and its logo and colors come up ----------
 const LOGO_IDX={'Pikeville':0,'Rio Grande':1,'Lindsey Wilson':2,'Cornerstone':3,'Rochester Christian':4,'Northwestern Ohio':5,'Michigan-Dearborn':6,'Madonna':7,'Indiana Tech':8,'Aquinas':9,'Lawrence Tech':10,'Defiance':11,'Midway':12,'Great Lakes Christian':13,'Wayne State':14};
-const XLOGO={"Lakeland": "lvc/lakeland.webp", "Milford": "lvc/milford.webp", "South Lyon": "lvc/south-lyon.webp", "Walled Lake Central": "lvc/wl-central.webp", "South Lyon East": "lvc/south-lyon-east.webp", "Walled Lake Western": "lvc/wl-western.webp"};
+const XLOGO={"Lakeland": "lvc/lakeland.webp", "Milford": "lvc/milford.webp", "South Lyon": "lvc/south-lyon.webp", "Walled Lake Central": "lvc/wl-central.webp", "South Lyon East": "lvc/south-lyon-east.webp", "Walled Lake Western": "lvc/wl-western.webp", "Farmington": "lvc/farmington.webp", "North Farmington": "lvc/north-farmington.webp", "Livonia Churchill": "lvc/churchill.webp", "Livonia Franklin": "lvc/franklin.webp", "Livonia Stevenson": "lvc/stevenson.webp"};
 Object.assign(TEAM_HEX,{'Siena Heights':['#004880','#00264A','SH'],'Lourdes':['#C2610F','#5E2F07','LU']});
 const TEAM_ALIAS={'upike':'Pikeville','university of pikeville':'Pikeville','urg':'Rio Grande','rio':'Rio Grande','lwu':'Lindsey Wilson','lindsey':'Lindsey Wilson','cornerstone university':'Cornerstone','rcu':'Rochester Christian','rochester':'Rochester Christian','unoh':'Northwestern Ohio','nw ohio':'Northwestern Ohio','umd':'Michigan-Dearborn','um-dearborn':'Michigan-Dearborn','dearborn':'Michigan-Dearborn','michigan dearborn':'Michigan-Dearborn','madonna university':'Madonna','itw':'Indiana Tech','indiana tech':'Indiana Tech','aq':'Aquinas','aquinas college':'Aquinas','ltu':'Lawrence Tech','lawrence technological':'Lawrence Tech','defiance college':'Defiance','midway university':'Midway','glcc':'Great Lakes Christian','great lakes':'Great Lakes Christian','wsu':'Wayne State','wayne':'Wayne State','siena':'Siena Heights','shu':'Siena Heights','lourdes university':'Lourdes','whac':'LVC Tournament'};
 function findTeam(q){ const s=String(q||'').trim().toLowerCase(); if(!s) return null;
@@ -8014,6 +8058,120 @@ function cheatsBind(body){
     renderCheats();
   };
 }
+
+
+/* ===== v12: team announcements (coaches post, everyone sees, optional push) ===== */
+let ANN=[], ANN_STATE=null, _annP=null;
+const annSeenAt=()=>{ try{ return localStorage.getItem('wlnAnnSeen')||''; }catch(e){ return ''; } };
+const annMarkSeen=()=>{ if(ANN[0]) try{ localStorage.setItem('wlnAnnSeen',ANN[0].created_at); }catch(e){} };
+const annUnread=()=>ANN.filter(a=>a.created_at>annSeenAt()).length;
+function annWhen(iso){ const d=new Date(iso), now=new Date(), m=Math.round((now-d)/6e4);
+  if(m<1) return 'just now'; if(m<60) return m+' min ago'; const h=Math.round(m/60); if(h<24) return h+(h===1?' hour ago':' hours ago');
+  const days=Math.round(h/24); if(days<7) return days===1?'yesterday':days+' days ago';
+  return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
+function loadAnn(force){
+  if(_annP&&!force) return _annP;
+  _annP=(async()=>{
+    if(!cloudOn()){ try{ ANN=JSON.parse(localStorage.getItem('wlnAnnLocal')||'[]'); }catch(e){ ANN=[]; } ANN_STATE=true; return ANN; }
+    try{ const r=await sb.from('announcements').select('id,title,body,author,created_at,push,pushed_at').order('created_at',{ascending:false}).limit(25);
+      if(r.error){ ANN_STATE=false; } else { ANN=r.data||[]; ANN_STATE=true; } }catch(e){ ANN_STATE=false; }
+    return ANN;
+  })();
+  return _annP;
+}
+async function annPost(title,body,push){
+  const row={title,body,author:(S&&S.name)||'Coach',push:!!push};
+  if(!cloudOn()){ ANN.unshift({...row,id:Date.now(),created_at:new Date().toISOString()}); try{ localStorage.setItem('wlnAnnLocal',JSON.stringify(ANN)); }catch(e){} return {ok:true}; }
+  const r=await sb.from('announcements').insert(row).select('id');
+  if(r.error||!r.data||!r.data.length) return {ok:false,err:r.error&&r.error.message};
+  await loadAnn(true); return {ok:true};
+}
+async function annDelete(id){
+  if(!cloudOn()){ ANN=ANN.filter(a=>a.id!==id); try{ localStorage.setItem('wlnAnnLocal',JSON.stringify(ANN)); }catch(e){} return {ok:true}; }
+  const r=await sb.from('announcements').delete().eq('id',id).select('id');
+  await loadAnn(true); return {ok:!r.error&&r.data&&r.data.length>0};
+}
+const annCoach=()=>typeof isCoachUser==='function'&&isCoachUser()&&!window.VIEW_AS;
+function annItem(a,coach){
+  return `<article class="ann-it ${a.created_at>annSeenAt()?'new':''}">
+    <div class="ann-top"><b>${esc(a.title)}</b>${coach?`<button type="button" class="ann-del" data-anndel="${esc(String(a.id))}" aria-label="Delete announcement">✕</button>`:''}</div>
+    ${a.body?`<p>${esc(a.body).replace(/\n/g,'<br>')}</p>`:''}
+    <small>${esc(a.author||'Coach')} · ${annWhen(a.created_at)}${coach&&a.push?(a.pushed_at?' · 🔔 sent':' · 🔔 sending…'):''}</small></article>`;
+}
+function annCard(){
+  const coach=annCoach();
+  if(!ANN.length&&!coach) return '';
+  const list=ANN.slice(0,3);
+  return `<section class="panel ann-card">
+    <div class="ann-h"><span>📌 Announcements</span>${coach?'<button type="button" class="btn sm" data-annnew>+ New</button>':''}</div>
+    ${list.length?list.map(a=>annItem(a,coach)).join(''):'<p class="hint">Nothing posted yet. Tap + New to post one.</p>'}
+    ${ANN.length>3?'<button type="button" class="btn ghost sm ann-all" data-annall>See all</button>':''}
+  </section>`;
+}
+function annSheetAll(){
+  const coach=annCoach();
+  showSheet(`<div class="ann-sheet"><p class="ws-eye">From the staff</p><h3>📌 Announcements</h3>
+    ${coach?'<button type="button" class="btn" data-annnew>+ New announcement</button>':''}
+    <div class="ann-list">${ANN.length?ANN.map(a=>annItem(a,coach)).join(''):'<p class="hint">Nothing posted yet.</p>'}</div></div>`);
+  annMarkSeen(); annRefreshBadges();
+}
+function annCompose(){
+  showSheet(`<div class="ann-sheet"><p class="ws-eye">Coach</p><h3>New announcement</h3>
+    <label class="ann-f">Headline<input type="text" id="annT" maxlength="70" placeholder="Practice moved to 3:30"></label>
+    <label class="ann-f">Details<textarea id="annB" rows="4" maxlength="600" placeholder="Optional"></textarea></label>
+    <label class="ann-chk"><input type="checkbox" id="annP" checked> <span>Also send a notification to everyone's phone<small>Goes out within about 10 minutes to players who allowed notifications.</small></span></label>
+    <div class="push-act"><button type="button" class="btn" id="annGo">Post</button><button type="button" class="btn ghost" id="annX">Cancel</button></div></div>`);
+  setTimeout(()=>{ const t=document.getElementById('annT'); t&&t.focus(); },50);
+  document.getElementById('annX').onclick=()=>closeSheet();
+  document.getElementById('annGo').onclick=async e=>{
+    const title=document.getElementById('annT').value.trim(), body=document.getElementById('annB').value.trim(), push=document.getElementById('annP').checked;
+    if(!title) return toast('Add a headline first');
+    e.target.disabled=true; e.target.textContent='Posting…';
+    const r=await annPost(title,body,push);
+    if(!r.ok){ e.target.disabled=false; e.target.textContent='Post'; return toast('Could not post'+(r.err?': '+r.err:'')); }
+    closeSheet(); annMarkSeen(); toast(push?'Posted. Notification goes out shortly.':'Posted'); annRerender();
+  };
+}
+function annRefreshBadges(){
+  const n=annUnread();
+  document.querySelectorAll('.ann-pill i').forEach(i=>{ i.hidden=!n; i.textContent=n; });
+}
+function annRerender(){
+  const h=document.getElementById('tab-home'); if(h&&!h.hidden) renderHome();
+  const c=document.getElementById('tab-clubhouse'); if(c&&!c.hidden) annClubPill();
+}
+function annClubPill(){
+  const room=document.getElementById('clubBody'); if(!room) return;
+  room.querySelector('.ann-pill')?.remove();
+  const a=ANN[0], coach=annCoach(); if(!a&&!coach) return;
+  const n=annUnread();
+  room.insertAdjacentHTML('beforeend',`<button type="button" class="ann-pill ${n?'hot':''}" data-annall>
+    <span class="ann-pin">📌</span><span class="ann-txt"><small>${a?'Announcement · '+annWhen(a.created_at):'Announcements'}</small><b>${a?esc(a.title):'Post one for the team'}</b></span><i ${n?'':'hidden'}>${n}</i></button>`);
+}
+const _rc12=renderClubhouse; renderClubhouse=function(allowed){
+  _rc12(allowed);
+  annClubPill();
+  if(ANN_STATE===null) loadAnn().then(()=>{ const c=document.getElementById('tab-clubhouse'); if(c&&!c.hidden) annClubPill(); });
+};
+const _rh12=renderHome; renderHome=function(){
+  _rh12.apply(this,arguments);
+  const el=document.getElementById('homeBody'); if(!el||document.getElementById('tab-home').hidden) return;
+  if(ANN_STATE===null){ loadAnn().then(()=>{ const h=document.getElementById('tab-home'); if(h&&!h.hidden) renderHome(); }); return; }
+  if(VIEWING&&VIEWING()) return;
+  const html=annCard(); if(!html) return;
+  const wl=el.querySelector('.welcome'); (wl||el).insertAdjacentHTML(wl?'afterend':'afterbegin',html);
+  if(ANN.length) setTimeout(()=>{ annMarkSeen(); annRefreshBadges(); },1500);
+};
+document.addEventListener('click',async e=>{
+  if(e.target.closest('[data-annnew]')){ e.preventDefault(); annCompose(); return; }
+  if(e.target.closest('[data-annall]')){ e.preventDefault(); if(ANN_STATE===null) await loadAnn(); annSheetAll(); return; }
+  const d=e.target.closest('[data-anndel]'); if(d){ e.preventDefault();
+    if(!d.dataset.arm){ d.dataset.arm='1'; d.textContent='Delete?'; d.classList.add('arm'); setTimeout(()=>{ if(d.isConnected){ delete d.dataset.arm; d.textContent='✕'; d.classList.remove('arm'); } },2500); return; }
+    const id=isNaN(+d.dataset.anndel)?d.dataset.anndel:+d.dataset.anndel; const r=await annDelete(id);
+    toast(r.ok?'Deleted':'Could not delete'); const inSheet=d.closest('.ann-sheet'); if(inSheet) annSheetAll(); annRerender(); }
+});
+// re-check when the app comes back to the front
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible'&&ANN_STATE!==null) loadAnn(true).then(()=>{ annRefreshBadges(); annRerender(); }); });
 
 // ===== Tabs =====
 function showTab(){

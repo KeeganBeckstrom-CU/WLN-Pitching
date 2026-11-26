@@ -1,0 +1,19 @@
+name: Announcement notifications
+on:
+  schedule:
+    - cron: '*/10 * * * *'   # checks for new coach announcements every 10 minutes
+  workflow_dispatch:
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults: { run: { working-directory: push } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install --no-audit --no-fund
+      - run: node announce.mjs
+        env:
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          VAPID_PRIVATE: ${{ secrets.VAPID_PRIVATE }}
