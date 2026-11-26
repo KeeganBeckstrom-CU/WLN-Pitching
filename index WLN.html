@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
 <script>/* STEP 3: paste your Supabase Project URL and Publishable key between the quotes on the next 2 lines */
-window.APP_BUILD='20261126084436';
+window.APP_BUILD='20261126092758';
 window.PICK_SKIPPED=true;
 window.WLN_SUPABASE_URL = 'https://uppnclgtqhfawmoahfrv.supabase.co';
 window.WLN_SUPABASE_KEY = 'sb_publishable_MHlCXobo0OnoturzVckmyA_0reKYvG-';
@@ -2398,44 +2398,58 @@ body:not([data-tab="clubhouse"]) .ann-pill{display:none}
 @media (min-width:761px){.ann-pill{bottom:84px}}
 .ann-sheet h3{padding-right:96px}
 
-/* ===== v13: Clubhouse TV ===== */
-.ctv{--tvc:#7A1F3D;position:absolute;z-index:2;border:0;padding:0;background:none;cursor:pointer;container-type:inline-size;-webkit-tap-highlight-color:transparent}
-/* desktop: content mapped onto the lounge video wall (JS sets the transform) */
-.ctv.wall{left:0;top:0;width:780px;height:300px;transform-origin:0 0}
-.ctv.wall .ctv-scr{position:absolute;inset:0;overflow:hidden;background:#050608;box-shadow:0 0 40px rgba(255,255,255,.08)}
-.ctv.wall:hover .ctv-scr{box-shadow:0 0 0 4px rgba(255,255,255,.35),0 0 50px rgba(255,255,255,.15)}
-/* phones: a TV hung from the ceiling */
-.ctv.hung{--tv-ar:684/408;left:var(--px);top:var(--py);width:var(--pw);aspect-ratio:var(--tv-ar);transform:translate(-50%,-50%)}
-.ctv.hung::before{content:"";position:absolute;left:46%;right:46%;bottom:100%;height:40%;background:linear-gradient(90deg,#1a1a1d,#3a3a40,#1a1a1d)}
-.ctv.hung .ctv-scr{position:absolute;left:1.2%;top:1.6%;right:1.4%;bottom:3.8%;overflow:hidden;background:#050608}
-.ctv-frame{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;filter:drop-shadow(0 8px 16px rgba(0,0,0,.65))}
-.ctv-in{position:absolute;inset:0;display:flex;flex-direction:column;color:#fff;font-family:var(--display,'Barlow Condensed',sans-serif);text-align:left}
-.ctv-in::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.08),transparent 38%),repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px)}
-.ctv-top{display:flex;align-items:center;gap:2.4cqw;padding:2cqw 3cqw;white-space:nowrap;background:linear-gradient(90deg,var(--tvc),color-mix(in srgb,var(--tvc) 30%,#000));font-size:4.6cqw;letter-spacing:.06em}
-.ctv-top img{height:6cqw;width:auto}
-.ctv-top b{font-weight:800}
-.ctv-live{color:#ff6b6b;font-size:3.8cqw;animation:ctvBlink 1.6s steps(2) infinite}
-.ctv-clock{margin-left:auto;font-size:3.9cqw;opacity:.9}
-@keyframes ctvBlink{50%{opacity:.35}}
-.ctv-main{position:relative;flex:1}
-.ctv-sl{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 5cqw;opacity:0;transform:translateY(6%);transition:opacity .6s,transform .6s}
-.ctv-sl.on{opacity:1;transform:none}
-.ctv-sl small{font-size:3.8cqw;letter-spacing:.14em;color:color-mix(in srgb,var(--tvc) 45%,#fff);font-weight:700}
-.ctv-sl b{font-size:6.6cqw;line-height:1.08;font-weight:800;text-transform:uppercase;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.ctv-crawl{flex:none;height:11cqw;background:#f2f2f4;color:#111;overflow:hidden;display:flex;align-items:center;border-top:1.2cqw solid var(--tvc)}
-.ctv-track{display:flex;width:max-content;animation:ctvCrawl var(--dur,30s) linear infinite}
-.ctv-track>div{display:flex;align-items:center;white-space:nowrap;font-size:5.4cqw;font-weight:700;text-transform:uppercase;letter-spacing:.02em}
-.ctv-track span{padding:0 2.5cqw}
-.ctv-track b{color:var(--tvc);margin-right:2cqw;font-weight:800}
-.ctv-track i{font-style:normal;color:var(--tvc);font-size:4cqw}
+/* ===== v13: Clubhouse TV · hologram from a projector, 2000s sports-desk graphics ===== */
+.holo{--tvc:#7A1F3D;position:absolute;left:0;top:0;width:640px;height:400px;transform-origin:0 0;z-index:2;border:0;padding:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transform-style:preserve-3d}
+.holo-in{position:absolute;inset:0;display:block;mix-blend-mode:screen;opacity:.94;animation:holoFlick 7s infinite steps(1);filter:drop-shadow(0 0 10px rgba(110,220,255,.55)) drop-shadow(0 0 28px rgba(80,190,255,.3))}
+.holo-in::before{content:'';position:absolute;inset:0;z-index:5;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(150,230,255,.10) 0 1px,transparent 1px 4px)}
+.holo-in::after{content:'';position:absolute;left:0;right:0;height:22%;z-index:6;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(170,240,255,.18),transparent);animation:holoSweep 4.5s linear infinite}
+@keyframes holoSweep{from{top:-25%}to{top:105%}}
+@keyframes holoFlick{0%,100%{opacity:.94}41%{opacity:.78}42%{opacity:.94}77%{opacity:.86}78%{opacity:.94}}
+.holo:hover .holo-in,.holo:focus-visible .holo-in{opacity:1;filter:drop-shadow(0 0 14px rgba(140,235,255,.8)) drop-shadow(0 0 40px rgba(80,190,255,.45))}
+.holo:focus-visible{outline:none}
+.holo-beam{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;mix-blend-mode:screen;filter:blur(2px);animation:beamPulse 3.5s ease-in-out infinite}
+@keyframes beamPulse{50%{opacity:.75}}
+.holo-proj{position:absolute;z-index:2;width:46px;height:22px;transform:translate(-50%,-50%);border-radius:5px;background:linear-gradient(180deg,#3a3d44,#16181c);box-shadow:0 4px 10px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.2);pointer-events:none}
+.holo-proj::before{content:'';position:absolute;left:50%;bottom:100%;width:4px;height:60px;transform:translateX(-50%);background:linear-gradient(90deg,#222,#555,#222)}
+.holo-proj i{position:absolute;left:50%;bottom:-6px;width:16px;height:16px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,#fff 0 20%,#9ff3ff 35%,#2aa8d8 70%);box-shadow:0 0 14px 4px rgba(120,230,255,.85)}
+.vw-off{position:absolute;left:0;top:0;width:100px;height:100px;transform-origin:0 0;z-index:1;pointer-events:none;background:linear-gradient(160deg,#121418,#05060a 55%,#0b0d12);box-shadow:inset 0 0 30px rgba(0,0,0,.9)}
+.vw-off::after{content:'';position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.07),transparent 40%)}
+/* the graphics (designed at 640×400) */
+.sc{position:absolute;inset:0;font-family:var(--display,'Barlow Condensed',sans-serif);color:#fff;text-align:left;border-radius:6px;overflow:hidden;
+  background:radial-gradient(120% 90% at 70% 30%,rgba(40,80,140,.55),rgba(6,12,26,.75) 70%);box-shadow:inset 0 0 0 2px rgba(160,230,255,.45)}
+.sc-rail{position:absolute;left:8px;top:8px;bottom:56px;width:96px;display:flex;flex-direction:column;gap:3px}
+.sc-clk{height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:4px 4px 0 0;background:linear-gradient(180deg,#3d4c66,#1a2335)}
+.sc-clk b{font-size:15px;letter-spacing:.04em}.sc-clk span{font-size:13px;font-weight:800;color:#ffcf3f;letter-spacing:.1em}
+.sc-tab{flex:1;max-height:42px;display:flex;align-items:center;justify-content:flex-end;text-align:right;padding:0 6px;font-size:13px;letter-spacing:0;font-weight:800;line-height:1;letter-spacing:.02em;
+  background:linear-gradient(180deg,#eef1f6,#aeb6c4);color:#1b2333;border-radius:2px;transition:background .3s,color .3s}
+.sc-tab.on{background:linear-gradient(180deg,#ff3b4f,var(--tvc));color:#fff;box-shadow:0 0 12px rgba(255,60,80,.6)}
+.sc-main{position:absolute;left:112px;right:8px;top:8px;bottom:80px}
+.sc-sl{position:absolute;inset:0;opacity:0;transform:translateX(18px);transition:opacity .5s,transform .5s;display:flex;flex-direction:column;gap:6px}
+.sc-sl.on{opacity:1;transform:none}
+.sc-hd{padding:8px 12px;font-size:22px;font-weight:800;line-height:1.05;letter-spacing:.02em;background:linear-gradient(180deg,#2b3953,#141c2c);border-left:4px solid var(--tvc)}
+.sc-box{display:flex;align-items:stretch;background:linear-gradient(180deg,#ffffff,#d5dbe6 55%,#b8c1d1);color:#0d1424;border-radius:2px;min-height:96px;box-shadow:0 2px 0 rgba(0,0,0,.4)}
+.sc-big{flex:1;display:flex;align-items:center;padding:10px 14px;font-size:34px;font-weight:800;line-height:1.02;text-transform:uppercase}
+.sc-rows{flex:1;display:flex;flex-direction:column;justify-content:center;padding:6px 12px}
+.sc-row{display:flex;justify-content:space-between;gap:10px;padding:3px 0;border-bottom:1px solid rgba(13,20,36,.15)}
+.sc-row:last-child{border-bottom:0}
+.sc-row b{font-size:30px;line-height:1;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc-row i{font-style:normal;font-size:22px;font-weight:800;color:#3b4660;align-self:center}
+.sc-n{flex:none;min-width:96px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 10px;background:linear-gradient(180deg,#e0263c,#8e0a1f);color:#fff;border-left:2px solid rgba(0,0,0,.25)}
+.sc-n b{font-size:46px;line-height:.95;font-weight:800}.sc-n small{font-size:14px;font-weight:800;letter-spacing:.12em;opacity:.9}
+.sc-sub{padding:0 12px;font-size:19px;line-height:1.2;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc-sub b{display:block;font-size:16px;color:#ffcf3f;letter-spacing:.06em}
+.sc-foot{position:absolute;left:112px;bottom:56px;font-size:14px;font-weight:700;letter-spacing:.08em;opacity:.85}
+.sc-bl{position:absolute;left:0;right:0;bottom:0;height:44px;display:flex;align-items:stretch;background:linear-gradient(180deg,#1f2530,#07090d);border-top:2px solid #8C2244}
+.sc-bl-tag{flex:none;display:flex;align-items:center;padding:0 10px;font-size:17px;font-weight:800;font-style:italic;color:#d7dce6;background:linear-gradient(180deg,#4a5366,#262c38)}
+.sc-bl-cr{flex:1;overflow:hidden;display:flex;align-items:center}
+.sc-bl-tr{display:flex;width:max-content;animation:ctvCrawl var(--dur,30s) linear infinite}
+.sc-bl-tr>div{display:flex;align-items:center;white-space:nowrap;font-size:20px;font-weight:700;text-transform:uppercase}
+.sc-bl-tr span{padding:0 6px}.sc-bl-tr b{color:#ffcf3f;margin-right:8px}
+.sc-bl-tr i{display:inline-block;width:8px;height:8px;margin:0 10px;background:#8C2244;transform:rotate(45deg)}
+.sc-bl-logo{flex:none;display:flex;align-items:center;gap:3px;padding:0 12px;font-size:17px;font-weight:800;font-style:italic;letter-spacing:.02em;background:linear-gradient(180deg,#e0263c,#8e0a1f)}
+.sc-bl-logo em{font-style:italic;background:#fff;color:#8e0a1f;padding:0 4px;border-radius:2px}
 @keyframes ctvCrawl{to{transform:translateX(-50%)}}
-/* wide video wall: sizes for a 780×300 screen */
-.ctv.wall .ctv-top{font-size:24px;padding:10px 22px;gap:14px}.ctv.wall .ctv-top img{height:30px}
-.ctv.wall .ctv-live{font-size:19px}.ctv.wall .ctv-clock{font-size:20px}
-.ctv.wall .ctv-sl{padding:0 28px}.ctv.wall .ctv-sl small{font-size:19px}.ctv.wall .ctv-sl b{font-size:44px;-webkit-line-clamp:2}
-.ctv.wall .ctv-crawl{height:56px;border-top-width:6px}.ctv.wall .ctv-track>div{font-size:30px}.ctv.wall .ctv-track span{padding:0 18px}.ctv.wall .ctv-track b{margin-right:12px}.ctv.wall .ctv-track i{font-size:18px}
-.ctv:focus-visible{outline:3px solid #fff;outline-offset:4px}
-@media (prefers-reduced-motion:reduce){.ctv-track{animation:none}}
+@media (prefers-reduced-motion:reduce){.sc-bl-tr,.holo-in,.holo-in::after,.holo-beam{animation:none}}
 /* ===== coach channel guide ===== */
 .tvg{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.72);display:grid;place-items:center;padding:16px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
 .tvg-box{width:min(620px,100%);max-height:calc(100dvh - 32px);display:flex;flex-direction:column;background:#07090f;border:3px solid #1d2230;border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.7),inset 0 0 80px rgba(40,60,120,.12);overflow:hidden;font-family:var(--display,'Barlow Condensed',sans-serif);color:#e9ecf4}
@@ -2475,7 +2489,12 @@ body:not([data-tab="clubhouse"]) .ann-pill{display:none}
   .egg-logo{left:41%;top:3%;width:18%;height:12%}
 }
 
-@media (min-width:761px){.ann-pill{bottom:18px}}
+
+
+/* announcements bar: top right, out of the way of the turkey */
+.ann-pill{left:auto;right:12px;bottom:auto;transform:none;top:calc(env(safe-area-inset-top,0px) + 12px);max-width:min(46vw,380px)}
+@media (min-width:761px){.ann-pill{top:76px;right:18px}}
+@media (max-width:760px){.ann-pill{max-width:calc(100vw - 200px);padding:7px 10px 7px 8px;gap:7px}.ann-pin{font-size:16px}.ann-txt small{display:none}.ann-txt b{font-size:13px}}
 @media (max-width:760px){ .tabs a[data-tab="leaders"]::before{-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M8%2021h8%22%2F%3E%3Cpath%20d%3D%22M12%2017v4%22%2F%3E%3Cpath%20d%3D%22M7%204h10v5a5%205%200%200%201-10%200z%22%2F%3E%3Cpath%20d%3D%22M17%205h3v2a3%203%200%200%201-3%203%22%2F%3E%3Cpath%20d%3D%22M7%205H4v2a3%203%200%200%200%203%203%22%2F%3E%3C%2Fsvg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M8%2021h8%22%2F%3E%3Cpath%20d%3D%22M12%2017v4%22%2F%3E%3Cpath%20d%3D%22M7%204h10v5a5%205%200%200%201-10%200z%22%2F%3E%3Cpath%20d%3D%22M17%205h3v2a3%203%200%200%201-3%203%22%2F%3E%3Cpath%20d%3D%22M7%205H4v2a3%203%200%200%200%203%203%22%2F%3E%3C%2Fsvg%3E")} }
 @media (max-width:760px){ .tabs a[data-tab="clubhouse"]::before{-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%2021h18%22%2F%3E%3Cpath%20d%3D%22M5%2021V8l7-4%207%204v13%22%2F%3E%3Cpath%20d%3D%22M10%2021v-6h4v6%22%2F%3E%3C%2Fsvg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%2021h18%22%2F%3E%3Cpath%20d%3D%22M5%2021V8l7-4%207%204v13%22%2F%3E%3Cpath%20d%3D%22M10%2021v-6h4v6%22%2F%3E%3C%2Fsvg%3E")} }
 @media (max-width:760px){ .tabs a[data-tab="cheats"]::before{-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%224%2017%2010%2011%204%205%22%2F%3E%3Cline%20x1%3D%2212%22%20y1%3D%2219%22%20x2%3D%2220%22%20y2%3D%2219%22%2F%3E%3C%2Fsvg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%224%2017%2010%2011%204%205%22%2F%3E%3Cline%20x1%3D%2212%22%20y1%3D%2219%22%20x2%3D%2220%22%20y2%3D%2219%22%2F%3E%3C%2Fsvg%3E")} }
@@ -6798,13 +6817,13 @@ function SCHED_LABEL(){ return weeklyMode()?'Weekly Schedule':'Set My Schedule';
 const CLUB_STOPS=[
   {k:'field', x:52, y:47, px:50, py:54, primary:true, p:['Today\'s Work','daily-work'], c:['Coach\'s View','coach-view']},
   {k:'tv',    x:67, y:55.5, px:81, py:60, flip:true, pflip:true, p:['Schedule','schedule'], c:['Schedule','schedule']},
-  {k:'board', x:4.6, y:62, px:14, py:62, p:[SCHED_LABEL(),'home'], c:null},
+  {k:'board', x:4.6, y:74, px:14, py:62, p:[SCHED_LABEL(),'home'], c:null},
   {k:'locker',x:72.5, y:63, px:80, py:80, pflip:true, p:['My Locker','profile'], c:['Clubhouse Home','home']},
   {k:'phone', x:37, y:84, px:27, py:67, p:['Chat','chat'], c:['Chat','chat']},
   {k:'laptop',x:63, y:85, px:72, py:73, pflip:true, p:['Log','personal-plan'], c:['Coach\'s Cheats','cheats']},
   {k:'door',  x:16, y:32, px:13, py:43, p:['Settings','@account'], c:['Settings','@account']},
-  {k:'cork',  x:72, y:20, px:13, py:22, flip:true, p:['Help','@help'], c:['Help','@help']},
-  {k:'lead',  x:85, y:48, px:86, py:40, flip:true, pflip:true, p:['Leaderboards','leaders'], c:['Leaderboards','leaders']},
+  {k:'cork',  x:72, y:20, px:12, py:15, flip:true, p:['Help','@help'], c:['Help','@help']},
+  {k:'lead',  x:85, y:48, px:86, py:45, flip:true, pflip:true, p:['Leaderboards','leaders'], c:['Leaderboards','leaders']},
 ];
 function clubGo(dest){
   if(dest==='@account'){ const b=document.getElementById('acctOpenL')||document.getElementById('acctOpen'); if(b) b.click(); return; }
@@ -8255,7 +8274,6 @@ document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==
 
 /* ===== v13: Clubhouse TV (video wall on desktop, hung TV on phones) + coach channel guide ===== */
 // phone spot for the hung TV (% of the phone stage)
-window.CLUB_TV=window.CLUB_TV||{px:50,py:26.5,pw:40};
 // desktop: the lounge's curved video wall (% of the stage): top-left, top-right, bottom-left, bottom-right
 window.CLUB_WALL=window.CLUB_WALL||[[10.4,53.7],[34.4,54.4],[10.4,77.6],[34.4,62.6]];
 const TV_CH=[
@@ -8273,27 +8291,39 @@ const tvOK=k=>k!=='lvc'||typeof LVC_DIVS!=='undefined';
 const tvCfg=()=>{ const t=TEAM_SET.ticker||{}; const src={}; TV_CH.forEach(([k])=>src[k]=t.src&&k in t.src?!!t.src[k]:k!=='potw'); return {on:t.on!==false,src,lines:Array.isArray(t.lines)?t.lines:[],potw:t.potw||{}}; };
 function tvNextGame(){ try{ return typeof nextGame==='function'?nextGame():null; }catch(e){ return null; } }
 function tvDays(d){ return Math.max(0,Math.round((parse(d)-parse(TODAY))/864e5)); }
+const TV_ME='WLN';
+const tvUp=x=>String(x||'').toUpperCase();
 function tvChannel(k,c,coach){ const out=[];
-  if(k==='ann'&&typeof ANN!=='undefined') ANN.slice(0,3).forEach(a=>out.push({t:'COACH',v:a.title}));
-  if(k==='game'){ const g=tvNextGame(); if(g){ const n=tvDays(g.d); out.push({t:'NEXT GAME',v:`${typeof gameVs==='function'?gameVs(g):g.opp} · ${typeof sFmt==='function'?sFmt(g.d):g.d}${n?` · ${n} day${n===1?'':'s'}`:' · TODAY'}`}); } }
-  if(k==='count'&&typeof SCHED!=='undefined'&&SCHED[0]&&TODAY<SCHED[0].d) out.push({t:'COUNTDOWN',v:`${tvDays(SCHED[0].d)} days until first pitch`});
-  if(k==='today'&&!coach){ try{ const p=dayPlan(TODAY); if(p) out.push({t:'TODAY',v:p.kind==='off'?'Off day. Recover.':`${label(p)}. Log it when you finish.`}); }catch(e){} }
-  if(k==='today'&&coach) out.push({t:'TODAY',v:"Players see their own work here"});
-  if(k==='team'&&coach){ try{ const st=staff().filter(({a})=>!a.pre); const n=st.filter(({a})=>a.logs&&a.logs[TODAY]).length; if(st.length) out.push({t:'LOGGED TODAY',v:`${n} of ${st.length} pitchers`}); }catch(e){} }
-  if(k==='lvc'&&typeof LVC_DIVS!=='undefined'&&typeof lvcRec==='function') LVC_DIVS.forEach(([dn,teams])=>{ const r=teams.map(n=>[n,...lvcRec(n)]).sort((a,b)=>(b[1]-b[2])-(a[1]-a[2])||b[1]-a[1]); const any=r.some(x=>x[1]+x[2]>0); out.push({t:`LVC ${dn.toUpperCase()}`,v:any?r.slice(0,3).map(x=>`${lvcShort(x[0])} ${x[1]}-${x[2]}`).join(' · '):'League play starts in April'}); });
-  if(k==='potw'&&c.potw.name) out.push({t:'PITCHER OF THE WEEK',v:c.potw.name+(c.potw.why?` · ${c.potw.why}`:'')});
-  if(k==='tip'){ const d=Math.floor(Date.now()/864e5); out.push({t:'ARM CARE',v:TV_TIPS[d%TV_TIPS.length]}); }
-  if(k==='custom') c.lines.filter(Boolean).forEach(l=>out.push({t:'',v:l}));
-  return out; }
+  if(k==='ann'&&typeof ANN!=='undefined') ANN.slice(0,3).forEach(a=>out.push({g:'COACH',t:'TEAM ANNOUNCEMENT',v:a.title,sub:[['POSTED',`${typeof annWhen==='function'?annWhen(a.created_at):''} · ${a.author||'Coach'}`]]}));
+  if(k==='game'){ const g=tvNextGame(); if(g){ const n=tvDays(g.d), when=`${typeof sDays==='function'?sDays(g):''} ${typeof sFmt==='function'?sFmt(g.d):g.d}${g.t?' · '+g.t:''}`.trim();
+    out.push({g:'NEXT GAME',t:'2027 SEASON · NEXT GAME',v:`${typeof gameVs==='function'?gameVs(g):g.opp} · ${typeof sFmt==='function'?sFmt(g.d):g.d}`,rows:[[TV_ME,g.at==='home'?'HOME':g.at==='away'?'AWAY':''],[tvUp(g.opp),'']],n:n||'0',nl:n===1?'DAY':'DAYS',sub:[['WHEN',when],['WHERE',g.at==='home'?'Home':g.at==='away'?'Away':'TBD']]}); } }
+  if(k==='count'&&typeof SCHED!=='undefined'&&SCHED[0]&&TODAY<SCHED[0].d){ const n=tvDays(SCHED[0].d); out.push({g:'COUNTDOWN',t:'COUNTDOWN TO FIRST PITCH',v:`${n} days until first pitch`,n,nl:'DAYS',sub:[['OPENER',`${typeof gameVs==='function'?gameVs(SCHED[0]):SCHED[0].opp} · ${typeof sFmt==='function'?sFmt(SCHED[0].d):SCHED[0].d}`]]}); }
+  if(k==='today'&&!coach){ try{ const p=dayPlan(TODAY); if(p) out.push({g:'TODAY',t:"TODAY'S WORK",v:p.kind==='off'?'Off day. Recover.':label(p),sub:[['THEN',p.kind==='off'?'Do your band work':'Log it when you finish']]}); }catch(e){} }
+  if(k==='today'&&coach) out.push({g:'TODAY',t:"TODAY'S WORK",v:'Each player sees his own plan here',sub:[['PLAYERS','Tap Today\'s Work to log it']]});
+  if(k==='team'&&coach){ try{ const st=staff().filter(({a})=>!a.pre); const n=st.filter(({a})=>a.logs&&a.logs[TODAY]).length; if(st.length) out.push({g:'LOGGED',t:'LOGGED TODAY',v:`${n} of ${st.length} pitchers`,n:`${n}/${st.length}`,nl:'LOGGED',sub:[['STILL NEED',`${st.length-n} pitchers`]]}); }catch(e){} }
+  if(k==='lvc'&&typeof LVC_DIVS!=='undefined'&&typeof lvcRec==='function') LVC_DIVS.forEach(([dn,teams])=>{ const r=teams.map(n=>[n,...lvcRec(n)]).sort((a,b)=>(b[1]-b[2])-(a[1]-a[2])||b[1]-a[1]); const any=r.some(x=>x[1]+x[2]>0);
+    out.push({g:'LVC',t:`LVC · ${dn.toUpperCase()} DIVISION`,v:any?r.slice(0,3).map(x=>`${lvcShort(x[0])} ${x[1]}-${x[2]}`).join(' · '):'League play starts in April',rows:r.slice(0,3).map(x=>[tvUp(lvcShort(x[0])),`${x[1]}-${x[2]}`]),sub:[['STANDINGS',any?'Conference record':'All teams 0-0']]}); });
+  if(k==='potw'&&c.potw.name) out.push({g:'POTW',t:'PITCHER OF THE WEEK',v:c.potw.name,sub:c.potw.why?[['WHY',c.potw.why]]:[]});
+  if(k==='tip'){ const d=Math.floor(Date.now()/864e5); out.push({g:'ARM CARE',t:'ARM CARE TIP OF THE DAY',v:TV_TIPS[d%TV_TIPS.length]}); }
+  if(k==='custom') c.lines.filter(Boolean).forEach(l=>out.push({g:'COACH',t:"COACH'S CORNER",v:l}));
+  out.forEach(o=>o.t=o.t||o.g); return out; }
 function tvItems(){ const c=tvCfg(), coach=typeof isCoachUser==='function'&&isCoachUser()&&!window.VIEW_AS; const out=[];
   TV_CH.forEach(([k])=>{ if(c.src[k]&&tvOK(k)) out.push(...tvChannel(k,c,coach)); });
-  if(!out.length) out.push({t:'',v:'Clubhouse TV'}); return out; }
+  if(!out.length) out.push({g:'CLUBHOUSE',t:'CLUBHOUSE TV',v:'Nothing on right now'}); return out; }
+function tvSlide(i,n){
+  const box=i.rows?`<div class="sc-rows">${i.rows.map(r=>`<div class="sc-row"><b>${esc(r[0])}</b><i>${esc(r[1])}</i></div>`).join('')}</div>`:`<div class="sc-big">${esc(i.v)}</div>`;
+  return `<div class="sc-sl ${n?'':'on'}" data-g="${esc(i.g)}"><div class="sc-hd">${esc(i.t)}</div>
+    <div class="sc-box">${box}${i.n!=null?`<div class="sc-n"><b>${esc(String(i.n))}</b><small>${esc(i.nl||'')}</small></div>`:''}</div>
+    ${(i.sub||[]).filter(s=>s[1]).map(s=>`<div class="sc-sub"><b>${esc(s[0])}</b>${esc(s[1])}</div>`).join('')}</div>`; }
 function tvHTML(){
-  const it=tvItems(), crawl=it.map(i=>`<span>${i.t?`<b>${esc(i.t)}</b>`:''}${esc(i.v)}</span>`).join('<i>●</i>');
-  const logo=(document.querySelector('header .logo img')||{}).src||'';
-  return `<div class="ctv-in"><div class="ctv-top">${logo?`<img src="${logo}" alt="">`:''}<b>CLUBHOUSE TV</b><span class="ctv-live">● LIVE</span><span class="ctv-clock" data-ctvclock></span></div>
-    <div class="ctv-main" data-ctvmain>${it.map((i,n)=>`<div class="ctv-sl ${n?'':'on'}"><small>${esc(i.t||'CLUBHOUSE')}</small><b>${esc(i.v)}</b></div>`).join('')}</div>
-    <div class="ctv-crawl"><div class="ctv-track" style="--dur:${Math.max(18,crawl.replace(/<[^>]+>/g,'').length*0.22)}s"><div>${crawl}<i>●</i></div><div aria-hidden="true">${crawl}<i>●</i></div></div></div></div>`;
+  const it=tvItems(), groups=[...new Set(it.map(i=>i.g))].slice(0,7);
+  const crawl=it.map(i=>`<span><b>${esc(i.g)}</b>${esc(i.v)}</span>`).join('<i></i>');
+  return `<div class="sc">
+    <div class="sc-rail"><div class="sc-clk"><b data-ctvclock></b><span>LIVE</span></div>${groups.map((g,n)=>`<div class="sc-tab ${n?'':'on'}" data-g="${esc(g)}">${esc(g)}</div>`).join('')}</div>
+    <div class="sc-main" data-ctvmain>${it.map((i,n)=>tvSlide(i,n)).join('')}</div>
+    <div class="sc-foot">CLUBHOUSE TV · ${esc(TV_ME)} PITCHING</div>
+    <div class="sc-bl"><span class="sc-bl-tag">${esc(TV_ME)}</span><div class="sc-bl-cr"><div class="sc-bl-tr" style="--dur:${Math.max(20,crawl.replace(/<[^>]+>/g,'').length*0.24)}s"><div>${crawl}<i></i></div><div aria-hidden="true">${crawl}<i></i></div></div></div><span class="sc-bl-logo">CLUBHOUSE<em>TV</em></span></div>
+  </div>`;
 }
 // map a w×h box onto 4 points (projective transform)
 function tvHomog(w,h,q){
@@ -8305,24 +8335,39 @@ function tvHomog(w,h,q){
   return `matrix3d(${t[0]},${t[3]},0,${t[6]},${t[1]},${t[4]},0,${t[7]},0,0,1,0,${t[2]},${t[5]},0,${t[8]})`;
 }
 const tvPhone=()=>matchMedia('(max-aspect-ratio: 1/1)').matches;
+// hologram spot (% of stage): x,y = centre of the picture, w = width; lx,ly = projector lens
+window.CLUB_HOLO=window.CLUB_HOLO||{d:{x:24,y:52,w:27,lx:24,ly:11,tilt:-9},p:{x:50,y:30,w:58,lx:84,ly:16.5,tilt:0}};
 let _ctvT=null, _ctvRO=null;
-function tvPlace(){ const st=document.querySelector('#clubBody .club-stage'), el=st&&st.querySelector('.ctv'); if(!el) return;
-  if(tvPhone()){ el.style.transform=''; return; }
-  const W=st.clientWidth, H=st.clientHeight, q=window.CLUB_WALL.flatMap(([x,y])=>[x/100*W,y/100*H]);
-  el.style.transform=tvHomog(780,300,q); }
+function tvPlace(){ const st=document.querySelector('#clubBody .club-stage'); if(!st) return;
+  const W=st.clientWidth, H=st.clientHeight, P=tvPhone()?window.CLUB_HOLO.p:window.CLUB_HOLO.d;
+  const el=st.querySelector('.holo'); if(!el) return;
+  const pw=P.w/100*W, s=pw/640, ph=400*s, cx=P.x/100*W, cy=P.y/100*H;
+  el.style.transform=`translate(${cx-pw/2}px,${cy-ph/2}px) perspective(${1400*s}px) rotateY(${P.tilt}deg) scale(${s})`;
+  const off=st.querySelector('.vw-off'); if(off){ off.hidden=tvPhone(); if(!tvPhone()){ const q=window.CLUB_WALL.flatMap(([x,y])=>[x/100*W,y/100*H]); off.style.transform=tvHomog(100,100,q); } }
+  // light beam: convex hull of the lens and the 4 corners of the picture
+  const lx=P.lx/100*W, ly=P.ly/100*H, tilt=Math.cos(P.tilt*Math.PI/180), hw=pw/2*tilt;
+  const pts=[[lx,ly],[cx-hw,cy-ph/2],[cx+hw,cy-ph/2],[cx+hw,cy+ph/2],[cx-hw,cy+ph/2]];
+  const hull=(p=>{ p=p.slice().sort((a,b)=>a[0]-b[0]||a[1]-b[1]); const cr=(o,a,b)=>(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]); const lo=[],up=[]; for(const q of p){ while(lo.length>=2&&cr(lo[lo.length-2],lo[lo.length-1],q)<=0) lo.pop(); lo.push(q);} for(const q of p.slice().reverse()){ while(up.length>=2&&cr(up[up.length-2],up[up.length-1],q)<=0) up.pop(); up.push(q);} return lo.slice(0,-1).concat(up.slice(0,-1)); })(pts);
+  const bm=st.querySelector('.holo-beam'); if(bm){ bm.setAttribute('viewBox',`0 0 ${W} ${H}`); bm.querySelector('polygon').setAttribute('points',hull.map(p=>p.map(v=>v.toFixed(1)).join(',')).join(' '));
+    const gr=bm.querySelector('linearGradient'); gr.setAttribute('x1',lx); gr.setAttribute('y1',ly); gr.setAttribute('x2',cx); gr.setAttribute('y2',cy); }
+  const pj=st.querySelector('.holo-proj'); if(pj){ pj.style.left=P.lx+'%'; pj.style.top=P.ly+'%'; }
+}
 function tvMount(){
   const st=document.querySelector('#clubBody .club-stage'); if(!st) return;
-  st.querySelector('.ctv')?.remove(); if(!tvCfg().on) return;
-  const T=window.CLUB_TV, phone=tvPhone();
-  st.insertAdjacentHTML('beforeend',`<button type="button" class="ctv ${phone?'hung':'wall'}" data-tvtap aria-label="Clubhouse TV" style="--px:${T.px}%;--py:${T.py}%;--pw:${T.pw}%">
-    <span class="ctv-scr">${tvHTML()}</span>${phone?'<img class="ctv-frame" src="tex/tv.webp" alt="">':''}</button>`);
+  st.querySelectorAll('.holo,.holo-beam,.holo-proj,.vw-off,.ctv').forEach(n=>n.remove()); if(!tvCfg().on) return;
+  st.insertAdjacentHTML('beforeend',`<span class="vw-off" aria-hidden="true"></span>
+    <svg class="holo-beam" aria-hidden="true"><defs><linearGradient id="hbG" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#9ff3ff" stop-opacity=".55"/><stop offset="1" stop-color="#5fd6ff" stop-opacity=".05"/></linearGradient></defs><polygon fill="url(#hbG)"/></svg>
+    <span class="holo-proj" aria-hidden="true"><i></i></span>
+    <button type="button" class="holo" data-tvtap aria-label="Clubhouse TV"><span class="holo-in">${tvHTML()}</span></button>`);
   tvPlace();
-  if(!_ctvRO&&window.ResizeObserver){ _ctvRO=new ResizeObserver(()=>{ const el=document.querySelector('#clubBody .ctv'); if(el&&el.classList.contains(tvPhone()?'wall':'hung')) tvMount(); else tvPlace(); }); }
+  if(!_ctvRO&&window.ResizeObserver) _ctvRO=new ResizeObserver(()=>tvPlace());
   if(_ctvRO){ _ctvRO.disconnect(); _ctvRO.observe(st); }
   clearInterval(_ctvT); let k=0;
-  const tick=()=>{ const m=st.querySelector('[data-ctvmain]'); if(!m||!m.isConnected){ clearInterval(_ctvT); return; } const s=m.children; if(s.length>1){ s[k%s.length].classList.remove('on'); k++; s[k%s.length].classList.add('on'); }
-    const c=st.querySelector('[data-ctvclock]'); if(c) c.textContent=new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}); };
-  tick(); _ctvT=setInterval(tick,5000);
+  const tick=()=>{ const m=st.querySelector('[data-ctvmain]'); if(!m||!m.isConnected){ clearInterval(_ctvT); return; } const s=m.children;
+    if(s.length>1){ s[k%s.length].classList.remove('on'); k++; s[k%s.length].classList.add('on'); }
+    const g=s[k%s.length]&&s[k%s.length].dataset.g; st.querySelectorAll('.sc-tab').forEach(t=>t.classList.toggle('on',t.dataset.g===g));
+    const c=st.querySelector('[data-ctvclock]'); if(c) c.textContent=new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}).replace(' ',' ')+' ET'; };
+  tick(); _ctvT=setInterval(tick,6000);
 }
 const _rc13=renderClubhouse; renderClubhouse=function(allowed){
   _rc13(allowed); tvMount();
@@ -8338,7 +8383,7 @@ function tvGuide(){ const c=tvCfg(); TVG={src:{...c.src},lines:[...c.lines],potw
 function tvGuideRender(){
   document.getElementById('tvGuide')?.remove();
   const chans=TV_CH.filter(([k])=>tvOK(k)), live=chans.filter(([k])=>TVG.src[k]).length;
-  const prev=k=>{ const it=tvChannel(k,{...TVG},true); return it.length?it.map(i=>(i.t?i.t+': ':'')+i.v).join('  ·  '):(k==='potw'?'Pick a pitcher below':k==='custom'?'Type your lines below':'Nothing to show right now'); };
+  const prev=k=>{ const it=tvChannel(k,{...TVG},true); return it.length?it.map(i=>i.v).join('  ·  '):(k==='potw'?'Pick a pitcher below':k==='custom'?'Type your lines below':'Nothing to show right now'); };
   const sel=chans[TVG.sel]||chans[0];
   document.body.insertAdjacentHTML('beforeend',`<div class="tvg" id="tvGuide" role="dialog" aria-modal="true" aria-label="Clubhouse TV channel guide">
    <div class="tvg-box">
