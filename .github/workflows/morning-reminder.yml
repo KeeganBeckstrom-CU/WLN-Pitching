@@ -1,0 +1,27 @@
+name: Morning reminder (9 AM Michigan)
+on:
+  schedule:
+    - cron: '45 12 * * *'   # 8:45 AM EDT (summer)
+    - cron: '45 13 * * *'   # 8:45 AM EST (winter)
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Send right now (test)'
+        type: boolean
+        default: true
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults: { run: { working-directory: push } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install --no-audit --no-fund
+      - run: node send.mjs
+        env:
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          VAPID_PRIVATE: ${{ secrets.VAPID_PRIVATE }}
+          SCHEDULE: ${{ github.event.schedule }}
+          FORCE: ${{ github.event.inputs.force == 'true' && '1' || '' }}
